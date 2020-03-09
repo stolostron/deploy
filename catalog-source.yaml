@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: open-cluster-management
+  namespace: multicloud-system
+spec:
+  sourceType: grpc
+  image: multicloudhub-operator-index:1.0.0
