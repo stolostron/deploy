@@ -5,4 +5,4 @@ metadata:
   namespace: multicloud-system
 spec:
   sourceType: grpc
-  image: multicloudhub-operator-index:1.0.0
+  address: open-cluster-management.open-cluster-management.svc:50051

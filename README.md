@@ -8,6 +8,13 @@ Deploy Open Cluster Management
   - select `Kubernetes Secret` from left-hand menu
   - click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
   - save secret file in root of this repo directory as `quay-secret.yaml`
+  - edit `quay-secret.yaml` file and change the name to `quay-secret`
+  ```bash
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: quay-secret
+  ```
 
 - update `kustomization.yaml` file to set `namespace` and `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multicloudhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.

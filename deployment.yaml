@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-cluster-management
+  labels:
+    app: open-cluster-management
+spec:
+  selector:
+    matchLabels:
+      app: open-cluster-management
+  template:
+    metadata:
+      labels:
+        app: open-cluster-management
+    spec:
+      containers:
+      - name: multicloudhub-operator-index
+        image: multicloudhub-operator-index:1.0.0
+        ports:
+        - containerPort: 50051
+      imagePullSecrets:
+      - name: quay-secret
