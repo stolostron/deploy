@@ -2,7 +2,6 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
   name: open-cluster-management
-  namespace: multicloud-system
 spec:
   sourceType: grpc
-  address: open-cluster-management.open-cluster-management.svc:50051
+  address: open-cluster-management-registry.open-cluster-management.svc:50051

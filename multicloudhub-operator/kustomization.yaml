@@ -5,9 +5,6 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-bases:
-- ./hive
-
 # namespace to deploy all Resources to
 namespace: open-cluster-management
 
@@ -18,8 +15,9 @@ images:
 
 # list of Resource Config to be Applied
 resources:
-  - namespace.yaml
   - quay-secret.yaml
   - deployment.yaml
   - service.yaml
   - catalog-source.yaml
+  - operator-group.yaml
+  - subscription.yaml

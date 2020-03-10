@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: open-cluster-management
+  name: open-cluster-management-registry
   labels:
-    app: open-cluster-management
+    app: open-cluster-management-registry
 spec:
   selector:
     matchLabels:
-      app: open-cluster-management
+      app: open-cluster-management-registry
   template:
     metadata:
       labels:
-        app: open-cluster-management
+        app: open-cluster-management-registry
     spec:
       containers:
       - name: multicloudhub-operator-index

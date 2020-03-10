@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: multicloudhub-operator-bundle
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: multicloudhub-operator-bundle
+  source: open-cluster-management
+  sourceNamespace: open-cluster-management
+  startingCSV: multicloudhub-operator.v0.0.1

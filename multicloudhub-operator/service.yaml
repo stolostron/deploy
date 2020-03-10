@@ -1,8 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: open-cluster-management
-  namespace: open-cluster-management
+  name: open-cluster-management-registry
 spec:
   ports:
     - name: grpc
@@ -10,4 +9,4 @@ spec:
       port: 50051
       targetPort: 50051
   selector:
-    app: open-cluster-management
+    app: open-cluster-management-registry

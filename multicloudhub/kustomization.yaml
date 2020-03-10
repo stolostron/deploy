@@ -6,10 +6,8 @@ generatorOptions:
   disableNameSuffixHash: true
 
 # namespace to deploy all Resources to
-namespace: default
+namespace: open-cluster-management
 
-patchesStrategicMerge:
-  - add-pull-secret.yaml
-
+# list of Resource Config to be Applied
 resources:
-  - service-account.yaml
+  - example-multicloudhub-cr.yaml
