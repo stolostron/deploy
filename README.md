@@ -34,13 +34,13 @@ Each of the three directories contains a `kustomization.yaml` file that will app
    3. enter your quay.io password
    4. select `Kubernetes Secret` from left-hand menu
    5. click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
-   6.  save secret file in the `mulitcloudhub-operator` directory as `quay-secret.yaml`
-   7.  edit `quay-secret.yaml` file and change the name to `quay-secret`
+   6.  save secret file in the `mulitcloudhub-operator` directory as `pull-secret.yaml`
+   7.  edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`
       ```bash
       apiVersion: v1
       kind: Secret
       metadata:
-        name: quay-secret
+        name: multiclusterhub-operator-pull-secret
       ```
 
 5. update the `kustomization.yaml` file in the `multicloudhub-operator` dir to set `newTag`

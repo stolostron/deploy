@@ -11,11 +11,11 @@ namespace: open-cluster-management
 images:
   - name: multicloudhub-operator-index
     newName: quay.io/open-cluster-management/multicloudhub-operator-index
-    newTag: 1.0.0-0b96bd0bec2a4599284d2128908d9917f76711ab
+    newTag: 1.0.0-SNAPSHOT-2020-03-10-11-21-47
 
 # list of Resource Config to be Applied
 resources:
-  - quay-secret.yaml
+  - pull-secret.yaml
   - deployment.yaml
   - service.yaml
   - catalog-source.yaml

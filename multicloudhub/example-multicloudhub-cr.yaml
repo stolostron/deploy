@@ -30,7 +30,7 @@ spec:
   imagePullPolicy: Always
   imagePullSecret: quay-secret
   imageRepository: quay.io/open-cluster-management
-  imageTagPostfix: SNAPSHOT-2020-03-10-03-59-15
+  imageTagPostfix: SNAPSHOT-2020-03-10-11-21-47
   mongo:
     endpoints: mongo-0.mongo.open-cluster-management
     replicaSet: rs0
