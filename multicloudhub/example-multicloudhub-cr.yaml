@@ -30,9 +30,9 @@ spec:
   imagePullPolicy: Always
   imagePullSecret: quay-secret
   imageRepository: quay.io/open-cluster-management
-  imageTagPostfix: SNAPSHOT-2020-03-10-11-21-47
+  imageTagPostfix: SNAPSHOT-2020-03-11-02-00-59
   mongo:
     endpoints: mongo-0.mongo.open-cluster-management
     replicaSet: rs0
-  ocpHost: carolina.demo.red-chesterfield.com
+  ocpHost: alltheway.demo.red-chesterfield.com
   version: latest

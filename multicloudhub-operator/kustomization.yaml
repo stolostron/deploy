@@ -2,20 +2,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-generatorOptions:
-  disableNameSuffixHash: true
-
 # namespace to deploy all Resources to
 namespace: open-cluster-management
+
+generatorOptions:
+  disableNameSuffixHash: true
 
 images:
   - name: multicloudhub-operator-index
     newName: quay.io/open-cluster-management/multicloudhub-operator-index
-    newTag: 1.0.0-SNAPSHOT-2020-03-10-11-21-47
+    newTag: 1.0.0-SNAPSHOT-2020-03-11-02-00-59
 
 # list of Resource Config to be Applied
 resources:
-  - pull-secret.yaml
   - deployment.yaml
   - service.yaml
   - catalog-source.yaml
