@@ -19,4 +19,4 @@ spec:
         ports:
         - containerPort: 50051
       imagePullSecrets:
-      - name: quay-secret
+      - name: multiclusterhub-operator-pull-secret
