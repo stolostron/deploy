@@ -37,15 +37,7 @@ Each of the three directories contains a `kustomization.yaml` file that will app
         name: multiclusterhub-operator-pull-secret
       ...
       ```
-    8. copy the `pull-secret.yaml` file from the `prereqs` dir and paste it back into the `prereqs` directory with the name `quay-secret.yaml`
-    9. edit the `metadata.name` inside the `quay-secret.yaml` file to be `quay-secret`:
-      ```bash
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: quay-secret
-      ...
-      ```
+
 4. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
   ```bash
   cd prereqs

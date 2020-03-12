@@ -15,4 +15,4 @@ bases:
 resources:
   - namespace.yaml
   - pull-secret.yaml
-  - quay-secret.yaml
+  - serviceaccount.yaml
