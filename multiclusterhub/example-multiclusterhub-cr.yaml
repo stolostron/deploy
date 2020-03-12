@@ -1,7 +1,7 @@
-apiVersion: operators.multicloud.ibm.com/v1alpha1
-kind: MultiCloudHub
+apiVersion: operators.open-cluster-management.io/v1alpha1
+kind: MultiClusterHub
 metadata:
-  name: example-multicloudhub
+  name: example-multiclusterhub
   namespace: open-cluster-management
 spec:
   etcd:
@@ -30,7 +30,7 @@ spec:
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
   imageRepository: quay.io/open-cluster-management
-  imageTagPostfix: SNAPSHOT-2020-03-12-15-54-29
+  imageTagPostfix: SNAPSHOT-2020-03-12-19-47-55
   mongo:
     endpoints: mongo-0.mongo.open-cluster-management
     replicaSet: rs0

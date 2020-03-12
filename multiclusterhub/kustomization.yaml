@@ -10,4 +10,4 @@ generatorOptions:
 
 # list of Resource Config to be Applied
 resources:
-  - example-multicloudhub-cr.yaml
+  - example-multiclusterhub-cr.yaml

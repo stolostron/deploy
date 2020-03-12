@@ -8,12 +8,12 @@
 
 This repo defines 3 directories:
   - `prereqs` - contains yaml definitions for prerequisite objects (like namespaces)
-  - `multicloudhub-operator` - contains yaml definitions for setting up a `CatalogSource` for `multicloudhub-operator`
-  - `multicloudhub` - contains yaml definitions for creating an instance of `MultiCloudHub` object type
+  - `multiclusterhub-operator` - contains yaml definitions for setting up a `CatalogSource` for `multiclusterhub-operator`
+  - `multiclusterhub` - contains yaml definitions for creating an instance of `MultiClusterHub` object type
 
 Each of the three directories contains a `kustomization.yaml` file that will apply the yaml definitions to your OCP instance using `kubectl apply -k .` when run within the requiste directory.
 
-## To Deploy a MultiCloudHub Instance
+## To Deploy a MultiClusterHub Instance
 
 1. clone this repo locally
   ```bash
@@ -44,26 +44,26 @@ Each of the three directories contains a `kustomization.yaml` file that will app
   kubectl apply -k .
   ```
 
-5. update the `kustomization.yaml` file in the `multicloudhub-operator` dir to set `newTag`
-  You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multicloudhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
+5. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
+  You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multiclusterhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
   ```bash
   namespace: open-cluster-management
 
   images: # updates operator.yaml with the dev image
-    - name: multicloudhub-operator-index
-      newName: quay.io/open-cluster-management/multicloudhub-operator-index
+    - name: multiclusterhub-operator-index
+      newName: quay.io/open-cluster-management/multiclusterhub-operator-index
       newTag: "1.0.0-SNAPSHOT-2020-03-02-20-35-12"
   ```
 
-6. create the `multicloudhub-operator` objects by applying the yaml definitions contained in the `multicloudhub-operator` dir:
+6. create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
   ```bash
-  cd multicloudhub-operator
+  cd multiclusterhub-operator
   kubectl apply -k .
   ```
 
 7. Wait for subscription to be healthy:
   ```bash
-  oc get subscription multicloudhub-operator-bundle --namespace open-cluster-management -o yaml
+  oc get subscription multiclusterhub-operator-bundle --namespace open-cluster-management -o yaml
   ...
   status:
     catalogHealth:
@@ -78,15 +78,15 @@ Each of the three directories contains a `kustomization.yaml` file that will app
       ...
   ```
 
-8. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multicloudhub-cr.yaml`
-   - edit the `example-multicloudhub-cr.yaml` file in the `mulitcloudhub` dir
+8. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
+   - edit the `example-multiclusterhub-cr.yaml` file in the `mulitclusterhub` dir
      - set `ocpHost` to your clustername.basedomain name
-     - set `imageTagPostfix` to the snapshot value used in the `kustomization.yaml` file in the `multicloudhub-operator` dir above
+     - set `imageTagPostfix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above
   ```bash
-  apiVersion: operators.multicloud.ibm.com/v1alpha1
-  kind: MultiCloudHub
+  apiVersion: operators.open-cluster-management.io/v1alpha1
+  kind: MultiClusterHub
   metadata:
-    name: example-multicloudhub
+    name: example-multiclusterhub
     namespace: open-cluster-management
   spec:
     etcd:
@@ -113,71 +113,71 @@ Each of the three directories contains a `kustomization.yaml` file that will app
       managedDomains:
         - s1.openshiftapps.com
     imagePullPolicy: Always
-    imagePullSecret: quay-secret
+    imagePullSecret: multiclusterhub-operator-pull-secret
     imageRepository: quay.io/open-cluster-management
-    imageTagPostfix: SNAPSHOT-2020-03-09-17-52-46
+    imageTagPostfix: SNAPSHOT-2020-03-12-18-24-18
     mongo:
       endpoints: mongo-0.mongo.open-cluster-management
       replicaSet: rs0
-    ocpHost: early.demo.red-chesterfield.com
+    ocpHost: snapshot-42.demo.red-chesterfield.com
     version: latest
   ```
 
-9. create the `example-multicloudhub` objects by applying the yaml definitions contained in the `multicloudhub` dir:
+9. create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
   ```bash
-  cd multicloudhub
+  cd multiclusterhub
   kubectl apply -k .
   ```
 
-## To Delete a MultiCloudHub Instance
+## To Delete a MultiClusterHub Instance
 
-1. Delete the `example-multicloudhub` objects by deleting the yaml definitions contained in the `multicloudhub` dir:
+1. Delete the `example-multiclusterhub` objects by deleting the yaml definitions contained in the `multiclusterhub` dir:
   ```bash
-  cd multicloudhub
+  cd multiclusterhub
   kubectl delete -k .
   ```
 
-2. Not all objects are currently being cleaned up by the `multicloudhub-operator` upon deletion of a `multicloudhub` instance... you can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multicloudhub` dir:
+2. Not all objects are currently being cleaned up by the `multiclusterhub-operator` upon deletion of a `multiclusterhub` instance... you can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multiclusterhub` dir:
   ```bash
-  cd multicloudhub
+  cd multiclusterhub
   ./uninstall.sh
   ```
 
-After completing the steps above you can redeploy the `multicloudhub` instance by simply running:
+After completing the steps above you can redeploy the `multiclusterhub` instance by simply running:
   ```bash
-  cd multicloudhub
+  cd multiclusterhub
   kubectl apply -k .
   ```
 
-## To Delete the multicloudhub-operator
+## To Delete the multiclusterhub-operator
 
-1. Delete the `multicloudhub-operator` objects by deleting the yaml definitions contained in the `multicloudhub-operator` dir:
+1. Delete the `multiclusterhub-operator` objects by deleting the yaml definitions contained in the `multiclusterhub-operator` dir:
   ```bash
-  cd multicloudhub-operator
+  cd multiclusterhub-operator
   kubectl delete -k .
   ```
 
-2. Not all objects are currently being cleaned up by the `multicloudhub-operator` upon deletion... you can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multicloudhub-operator` dir:
+2. Not all objects are currently being cleaned up by the `multiclusterhub-operator` upon deletion... you can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multiclusterhub-operator` dir:
   ```bash
-  cd multicloudhub-operator
+  cd multiclusterhub-operator
   ./uninstall.sh
   ```
 
-After completing the steps above you can redeploy the `multicloudhub-operator` by simply running:
+After completing the steps above you can redeploy the `multiclusterhub-operator` by simply running:
   ```bash
-  cd multicloudhub-operator
+  cd multiclusterhub-operator
   kubectl apply -k .
   ```
-## To Redploy the multicloudhub-operator
+## To Redeploy the multiclusterhub-operator
 
-1. Repeat deployment steps starting at step 5 above under the [To Deploy a MultiCloudHub Instance](#to-deploy-a-multicloudhub-instance) section
+1. Repeat deployment steps starting at step 5 above under the [To Deploy a multiclusterHub Instance](#to-deploy-a-multiclusterhub-instance) section
 
 
 ## TL;DR
 
 ## Advanced Usage
 
-Let's say you are working on an image used by one of the `helmreleases` deployed via the `multicloudhub-operator`.  Let's say  you have a new version of one of those images and you'd like to deploy that image in a running environment. You can utilize this repo to help you do that.
+Let's say you are working on an image used by one of the `helmreleases` deployed via the `multiclusterhub-operator`.  Let's say  you have a new version of one of those images and you'd like to deploy that image in a running environment. You can utilize this repo to help you do that.
 
 ### To Deploy a newer Image into your environment
 
@@ -253,4 +253,4 @@ kubectl apply -k .
 
 The `console-sub` subscription object will be `patched` with you changes and you should see the pods deployed via the `console-sub`'s helm chart start to redeploy and they will use your updated image references!
 
-Keep in mind that if you require changes to your helm-chart this method will not work :-( This will only work for updating objects in your running environment that can by manipulated via kubectl... currently the `multicloudhub-operator` deploys helm charts by deploying an image `multicloudhub-operator-repo` that contains `tar gz` archives of each helm chart... that's not an easy update via `kubectl` but I'll work on a solution for that as well.
+Keep in mind that if you require changes to your helm-chart this method will not work :-( This will only work for updating objects in your running environment that can by manipulated via kubectl... currently the `multiclusterhub-operator` deploys helm charts by deploying an image `multiclusterhub-operator-repo` that contains `tar gz` archives of each helm chart... that's not an easy update via `kubectl` but I'll work on a solution for that as well.

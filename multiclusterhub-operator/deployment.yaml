@@ -14,8 +14,8 @@ spec:
         app: open-cluster-management-registry
     spec:
       containers:
-      - name: multicloudhub-operator-index
-        image: multicloudhub-operator-index:1.0.0
+      - name: multiclusterhub-operator-index
+        image: multiclusterhub-operator-index:1.0.0
         ports:
         - containerPort: 50051
       imagePullSecrets:

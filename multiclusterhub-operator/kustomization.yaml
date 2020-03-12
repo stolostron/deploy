@@ -9,9 +9,9 @@ generatorOptions:
   disableNameSuffixHash: true
 
 images:
-  - name: multicloudhub-operator-index
-    newName: quay.io/open-cluster-management/multicloudhub-operator-index
-    newTag: 1.0.0-SNAPSHOT-2020-03-12-15-54-29
+  - name: multiclusterhub-operator-index
+    newName: quay.io/open-cluster-management/multiclusterhub-operator-index
+    newTag: 1.0.0-SNAPSHOT-2020-03-12-19-47-55
 
 # list of Resource Config to be Applied
 resources:
