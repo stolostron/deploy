@@ -4,35 +4,33 @@ metadata:
   name: example-multiclusterhub
   namespace: open-cluster-management
 spec:
-  etcd:
-    endpoints: 'http://etcd-cluster.open-cluster-management.svc.cluster.local:2379'
-  foundation:
-    apiserver:
-      apiserverSecret: mcm-apiserver-self-signed-secrets
-      configuration:
-        http2-max-streams-per-connection: '1000'
-      klusterletSecret: mcm-klusterlet-self-signed-secrets
-      replicas: 1
-    controller:
-      configuration:
-        enable-rbac: 'true'
-        enable-service-registry: 'true'
-      replicas: 1
-  hive:
-    additionalCertificateAuthorities:
-      - name: letsencrypt-ca
-    failedProvisionConfig:
-      skipGatherLogs: true
-    globalPullSecret:
-      name: private-secret
-    managedDomains:
-      - s1.openshiftapps.com
+  version: latest
+  imageRepository: "quay.io/open-cluster-management"
+  imageTagSuffix: "SNAPSHOT-2020-03-13-23-07-54"
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
-  imageRepository: quay.io/open-cluster-management
-  imageTagPostfix: SNAPSHOT-2020-03-12-19-47-55
+  ocpHost: "blue.demo.red-chesterfield.com"
+  foundation:
+    apiserver:
+      configuration:
+        http2-max-streams-per-connection: "1000"
+      replicas: 1
+      apiserverSecret: "mcm-apiserver-self-signed-secrets"
+      klusterletSecret: "mcm-klusterlet-self-signed-secrets"
+    controller:
+      configuration:
+        enable-rbac: "true"
+        enable-service-registry: "true"
+      replicas: 1
   mongo:
     endpoints: mongo-0.mongo.open-cluster-management
     replicaSet: rs0
-  ocpHost: snapshot-42.demo.red-chesterfield.com
-  version: latest
+  hive:
+    additionalCertificateAuthorities:
+      - name: letsencrypt-ca
+    managedDomains:
+      - s1.openshiftapps.com
+    globalPullSecret:
+      name: private-secret
+    failedProvisionConfig:
+      skipGatherLogs: true

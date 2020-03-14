@@ -52,7 +52,7 @@ Each of the three directories contains a `kustomization.yaml` file that will app
   images: # updates operator.yaml with the dev image
     - name: multiclusterhub-operator-index
       newName: quay.io/open-cluster-management/multiclusterhub-operator-index
-      newTag: "1.0.0-SNAPSHOT-2020-03-02-20-35-12"
+      newTag: "1.0.0-SNAPSHOT-2020-03-13-23-07-54"
   ```
 
 6. create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
@@ -85,7 +85,7 @@ Each of the three directories contains a `kustomization.yaml` file that will app
      # clustername.basedomain in terraform.tfvars.json or run the following:
      oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'
      ```
-     - set `imageTagPostfix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above<br>_**Note:** Make sure to remove the VERSION 1.0.0-, from the newTag value taken from kustomization.yaml**_
+     - set `imageTagSuffix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above<br>_**Note:** Make sure to remove the VERSION 1.0.0-, from the newTag value taken from kustomization.yaml**_
   ```bash
   apiVersion: operators.open-cluster-management.io/v1alpha1
   kind: MultiClusterHub
@@ -93,38 +93,36 @@ Each of the three directories contains a `kustomization.yaml` file that will app
     name: example-multiclusterhub
     namespace: open-cluster-management
   spec:
-    etcd:
-      endpoints: 'http://etcd-cluster.open-cluster-management.svc.cluster.local:2379'
-    foundation:
-      apiserver:
-        apiserverSecret: mcm-apiserver-self-signed-secrets
-        configuration:
-          http2-max-streams-per-connection: '1000'
-        klusterletSecret: mcm-klusterlet-self-signed-secrets
-        replicas: 1
-      controller:
-        configuration:
-          enable-rbac: 'true'
-          enable-service-registry: 'true'
-        replicas: 1
-    hive:
-      additionalCertificateAuthorities:
-        - name: letsencrypt-ca
-      failedProvisionConfig:
-        skipGatherLogs: true
-      globalPullSecret:
-        name: private-secret
-      managedDomains:
-        - s1.openshiftapps.com
+    version: latest
+    imageRepository: "quay.io/open-cluster-management"
+    imageTagSuffix: "SNAPSHOT-2020-03-13-23-07-54"
     imagePullPolicy: Always
     imagePullSecret: multiclusterhub-operator-pull-secret
-    imageRepository: quay.io/open-cluster-management
-    imageTagPostfix: SNAPSHOT-2020-03-12-18-24-18
+    ocpHost: "blue.demo.red-chesterfield.com"
+    foundation:
+      apiserver:
+        configuration:
+          http2-max-streams-per-connection: "1000"
+        replicas: 1
+        apiserverSecret: "mcm-apiserver-self-signed-secrets"
+        klusterletSecret: "mcm-klusterlet-self-signed-secrets"
+      controller:
+        configuration:
+          enable-rbac: "true"
+          enable-service-registry: "true"
+        replicas: 1
     mongo:
       endpoints: mongo-0.mongo.open-cluster-management
       replicaSet: rs0
-    ocpHost: snapshot-42.demo.red-chesterfield.com
-    version: latest
+    hive:
+      additionalCertificateAuthorities:
+        - name: letsencrypt-ca
+      managedDomains:
+        - s1.openshiftapps.com
+      globalPullSecret:
+        name: private-secret
+      failedProvisionConfig:
+        skipGatherLogs: true
   ```
 
 9. create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
