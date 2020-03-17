@@ -41,7 +41,7 @@ Each of the three directories contains a `kustomization.yaml` file that will app
 4. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
   ```bash
   cd prereqs
-  kubectl apply -k .
+  kubectl apply --openapi-patch=true -k .
   ```
 
 5. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
