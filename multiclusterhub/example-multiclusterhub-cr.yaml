@@ -6,10 +6,9 @@ metadata:
 spec:
   version: latest
   imageRepository: "quay.io/open-cluster-management"
-  imageTagSuffix: "SNAPSHOT-2020-03-13-23-07-54"
+  imageTagSuffix: "SNAPSHOT-2020-03-18-02-33-16"
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
-  ocpHost: "blue.demo.red-chesterfield.com"
   foundation:
     apiserver:
       configuration:
