@@ -13,7 +13,7 @@ Let's get started...
 
 #### Prereqs
 - you have an OCP 4.3+ cluster available
-- you have oc & kubectl configured to connect to your running OCP 4.3+ cluster
+- you have oc & kubectl (ver. 1.16+) configured to connect to your running OCP 4.3+ cluster
 - you're oc is configured with adequet permissions to create new namespaces in your OCP cluster.
 
 This repo defines 3 directories:
@@ -23,7 +23,7 @@ This repo defines 3 directories:
 
 Each of the three directories contains a `kustomization.yaml` file that will apply the yaml definitions to your OCP instance using `kubectl apply`.
 
-## To Deploy a MultiClusterHub Instance
+## Prepare to deploy MultiClusterHub Instance (ONCE)
 
 1. clone this repo locally
     ```bash
@@ -82,12 +82,33 @@ Each of the three directories contains a `kustomization.yaml` file that will app
       ...
       ```
 
-4. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
+## Deploy using the ./start.sh script
+1. Run the `start.sh` script
+Options:  (Only use one at a time)
+```
+-t modify the YAML but exit before apply the resources
+--silent, skip all prompting, uses the previous configuration
+--watch, will monitor the main Red Hat ACM pod deployments for up to 10min
+```
+
+2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new tag.<br>
+Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/multiclusterhub-operator-index)
+```bash
+1.0.0-SNAPSHOT-2020-03-13-23-07-54
+```
+2. Depending on your script Option choice, Red Hat ACM will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
+
+3. The script provides you with the `Red Hat Advanced Cluster Management for Kubernetes` URL
+
+Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the uninstall steps if you have a failure and have installed multiple times.
+
+## Manually deploy
+1. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
   ```bash
   kubectl apply --openapi-patch=true -k prereqs/
   ```
 
-5. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
+2. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multiclusterhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
     ```bash
     namespace: open-cluster-management
@@ -120,7 +141,7 @@ Each of the three directories contains a `kustomization.yaml` file that will app
         ...
     ```
 
-8. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
+5. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
    - edit the `example-multiclusterhub-cr.yaml` file in the `mulitclusterhub` dir
      - set `imageTagSuffix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above<br>_**Note:** Make sure to remove the VERSION 1.0.0-, from the newTag value taken from kustomization.yaml**_
     ```bash
