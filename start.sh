@@ -119,7 +119,7 @@ if [ "$1" == "--watch" ]; then
     for i in {1..60}; do
         clear
         oc -n ${TARGET_NAMESPACE} get pods
-        CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}'`
+        CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
         whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v Completed | grep -v Running | wc -l`
         if [ "$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 1 ]; then
             COMPLETE=0
