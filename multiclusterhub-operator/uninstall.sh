@@ -16,6 +16,3 @@ oc delete crd etcdclusters.etcd.database.coreos.com --ignore-not-found || true
 oc delete crd etcdrestores.etcd.database.coreos.com --ignore-not-found || true
 oc delete scc multicluster-scc --ignore-not-found || true
 oc delete scc multicloud-scc --ignore-not-found || true
-
-# hive
-oc delete csv hive -n hive $(oc get csv -n hive | tail -n +2 | cut -f 1 -d ' ') --ignore-not-found || true

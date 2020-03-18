@@ -17,3 +17,6 @@ oc get clusterrole | grep "hive" | awk '{ print $1 }' | xargs oc delete clusterr
 oc get clusterrolebindings | grep "hive" | awk '{ print $1 }' | xargs oc delete clusterrolebinding
 for configmap in $(oc get configmap -n hive | tail -n +2 | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
 for webhook in $(oc get validatingwebhookconfiguration | grep hive | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
+
+# hive
+oc delete csv hive -n hive $(oc get csv -n hive | tail -n +2 | cut -f 1 -d ' ') --ignore-not-found || true
