@@ -62,6 +62,10 @@ if [ "$1" != "--silent" ]; then
         printf "${DEFAULT_SNAPSHOT}" > ./snapshot.ver
     fi
 fi
+if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
+    echo "Please specify a valid snapshot tag to continue."
+    exit 2
+fi
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
