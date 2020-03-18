@@ -120,20 +120,18 @@ if [ "$1" == "--watch" ]; then
         clear
         oc -n ${TARGET_NAMESPACE} get pods
         CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
-        whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v Completed | grep -v Running | wc -l`
-        if [ "$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 1 ]; then
+        whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
+        if [ "$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
             COMPLETE=0
             break
         fi
         echo
-        COUNT=`oc -n ${TARGET_NAMESPACE} get pods | grep -v READY | wc -l`
-        echo "Total pod count ${COUNT}/36 "
-        echo
+        echo "Pods still NOT running: ${whatsLeft}"
         sleep 10
     done
     if [ $COMPLETE -eq 1 ]; then
         echo "At least one pod failed to start..."
-        oc -n ${TARGET_NAMESPACE} get pods | grep -v Completed | grep -v Running
+        oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running"
         exit 1
     fi
     echo "#####"
