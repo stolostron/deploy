@@ -19,7 +19,7 @@ if [ $? -ne 0 ]; then
 fi
 #Shorten to the basedomain
 HOST_URL=${HOST_URL/apps./}
-echo "* Using HOST_URL: ${HOST_URL}"
+echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
