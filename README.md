@@ -83,9 +83,10 @@ Each of the three directories contains a `kustomization.yaml` file that will app
       ```
 
 4. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
-    ```bash
-    kubectl apply -k prereqs/
-    ```
+  ```bash
+  cd prereqs
+  kubectl apply --openapi-patch=true -k prereqs/
+  ```
 
 5. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multiclusterhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
