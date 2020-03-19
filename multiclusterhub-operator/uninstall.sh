@@ -1,7 +1,7 @@
 #!/bin/bash
 
 oc project open-cluster-management
-for deployment in $(oc get Deployments -n open-cluster-management | cut -f 1 -d ' '); do oc delete $deployment -n open-cluster-management --ignore-not-found; done
+for deployment in $(oc get Deployments -n open-cluster-management | cut -f 1 -d ' '); do oc delete Deployment $deployment -n open-cluster-management --ignore-not-found; done
 oc delete csv multiclusterhub-operator.v0.0.1 --ignore-not-found || true
 oc delete csv etcdoperator.v0.9.4 --ignore-not-found || true
 oc delete csv multicloud-operators-subscription.v0.1.2 --ignore-not-found || true
