@@ -1,2 +1,4 @@
 quay-secret.yaml
 pull-secret.yaml
+
+*.bak

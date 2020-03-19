@@ -1,12 +1,12 @@
 apiVersion: operators.open-cluster-management.io/v1alpha1
 kind: MultiClusterHub
 metadata:
-  name: example-multiclusterhub
+  name: multiclusterhub
   namespace: open-cluster-management
 spec:
   version: latest
   imageRepository: "quay.io/open-cluster-management"
-  imageTagSuffix: "SNAPSHOT-2020-03-18-02-33-16"
+  imageTagSuffix: SNAPSHOT-2020-03-19-16-07-21
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
   foundation:

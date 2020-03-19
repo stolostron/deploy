@@ -5,7 +5,7 @@ Here you will find a set of k8s yaml definitions that can be used to deploy Open
 
 Note that the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)". The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology such as [github.com/openshift/hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
-You can find our __work-in-progress__ documentation [here](https://open-cluster-management.github.io/rhacm-docs/).  Please read through the docs to find information on what Open Cluster Management is and how you can use it. Oh and please submit PR's for any issues you may find or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/summary.md).  Please read through the docs to find information on what Open Cluster Management is and how you can use it. Oh and please submit PR's for any issues you may find or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
@@ -23,15 +23,14 @@ This repo defines 3 directories:
 
 Each of the three directories contains a `kustomization.yaml` file that will apply the yaml definitions to your OCP instance using `kubectl apply`.
 
-## Prepare to deploy MultiClusterHub Instance (ONCE)
+## Prepare to deploy MultiClusterHub Instance (do these task only ONCE)
 
 1. clone this repo locally
     ```bash
     git clone https://github.com/open-cluster-management/deploy.git
     ```
 
-2. check out the specific tag cooresponding to the snapshot you wish to deploy or simply run with the latest snapshot by using `master`
-3. generate a pull-secret
+2. generate a pull-secret
    1. ensure you have access to the quay org by following this link:  [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags)
    2. if you do not have access to the [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) org in quay.io you can request access on our Slack Channel [#forum-acm]([https://](https://coreos.slack.com/archives/CTDEY6EEA)).
    3. go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
@@ -48,42 +47,13 @@ Each of the three directories contains a `kustomization.yaml` file that will app
         name: multiclusterhub-operator-pull-secret
       ...
       ```
-4. run `start.sh` from your terminal
+3. run `start.sh` from your terminal (see [Deploy using the ./start.sh script](#deploy-using-the-startsh-script) below for details)
     ```bash
     ./start.sh
     ```
 
-## TL;DR
-
-### How to run manually using `kubectl` or `oc`
-
-1. clone this repo locally
-    ```bash
-    git clone https://github.com/open-cluster-management/deploy.git
-    ```
-
-2. cd into cloned dir `cd deploy`
-
-3. generate quay-secret
-   1. ensure you have access to the quay org by following this link:  [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags)
-   2. if you do not have access to the [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) org in quay.io you can request access on our Slack Channel [#forum-acm]([https://](https://coreos.slack.com/archives/CTDEY6EEA)).
-   3. go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
-   4. click on `Generate Encrypted Password`
-   5. enter your quay.io password
-   6. select `Kubernetes Secret` from left-hand menu
-   7. click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
-   8.  save secret file in the `prereqs` directory as `pull-secret.yaml`
-   9.  edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`
-      ```bash
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: multiclusterhub-operator-pull-secret
-      ...
-      ```
-
 ## Deploy using the ./start.sh script
-1. Run the `start.sh` script
+1. Run the `start.sh` script (see )
 Options:  (Only use one at a time)
 ```
 -t modify the YAML but exit before apply the resources
@@ -102,13 +72,32 @@ Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/mu
 
 Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the uninstall steps if you have a failure and have installed multiple times.
 
-## Manually deploy
-1. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
+## Manually deploy using only `oc` commands
+
+1. generate quay-secret
+   1. ensure you have access to the quay org by following this link:  [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags)
+   2. if you do not have access to the [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) org in quay.io you can request access on our Slack Channel [#forum-acm]([https://](https://coreos.slack.com/archives/CTDEY6EEA)).
+   3. go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
+   4. click on `Generate Encrypted Password`
+   5. enter your quay.io password
+   6. select `Kubernetes Secret` from left-hand menu
+   7. click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
+   8.  save secret file in the `prereqs` directory as `pull-secret.yaml`
+   9.  edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`
+      ```bash
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: multiclusterhub-operator-pull-secret
+      ...
+      ```
+
+2. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
   ```bash
   kubectl apply --openapi-patch=true -k prereqs/
   ```
 
-2. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
+3. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multiclusterhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
     ```bash
     namespace: open-cluster-management
@@ -119,12 +108,12 @@ Note: This script can be run multiple times and will attempt to continue where i
         newTag: "1.0.0-SNAPSHOT-2020-03-13-23-07-54"
     ```
 
-6. create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
+4. create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
     ```bash
     kubectl apply -k multiclusterhub-operator/
     ```
 
-7. Wait for subscription to be healthy:
+5. Wait for subscription to be healthy:
     ```bash
     oc get subscription multiclusterhub-operator-bundle --namespace open-cluster-management -o yaml
     ...
@@ -141,7 +130,7 @@ Note: This script can be run multiple times and will attempt to continue where i
         ...
     ```
 
-5. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
+6. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
    - edit the `example-multiclusterhub-cr.yaml` file in the `mulitclusterhub` dir
      - set `imageTagSuffix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above<br>_**Note:** Make sure to remove the VERSION 1.0.0-, from the newTag value taken from kustomization.yaml**_
     ```bash
@@ -182,7 +171,7 @@ Note: This script can be run multiple times and will attempt to continue where i
           skipGatherLogs: true
     ```
 
-9. create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
+7. create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
     ```bash
     kubectl apply -k multiclusterhub/
     ```
