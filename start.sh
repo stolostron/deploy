@@ -126,7 +126,8 @@ if [ "$1" == "--watch" ]; then
             break
         fi
         echo
-        echo "Pods still NOT running: ${whatsLeft}"
+        echo "Pods still NOT running  : ${whatsLeft}"
+        echo "Detected ACM Console URL: ${CONSOLE_URL}"
         sleep 10
     done
     if [ $COMPLETE -eq 1 ]; then
