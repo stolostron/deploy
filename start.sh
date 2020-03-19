@@ -7,6 +7,14 @@
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
+
+# fix sed issue on mac
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+SED="sed"
+if [ "${OS}" == "darwin" ]; then
+    SED="gsed"
+fi
+
 #TARGET_NAMESPACE should be adjustable in the future
 TARGET_NAMESPACE=open-cluster-management
 
@@ -69,11 +77,10 @@ fi
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
-sed -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./multiclusterhub-operator/kustomization.yaml
+${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./multiclusterhub-operator/kustomization.yaml
 echo "* Applying multicluster-hub-cr values"
-sed -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-sed -i "s/ocpHost: .*$/ocpHost: ${HOST_URL}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-sed -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
 if [ "$1" == "-t" ]; then
     echo "* Test mode, see yaml files for updates"
