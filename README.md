@@ -23,7 +23,7 @@ This repo defines 3 directories:
 
 Each of the three directories contains a `kustomization.yaml` file that will apply the yaml definitions to your OCP instance using `kubectl apply`.
 
-## Prepare to deploy MultiClusterHub Instance (do these task only ONCE)
+## Prepare to deploy MultiClusterHub Instance (do these tasks only ONCE)
 
 1. clone this repo locally
     ```bash
@@ -47,12 +47,11 @@ Each of the three directories contains a `kustomization.yaml` file that will app
         name: multiclusterhub-operator-pull-secret
       ...
       ```
-3. run `start.sh` from your terminal (see [Deploy using the ./start.sh script](#deploy-using-the-startsh-script) below for details)
-    ```bash
-    ./start.sh
-    ```
 
 ## Deploy using the ./start.sh script
+
+We've added a very simple `start.sh` script to make your life easier... if you want to deploy `OCM` the __"hard way"__ you can find the instructions for deploying `OCM` using nothing but `oc` commands [here](#manually-deploy-using-only-oc-commands).
+
 1. Run the `start.sh` script (see )
 Options:  (Only use one at a time)
 ```
@@ -66,11 +65,11 @@ Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/mu
 ```bash
 1.0.0-SNAPSHOT-2020-03-13-23-07-54
 ```
-2. Depending on your script Option choice, Red Hat ACM will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
+2. Depending on your script Option choice, `OCM` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
 
-3. The script provides you with the `Red Hat Advanced Cluster Management for Kubernetes` URL
+3. The script provides you with the `Open Cluster Management` URL
 
-Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the uninstall steps if you have a failure and have installed multiple times.
+Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
 
 ## Manually deploy using only `oc` commands
 
