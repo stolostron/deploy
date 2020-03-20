@@ -19,3 +19,12 @@ oc delete crd etcdclusters.etcd.database.coreos.com --ignore-not-found || true
 oc delete crd etcdrestores.etcd.database.coreos.com --ignore-not-found || true
 oc delete scc multicluster-scc --ignore-not-found || true
 oc delete scc multicloud-scc --ignore-not-found || true
+oc delete crd certificates.certmanager.k8s.io || true
+oc delete crd certificaterequests.certmanager.k8s.io || true
+oc delete crd challenges.certmanager.k8s.io || true
+oc delete crd clusterissuers.certmanager.k8s.io || true
+oc delete crd issuers.certmanager.k8s.io || true
+oc delete crd orders.certmanager.k8s.io || true
+oc delete clusterrolebinding cert-manager-webhook-auth-delegator || true
+oc delete clusterRoles cert-manager-webhook-requester || true
+oc delete mutatingwebhookconfiguration cert-manager-webhook || true

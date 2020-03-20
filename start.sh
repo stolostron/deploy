@@ -8,6 +8,41 @@
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
 
+function waitForPod() {
+    FOUND=1
+    MINUTE=0
+    podName=$1
+    ignore=$2
+    runnings="$3"
+    echo "Wait for ${podName} to reach running state (4min)."
+    while [ ${FOUND} -eq 1 ]; do
+        # Wait up to 4min, should only take about 20-30s
+        if [ $MINUTE -gt 240 ]; then
+            echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
+            echo "List of current pods:"
+            oc -n ${TARGET_NAMESPACE} get pods
+            echo
+            echo "You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods"
+            exit 1
+        fi
+        if [ "$ignore" == "" ]; then
+            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName}`
+        else
+            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
+        fi
+        if [[ "$operatorPod" =~ "${running}     Running" ]]; then
+            echo "* ${podName} is running"
+            break
+        elif [ "$operatorPod" == "" ]; then
+            operatorPod="Waiting"
+        fi
+        echo "* STATUS: $operatorPod"
+        sleep 3
+        (( MINUTE = MINUTE + 3 ))
+    done
+    printf "#####\n\n"
+}
+
 # fix sed issue on mac
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 SED="sed"
@@ -93,34 +128,20 @@ printf "#####\n\n"
 
 echo "##### Applying multicluster-hub-operator subscription #####"
 oc apply -k multiclusterhub-operator/
+waitForPod "multiclusterhub-operator" "registry" "1/1"
+echo "Beginning deploy..."
 
-FOUND=1
-MINUTE=0
-while [ ${FOUND} -eq 1 ]; do
-    # Wait up to 4min, should only take about 20-30s
-    if [ $MINUTE -gt 240 ]; then
-        echo "Timeout waiting for the multiclusterhub-operator. Try cleaning up using the uninstall scripts before running again."
-        echo "List of current pods:"
-        oc -n ${TARGET_NAMESPACE} get pods
-        echo
-        echo "You should see multiclusterhub-operator, multiclusterhub-repo, and multicloud-operators-subscription pods"
-        exit 1
-    fi
-    operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep multiclusterhub-operator | grep -v registry`
-    if [[ "$operatorPod" =~ "1/1     Running" ]]; then
-        echo "* multiclusterhub-operator-registry is running, beginning deploy"
-        break
-    elif [ "$operatorPod" == "" ]; then
-        operatorPod="Waiting"
-    fi
-    echo "* STATUS: $operatorPod"
-    sleep 3
-    (( MINUTE = MINUTE + 3 ))
-done
-printf "#####\n\n"
 
 echo "* Applying the multiclusterhub-operator to install Red hat Advanced Cluster Management for Kubernetes"
 oc apply -k multiclusterhub
+waitForPod "multicluster-operators-application" "" "4/4"
+#This is needed to work around the fact that the Subscription Operator incluses the clusters.clusterregistry.k8s.io
+echo "Remove the clusters.clusterregistry.k8s.io CustomResourceDefinition"
+oc get crd clusters.clusterregistry.k8s.io > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+  oc delete crd clusters.clusterregistry.k8s.io
+fi
+
 COMPLETE=1
 if [ "$1" == "--watch" ]; then
     for i in {1..60}; do
@@ -134,7 +155,7 @@ if [ "$1" == "--watch" ]; then
         fi
         echo
         echo "Pods still NOT running  : ${whatsLeft}"
-        echo "Detected ACM Console URL: ${CONSOLE_URL}"
+        echo "Detected ACM Console URL: https://${CONSOLE_URL}"
         sleep 10
     done
     if [ $COMPLETE -eq 1 ]; then
