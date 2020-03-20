@@ -13,6 +13,10 @@ OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 SED="sed"
 if [ "${OS}" == "darwin" ]; then
     SED="gsed"
+    if [ ! -x "$(command -v ${SED})"  ]; then
+       echo "This script requirs $SED, but it was not found.  Perform \"brew install gnu-sed\" and try again."
+       exit
+    fi
 fi
 
 #TARGET_NAMESPACE should be adjustable in the future
@@ -119,7 +123,7 @@ while [ ${FOUND} -eq 1 ]; do
 done
 printf "#####\n\n"
 
-echo "* Applying the multiclusterhub-operator to install Red hat Advanced Cluster Management for Kubernetes"
+echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 oc apply -k multiclusterhub
 COMPLETE=1
 if [ "$1" == "--watch" ]; then
@@ -153,3 +157,9 @@ echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
 echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
 
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+if [ "${OS}" == "darwin" ]; then
+    if [ ! -x "$(command -v watch)"  ]; then
+       echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
+    fi
+fi
