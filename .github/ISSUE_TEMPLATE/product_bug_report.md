@@ -1,9 +1,9 @@
 ---
-name: Deploy Bug report
-about: Create a report to help us improve this deploy repo
-title: "[BUG][DEPLOY]"
-labels: 'bug', 'deploy'
-assignees: 'tpouyer'
+name: Product Bug report
+about: Create a report to help us improve our product
+title: "[BUG][PRODUCT]"
+labels: 'bug', 'product'
+assignees: ''
 
 ---
 

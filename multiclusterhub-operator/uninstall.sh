@@ -6,7 +6,12 @@ oc delete csv multiclusterhub-operator.v0.0.1 --ignore-not-found || true
 oc delete csv etcdoperator.v0.9.4 --ignore-not-found || true
 oc delete csv multicloud-operators-subscription.v0.1.2 --ignore-not-found || true
 oc delete csv multicluster-operators-subscription.v0.1.0 --ignore-not-found || true
+oc delete subscription multiclusterhub-operator || true
+oc delete subscription etcdoperator.v0.9.4 || true
+oc delete subscription multicloud-operators-subscription.v0.1.2 || true
+oc delete crd placementrules.apps.open-cluster-management.io || true
 oc delete crd multiclusterhubs.operators.open-cluster-management.io --ignore-not-found || true
+oc delete service multicluster-operators-subscription || true
 oc delete crd channels.apps.open-cluster-management.io --ignore-not-found || true
 oc delete crd deployables.apps.open-cluster-management.io --ignore-not-found || true
 oc delete crd helmreleases.apps.open-cluster-management.io --ignore-not-found || true
