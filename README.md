@@ -1,12 +1,12 @@
 
 # Deploy Open Cluster Management (OCM)
 
-### Welcome! 
+### Welcome!
 
-You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)". 
+You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)".
 
 >The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology such as [github.com/openshift/hive](https://github.com/openshift/hive) is already shared between the two offerings.
-  
+
 Kubernetes provides a platform for deploying and managing containers in a standard, consistent control plane. However, as applications workloads move from development to production, they often require multiple fit for purpose Kubernetes clusters to support DevOps pipelines. Users, such as administrators and site reliability engineers, face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges.
 
 Red Hat Advanced Cluster Management for Kubernetes provides end-to-end management visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console, with built-in security policies. Run your operations from anywhere that Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
@@ -25,9 +25,12 @@ You can find our __work-in-progress__ documentation [here](https://github.com/op
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
 #### Prereqs
-- an OCP 4.3+ cluster available
+- an OpenShift Container Platform (OCP) 4.3+ cluster available
 - `oc` & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
-- `oc` is conected with adequet permissions to create new namespaces in your OCP cluster.
+- `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
+- macOS users:
+   - `gsed` is required. Install using `brew install gnu-sed`
+   - `wait` is optional. Install using `brew install wait`
 
 #### Repo Structure and Organization  
 This repo contains 3 directories:
@@ -40,7 +43,7 @@ Each of the three directories contains a `kustomization.yaml` file that will app
 You will find __helper__ scripts in the root of this repo:
   - `start.sh` - takes the edge off having to hand edit yaml files
   - `uninstall.sh` - we're not perfect yet... includes additional scripting to ensure we clean up our mess on your OCP cluster.
-  
+
 You have two choices of installation...
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will hand hold you through the process
   - [the hard way](#manually-deploy-using-oc-commands-the-hard-way) - using nothing but `oc` commands and you'll need to edit some yaml
