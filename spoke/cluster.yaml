@@ -1,0 +1,9 @@
+apiVersion: clusterregistry.k8s.io/v1alpha1
+kind: Cluster
+metadata:
+  labels:
+    cloud: auto-detect
+    name: spoke
+    vendor: auto-detect
+  name: spoke
+spec: {}

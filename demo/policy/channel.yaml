@@ -1,0 +1,8 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: policy-channel
+  namespace: open-cluster-management
+spec:
+  type: GitHub
+  pathname: https://github.com/open-cluster-management/deploy.git

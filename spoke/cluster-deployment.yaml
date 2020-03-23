@@ -1,0 +1,29 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: spoke
+  labels:
+    cloud: 'AWS'
+    region: 'us-east-2'
+    environment: 'dev'
+    vendor: 'OCP'
+spec:
+  baseDomain: demo.red-chesterfield.com
+  clusterName: spoke
+  controlPlaneConfig:
+    servingCertificates: {}
+  installed: false
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: aws-creds
+      region: us-east-2
+  provisioning:
+    installConfigSecretRef:
+      name: install-config
+    sshPrivateKeySecretRef:
+      name: ssh-privatekey
+    imageSetRef:
+      name: imageset
+  pullSecretRef:
+    name: openshift-installer-pull-secret
