@@ -153,7 +153,7 @@ if [ "$1" == "--watch" ]; then
         oc -n ${TARGET_NAMESPACE} get pods
         CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
         whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
-        if [ "$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
+        if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
             COMPLETE=0
             break
         fi
@@ -168,7 +168,7 @@ if [ "$1" == "--watch" ]; then
         exit 1
     fi
     echo "#####"
-    echo "* Red Hat ACM URL: $CONSOLE_URL"
+    echo "* Red Hat ACM URL: https://$CONSOLE_URL"
     echo "#####"
     echo "Done!"
     exit 0
