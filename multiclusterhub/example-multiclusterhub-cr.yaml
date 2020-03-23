@@ -6,7 +6,8 @@ metadata:
 spec:
   version: latest
   imageRepository: "quay.io/open-cluster-management"
-  imageTagSuffix: SNAPSHOT-2020-03-20-14-30-04
+  # storageClass: "gp2" # used to override the default storage class
+  imageTagSuffix: SNAPSHOT-2020-03-23-07-17-57
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
   foundation:
@@ -22,13 +23,13 @@ spec:
         enable-service-registry: "true"
       replicas: 1
   mongo:
-    endpoints: mongo-0.mongo.open-cluster-management
+    endpoints: multicluster-mongodb
     replicaSet: rs0
+    tlsSecret: multicluster-mongodb-client-cert
+    caSecret: multicloud-ca-cert
   hive:
     additionalCertificateAuthorities:
       - name: letsencrypt-ca
-    managedDomains:
-      - s1.openshiftapps.com
     globalPullSecret:
       name: private-secret
     failedProvisionConfig:

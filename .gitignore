@@ -1,4 +1,5 @@
 quay-secret.yaml
 pull-secret.yaml
 
+multiclusterspoke/
 *.bak
