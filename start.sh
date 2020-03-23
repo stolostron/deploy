@@ -127,17 +127,17 @@ if [ "$1" == "-t" ]; then
 fi
 
 echo "##### Applying prerequisites"
-oc apply -k prereqs/
+kubectl apply -k prereqs/
 printf "#####\n\n"
 
 echo "##### Applying multicluster-hub-operator subscription #####"
-oc apply -k multiclusterhub-operator/
+kubectl apply -k multiclusterhub-operator/
 waitForPod "multiclusterhub-operator" "registry" "1/1"
 echo "Beginning deploy..."
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-oc apply -k multiclusterhub
+kubectl apply -k multiclusterhub
 waitForPod "multicluster-operators-application" "" "4/4"
 #Issues #1025 = This is needed to work around the fact that the Subscription Operator incluses the clusters.clusterregistry.k8s.io
 echo "Remove the clusters.clusterregistry.k8s.io CustomResourceDefinition"
