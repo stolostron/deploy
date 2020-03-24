@@ -2,7 +2,7 @@ apiVersion: policy.mcm.ibm.com/v1alpha1
 kind: Policy
 metadata:
   name: policy-rolebinding
-  namespace: default
+  namespace: open-cluster-management-policies
   annotations:
     policy.mcm.ibm.com/standards: NIST-CSF
     policy.mcm.ibm.com/categories: PR.AC Identity Management Authentication and Access Control
@@ -34,7 +34,7 @@ apiVersion: mcm.ibm.com/v1alpha1
 kind: PlacementBinding
 metadata:
   name: binding-policy-rolebinding
-  namespace: default
+  namespace: open-cluster-management-policies
 placementRef:
   name: placement-policy-rolebinding
   kind: PlacementRule
@@ -48,7 +48,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: placement-policy-rolebinding
-  namespace: default
+  namespace: open-cluster-management-policies
 spec:
   clusterConditions:
   - type: OK
