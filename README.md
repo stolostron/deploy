@@ -209,7 +209,9 @@ After completing the steps above you can redeploy the `multiclusterhub` instance
 
 ## To Delete the multiclusterhub-operator (the easy way)
 
-1. run the `uninstall.sh` script in the root of this repo
+1. run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters
+2. run the `uninstall.sh` script in the root of this repo
+
 
 ## To Delete the multiclusterhub-operator (the hard way)
 
