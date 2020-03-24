@@ -8,7 +8,15 @@ namespace: open-cluster-management
 generatorOptions:
   disableNameSuffixHash: true
 
+secretGenerator:
+- name: policies-secret
+  type: "Opaque"
+  literals:
+    - user=
+    - accessToken=
+
 # list of Resource Config to be Applied
 resources:
+  # - config-map.yaml
   - channel.yaml
   - subscription.yaml
