@@ -33,3 +33,4 @@ oc delete crd orders.certmanager.k8s.io || true
 oc delete clusterrolebinding cert-manager-webhook-auth-delegator || true
 oc delete clusterRoles cert-manager-webhook-requester || true
 oc delete mutatingwebhookconfiguration cert-manager-webhook || true
+oc delete namespace open-cluster-management --wait=false

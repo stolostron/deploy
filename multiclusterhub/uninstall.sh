@@ -1,8 +1,20 @@
 #!/bin/bash
 
+remove-apiservices () {
+  echo "Remove Orphaned Apiservices"
+  for apiservice in `kubectl get apiservices 2>/dev/null | grep "False" | awk '{ print $1; }'`; do
+    if [[ $apiservice =~ "clusterapi.io" ]] || [[ $apiservice =~ "clusterregistry.k8s.io" ]] || [[ $apiservice =~ "mcm.ibm.com" ]] || [[ $apiservice =~ "v1beta1.webhook.certmanager.k8s.io" ]] || [[ $apiservice =~ "hive.openshift.io" ]]; then
+      kubectl delete apiservice $apiservice
+    else
+      echo "Skipping apiservice $apiservice"
+    fi
+  done
+}
+
 oc project open-cluster-management
+remove-apiservices
 for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
-for cluster in $(oc get Cluster.clusterregistry.k8s.io --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster; done
+for cluster in $(oc get Cluster.clusterregistry.k8s.io --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false; done
 oc delete appsub --all --ignore-not-found || true
 oc delete crd endpointconfigs.multicloud.ibm.com --ignore-not-found || true
 for subscription in $(oc get subscriptions.apps.open-cluster-management.io -n open-cluster-management | tail -n +2 | cut -f 1 -d ' '); do oc delete subscriptions.apps.open-cluster-management.io $subscription -n open-cluster-management --wait=false; done
@@ -26,6 +38,8 @@ for secret in $(oc get Secret -n open-cluster-management | grep topology| cut -f
 for secret in $(oc get Secret -n open-cluster-management | grep console-chart | cut -f 1 -d ' '); do oc delete Secret $secret -n open-cluster-management --ignore-not-found; done
 for secret in $(oc get Secret -n open-cluster-management | grep aws | cut -f 1 -d ' '); do oc delete Secret $secret -n open-cluster-management --ignore-not-found; done
 
+remove-apiservices
+oc get apiservice | grep "hive" | awk '{ print $1 }' | xargs oc delete apiservice
 oc get crd | grep "hive" | awk '{ print $1 }' | xargs oc delete crd --wait=false
 oc delete csv hive -n hive $(oc get csv -n hive | tail -n +2 | cut -f 1 -d ' ') --ignore-not-found || true
 oc delete deploy hive-controllers -n hive -n hive --ignore-not-found || true
@@ -42,3 +56,9 @@ for secret in $(oc get Secret -n hive | grep management-ingress | cut -f 1 -d ' 
 for secret in $(oc get Secret -n hive | grep multicluster | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
 for secret in $(oc get Secret -n hive | grep sh.helm.release.v1 | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
 for secret in $(oc get Secret -n hive | grep topology | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
+oc delete namespace hive --wait=false
+
+#Additonal cleanup
+oc delete crd userpreferences.console.acm.io --ignore-not-found || true
+oc delete ConsoleLink acm-console-link --ignore-not-found || true
+oc delete OAuthClient multicloudingress --ignore-not-found || true
