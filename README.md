@@ -20,7 +20,7 @@ With Red Hat Advanced Cluster Management for Kubernetes:
 
 ## Let's get started...  
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/summary.md)(_private link... to be opened 03/27/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md)(_private link... to be opened 03/27/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
@@ -209,7 +209,9 @@ After completing the steps above you can redeploy the `multiclusterhub` instance
 
 ## To Delete the multiclusterhub-operator (the easy way)
 
-1. run the `uninstall.sh` script in the root of this repo
+1. run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters
+2. run the `uninstall.sh` script in the root of this repo
+
 
 ## To Delete the multiclusterhub-operator (the hard way)
 
