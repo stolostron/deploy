@@ -1,8 +1,0 @@
-apiVersion: app.ibm.com/v1alpha1
-kind: Channel
-metadata:
-  name: bookinfo-github
-  namespace: bookinfo-channel
-spec:
-  type: GitHub
-  pathname: https://github.com/open-cluster-management/deploy/bookinfo/manifest/

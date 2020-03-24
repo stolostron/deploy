@@ -9,7 +9,7 @@ generatorOptions:
   disableNameSuffixHash: true
 
 secretGenerator:
-- name: policies-secret
+- name: policies-github-secret
   type: "Opaque"
   literals:
     - user=
@@ -17,6 +17,5 @@ secretGenerator:
 
 # list of Resource Config to be Applied
 resources:
-  # - config-map.yaml
   - channel.yaml
   - subscription.yaml

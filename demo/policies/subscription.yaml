@@ -2,21 +2,21 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policies-path
+  name: policies-github-path
   namespace: open-cluster-management
 data:
-    # path: policies
+    # path: resources/policies
     path: artifacts/policies-acm
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
 metadata:
-  name: policies
+  name: demo-policies
   namespace: open-cluster-management
 spec:
-  channel: open-cluster-management/policies
+  channel: open-cluster-management/deploy-demo-policies
   placement:
     local: true
   packageFilter:
     filterRef:
-      name: policies-path
+      name: policies-github-path

@@ -5,8 +5,13 @@ kind: Kustomization
 # namespace to deploy all Resources to
 namespace: open-cluster-management
 
-bases:
-  - ./policy
-
 generatorOptions:
   disableNameSuffixHash: true
+
+# list of Resource Config to be Applied
+resources:
+  - namespace.yaml
+  - channel.yaml
+  - application.yaml
+  - placement-rule.yaml
+  - subscription.yaml

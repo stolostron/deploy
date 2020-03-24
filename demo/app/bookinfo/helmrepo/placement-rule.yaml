@@ -1,0 +1,14 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: dev-placementrule
+  namespace: bookinfo-helmrepo
+  labels:
+    purpose: bookinfo-helmrepo-demo
+spec:
+  clusterConditions:
+    - type: OK
+  clusterSelector:
+    matchExpressions: []
+    matchLabels:
+      environment: Dev
