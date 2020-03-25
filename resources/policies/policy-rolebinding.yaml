@@ -1,0 +1,56 @@
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: policy-rolebinding
+  namespace: default
+  annotations:
+    policy.mcm.ibm.com/standards: NIST-CSF
+    policy.mcm.ibm.com/categories: PR.AC Identity Management Authentication and Access Control
+    policy.mcm.ibm.com/controls: PR.AC-4 Access Control
+spec:
+  complianceType: musthave
+  remediationAction: inform
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["default"]
+  object-templates:
+    - complianceType: musthave
+      objectDefinition:
+        kind: RoleBinding # role binding must exist
+        apiVersion: rbac.authorization.k8s.io/v1
+        metadata:
+          name: operate-pods-rolebinding
+        subjects:
+        - kind: User
+          name: admin # Name is case sensitive
+          apiGroup: rbac.authorization.k8s.io
+        roleRef:
+          kind: Role #this must be Role or ClusterRole
+          name: operator # this must match the name of the Role or ClusterRole you wish to bind to
+          apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-rolebinding
+  namespace: default
+placementRef:
+  name: placement-policy-rolebinding
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-rolebinding
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-rolebinding
+  namespace: default
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchExpressions: []

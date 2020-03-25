@@ -1,0 +1,29 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: <CLUSTER_NAME>
+  labels:
+    cloud: 'AWS'
+    region: '<CLOUD_REGION>'
+    environment: 'dev'
+    vendor: 'OCP'
+spec:
+  baseDomain: <BASE_DOMAIN>
+  clusterName: <CLUSTER_NAME>
+  controlPlaneConfig:
+    servingCertificates: {}
+  installed: false
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: aws-creds
+      region: <CLOUD_REGION>
+  provisioning:
+    installConfigSecretRef:
+      name: install-config
+    sshPrivateKeySecretRef:
+      name: ssh-privatekey
+    imageSetRef:
+      name: imageset
+  pullSecretRef:
+    name: openshift-installer-pull-secret

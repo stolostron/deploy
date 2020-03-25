@@ -1,5 +1,10 @@
 quay-secret.yaml
 pull-secret.yaml
 
-multiclusterspoke/
+ssh-privatekey
+ssh-privatekey.pub
+id_rsa
+id_rsa.pub
+
+local.rc
 *.bak

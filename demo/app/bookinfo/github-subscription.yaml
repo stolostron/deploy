@@ -1,0 +1,26 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: bookinfo-github
+  namespace: bookinfo
+  labels:
+    app: bookinfo
+spec:
+  channel: deploy-github/master
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-placementrule
+  packageFilter:
+    filterRef:
+      name: bookinfo-resource-filter-configmap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookinfo-resource-filter-configmap
+  namespace: bookinfo
+  labels:
+    app: bookinfo
+data:
+    path: resources/bookinfo/manifest

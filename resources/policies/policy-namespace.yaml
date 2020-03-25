@@ -1,0 +1,48 @@
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: policy-namespace
+  namespace: default
+  annotations:
+    policy.mcm.ibm.com/standards: NIST-CSF
+    policy.mcm.ibm.com/categories: PR.IP Information Protection Processes and Procedures
+    policy.mcm.ibm.com/controls: PR.IP-1 Baseline configuration
+spec:
+  complianceType: musthave
+  remediationAction: inform
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["default"]
+  object-templates:
+    - complianceType: musthave
+      objectDefinition:
+        kind: Namespace # must have namespace 'prod'
+        apiVersion: v1
+        metadata:
+          name: prod
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-namespace
+  namespace: default
+placementRef:
+  name: placement-policy-namespace
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-namespace
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-namespace
+  namespace: default
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchExpressions: []

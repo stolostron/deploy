@@ -1,0 +1,19 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# namespace to deploy all Resources to
+namespace: bookinfo
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+# list of Resource Config to be Applied
+resources:
+  - namespace.yaml
+  # - chart-channel.yaml
+  # - chart-subscription.yaml
+  - github-channel.yaml
+  - github-subscription.yaml
+  - application.yaml
+  - dev-placement-rule.yaml

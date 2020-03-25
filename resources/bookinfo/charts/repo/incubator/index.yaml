@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  bookinfo:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2020-01-10T16:44:47.008252+01:00
+    description: A Helm chart for bookinfo app (based on sample Istio app)
+    digest: 62cf2c73737db9016570a3c7069707dff256efdb3a6cb9e65afc51708576ad1b
+    icon: https://raw.githubusercontent.com/open-cluster-management/deploy/spoke-creation/resources/bookinfo/bookinfo.png
+    keywords:
+    - sample
+    - istio
+    - bookinfo
+    - ruby
+    - python
+    - liberty
+    - mysql
+    - ICAM
+    - CloudPak
+    name: bookinfo
+    urls:
+    - https://raw.githubusercontent.com/open-cluster-management/deploy/spoke-creation/resources/bookinfo/charts/repo/incubator/bookinfo-1.0.7.tgz
+    version: 1.0.7
+generated: 2020-01-10T16:44:46.986481+01:00

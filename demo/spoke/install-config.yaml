@@ -1,0 +1,38 @@
+apiVersion: v1
+metadata:
+  name: <CLUSTER_NAME>
+baseDomain: <BASE_DOMAIN>
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 3
+  platform:
+    aws:
+      rootVolume:
+        iops: 4000
+        size: 500
+        type: io1
+      type: m4.xlarge
+compute:
+- hyperthreading: Enabled
+  name: worker
+  replicas: 3
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 500
+        type: io1
+      type: m4.xlarge
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region: <CLOUD_REGION>
+pullSecret: "" # skip, hive will inject based on it's secrets

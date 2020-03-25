@@ -16,9 +16,9 @@ With Red Hat Advanced Cluster Management for Kubernetes:
   - Work across a range of environments, including multiple data centers, private clouds and public clouds that run Kubernetes clusters.
   - Easily create Kubernetes clusters and offer cluster lifecycle management in a single console.
   - Enforce policies at the target clusters using Kubernetes-supported custom resource definitions.
-  - Deploy and maintain day-two operations of business applications distributed across your cluster landscape.  
+  - Deploy and maintain day-two operations of business applications distributed across your cluster landscape.
 
-## Let's get started...  
+## Let's get started...
 
 You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md)(_private link... to be opened 03/27/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
 
@@ -32,7 +32,7 @@ You can find information on how to contribute to this project and our docs proje
    - `gsed` is required. Install using `brew install gnu-sed`
    - `wait` is optional. Install using `brew install wait`
 
-#### Repo Structure and Organization  
+#### Repo Structure and Organization
 This repo contains 3 directories:
   - `prereqs` - yaml definitions for prerequisite objects (namespaces and pull-secrets)
   - `multiclusterhub-operator` - yaml definitions for setting up a `CatalogSource` for our operator
@@ -46,7 +46,7 @@ You will find __helper__ scripts in the root of this repo:
 
 You have two choices of installation...
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will hand hold you through the process
-  - [the hard way](#manually-deploy-using-oc-commands-the-hard-way) - using nothing but `oc` commands and you'll need to edit some yaml
+  - [the hard way](#manually-deploy-using-kubectl-commands-the-hard-way) - using nothing but `oc` commands and you'll need to edit some yaml
 
 Either way you choose to go you're gonna need a `pull-secret`... we are still in early development stage and yes we do plan on open sourcing all of our code but... lawyers, gotta do some more due diligence before we can open up to the world.  In the mean time you'll require access to our built images residing in our private [quay.io/open-cluster-management](https://quay.io/open-cluster-management) org. Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
 
@@ -100,7 +100,7 @@ Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/mu
 
 Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
 
-## Manually deploy using `oc` commands (the hard way)
+## Manually deploy using `kubectl` commands (the hard way)
 
 1. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
   ```bash
@@ -190,7 +190,7 @@ Note: This script can be run multiple times and will attempt to continue where i
 
 1. run the `uninstall.sh` script in the root of this repo
 
-## To Delete a MultiClusterHub Instance (the hard way)  
+## To Delete a MultiClusterHub Instance (the hard way)
 
 1. Delete the `example-multiclusterhub` objects by deleting the yaml definitions contained in the `multiclusterhub` dir:
     ```bash
