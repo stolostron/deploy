@@ -1,7 +1,7 @@
 apiVersion: v1
 metadata:
   name: <CLUSTER_NAME>
-baseDomain: <HOST_URL>
+baseDomain: <BASE_DOMAIN>
 controlPlane:
   hyperthreading: Enabled
   name: master

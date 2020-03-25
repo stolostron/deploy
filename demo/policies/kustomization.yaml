@@ -8,13 +8,6 @@ namespace: open-cluster-management
 generatorOptions:
   disableNameSuffixHash: true
 
-secretGenerator:
-- name: policies-github-secret
-  type: "Opaque"
-  literals:
-    - user=
-    - accessToken=
-
 # list of Resource Config to be Applied
 resources:
   - channel.yaml

@@ -11,9 +11,9 @@ generatorOptions:
 # list of Resource Config to be Applied
 resources:
   - namespace.yaml
-  - chart-channel.yaml
-  # - github-channel.yaml
+  # - chart-channel.yaml
+  # - chart-subscription.yaml
+  - github-channel.yaml
+  - github-subscription.yaml
   - application.yaml
   - dev-placement-rule.yaml
-  - chart-subscription.yaml
-  # - github-subscription.yaml

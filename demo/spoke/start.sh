@@ -12,17 +12,18 @@ if [ "${OS}" == "darwin" ]; then
 fi
 
 #This is needed for the deploy
-echo "* Testing connection"
+echo "* Testing connection to OCP cluster..."
 HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
 if [ $? -ne 0 ]; then
     echo "* Make sure you are logged into an OpenShift Container Platform before running this script"
     exit 2
 fi
-#Shorten to the basedomain
-HOST_URL=${HOST_URL/apps./}
-echo "* Using host url: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
+
+#Shorten to the basedomain
+BASE_DOMAIN=${BASE_DOMAIN/apps./}
+echo "* Using base domain: ${BASE_DOMAIN}"
 
 # read variables from file
 if [ ! -f ./local.rc ]; then
@@ -32,20 +33,38 @@ fi
 source local.rc
 
 # cluster name
+DEFAULT_BASE_DOMAIN=${BASE_DOMAIN}
+if [ "${BASE_DOMAIN}" == "" ]; then
+    printf "Enter BASE DOMAIN: (provisioned cluster will use this domain)\n"
+    read -r BASE_DOMAIN_CHOICE
+    if [ "${BASE_DOMAIN_CHOICE}" != "" ]; then
+        BASE_DOMAIN=${BASE_DOMAIN_CHOICE}
+        echo "BASE_DOMAIN=${BASE_DOMAIN}" >> ./local.rc
+    elif [ "${DEFAULT_BASE_DOMAIN}" == "" ]; then
+        echo "Please specify a valid cluster name to continue."
+        exit 2
+    fi
+fi
+
+BASE_DOMAIN=${BASE_DOMAIN}
+printf "using base domain: ${BASE_DOMAIN}\n"
+
+# cluster name
 DEFAULT_CLUSTER_NAME=${CLUSTER_NAME}
 if [ "${CLUSTER_NAME}" == "" ]; then
     printf "Enter CLUSTER NAME:\n"
     read -r CLUSTER_NAME_CHOICE
     if [ "${CLUSTER_NAME_CHOICE}" != "" ]; then
-        DEFAULT_CLUSTER_NAME=${CLUSTER_NAME_CHOICE}
-        echo "CLUSTER_NAME=${DEFAULT_CLUSTER_NAME}" >> ./local.rc
+        CLUSTER_NAME=${CLUSTER_NAME_CHOICE}-${RANDOM}
+        echo "" >> ./local.rc
+        echo "CLUSTER_NAME=${CLUSTER_NAME}" >> ./local.rc
     elif [ "${DEFAULT_CLUSTER_NAME}" == "" ]; then
         echo "Please specify a valid cluster name to continue."
         exit 2
     fi
 fi
 
-CLUSTER_NAME=${CLUSTER_NAME}-$RANDOM
+CLUSTER_NAME=${CLUSTER_NAME}
 printf "using cluster name: ${CLUSTER_NAME}\n"
 
 
@@ -56,6 +75,7 @@ if [ "${CLOUD_REGION}" == "" ]; then
     read -r CLOUD_REGION_CHOICE
     if [ "${CLOUD_REGION_CHOICE}" != "" ]; then
         CLOUD_REGION=${CLOUD_REGION_CHOICE}
+        echo "" >> ./local.rc
         echo "CLOUD_REGION=${CLOUD_REGION}" >> local.rc
     fi
 fi
@@ -70,6 +90,7 @@ if [ "${AWS_ACCESS_KEY}" == "" ]; then
     read -r AWS_ACCESS_KEY_CHOICE
     if [ "${AWS_ACCESS_KEY_CHOICE}" != "" ]; then
         DEFAULT_AWS_ACCESS_KEY=${AWS_ACCESS_KEY_CHOICE}
+        echo "" >> ./local.rc
         echo "AWS_ACCESS_KEY=${DEFAULT_AWS_ACCESS_KEY}" >> local.rc
     elif [ "${DEFAULT_AWS_ACCESS_KEY}" == "" ]; then
         echo "Please specify a valid aws access key to continue."
@@ -87,6 +108,7 @@ if [ "${AWS_SECRET_ACCESS_KEY}" == "" ]; then
     read -r AWS_SECRET_ACCESS_KEY_CHOICE
     if [ "${AWS_SECRET_ACCESS_KEY_CHOICE}" != "" ]; then
         DEFAULT_AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_CHOICE}
+        echo "" >> ./local.rc
         echo "AWS_SECRET_ACCESS_KEY=${DEFAULT_AWS_SECRET_ACCESS_KEY}" >> local.rc
     elif [ "${DEFAULT_AWS_SECRET_ACCESS_KEY}" == "" ]; then
         echo "Please specify a valid aws secret access key to continue."
@@ -99,8 +121,8 @@ printf "using aws secret access key: ${AWS_SECRET_ACCESS_KEY}\n"
 
 # ocp pull secret
 if [ "${OCP_PULL_SECRET}" == "" ]; then
-    printf "OCP PULL SECRET not set... Please specify OCP_PULL_SECRET in ./local.rc"
-    printf "You can download or copy it directly from this link: https://cloud.redhat.com/openshift/install/pull-secret"
+    printf "OCP PULL SECRET not set... Please specify OCP_PULL_SECRET in ./local.rc\n"
+    printf "You can download or copy it directly from this link: https://cloud.redhat.com/openshift/install/pull-secret\n"
     exit 2
 fi
 
@@ -121,9 +143,9 @@ if [ ! -f ./ssh-privatekey ]; then
     fi
 fi
 
-printf "* Applying HOST_URL (${HOST_URL}) to ./*.yaml\n"
-${SED} -i "s/<HOST_URL>/${HOST_URL}/g" ./cluster-deployment.yaml
-${SED} -i "s/<HOST_URL>/${HOST_URL}/g" ./install-config.yaml
+printf "* Applying BASE_DOMAIN (${BASE_DOMAIN}) to ./*.yaml\n"
+${SED} -i "s/<BASE_DOMAIN>/${BASE_DOMAIN}/g" ./cluster-deployment.yaml
+${SED} -i "s/<BASE_DOMAIN>/${BASE_DOMAIN}/g" ./install-config.yaml
 
 printf "* Applying CLUSTER_NAME (${CLUSTER_NAME}) to ./*.yaml\n"
 ${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./cluster-deployment.yaml
@@ -146,3 +168,15 @@ ${SED} -i "s/<AWS_SECRET_ACCESS_KEY>/${AWS_SECRET_ACCESS_KEY}/g" ./kustomization
 
 printf "* Applying OCP_PULL_SECRET to ./kustomization.yaml\n"
 ${SED} -i "s/<OCP_PULL_SECRET>/${OCP_PULL_SECRET}/g" ./kustomization.yaml
+
+
+echo "Ready to start applying yaml definitions to your OCP cluster."
+echo "Press ENTER to continue"
+read -r CONTINUE
+
+kubectl apply -k .
+
+printf "\n"
+echo "Deploying spoke cluster ${CLUSTER_NAME}, use \"watch oc -n ${CLUSTER_NAME} get jobs\" to monitor progress."
+echo "Once the provision job has completed you will see the cluster in your OCM here: "
+echo "https://multicloud-console.apps.${HOST_URL}/multicloud/clusters"

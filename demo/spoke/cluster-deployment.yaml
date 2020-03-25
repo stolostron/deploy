@@ -8,7 +8,7 @@ metadata:
     environment: 'dev'
     vendor: 'OCP'
 spec:
-  baseDomain: <HOST_URL>
+  baseDomain: <BASE_DOMAIN>
   clusterName: <CLUSTER_NAME>
   controlPlaneConfig:
     servingCertificates: {}

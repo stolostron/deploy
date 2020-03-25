@@ -5,8 +5,7 @@ metadata:
   name: policies-github-path
   namespace: open-cluster-management
 data:
-    # path: resources/policies
-    path: artifacts/policies-acm
+    path: resources/policies
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
