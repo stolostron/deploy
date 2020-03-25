@@ -77,7 +77,7 @@ Either way you choose to go you're gonna need a `pull-secret`... we are still in
 
 ## Deploy using the ./start.sh script (the easy way)
 
-We've added a very simple `start.sh` script to make your life easier... if you want to deploy `OCM` the __"hard way"__ you can find the instructions for deploying `OCM` using nothing but `oc` commands [here](#manually-deploy-using-only-oc-commands).
+We've added a very simple `start.sh` script to make your life easier... if you want to deploy `OCM` the __"hard way"__ you can find the instructions for deploying `OCM` using nothing but `oc` commands [here](#manually-deploy-using-oc-commands-the-hard-way).
 
 1. Run the `start.sh` script (see )
 Options:  (Only use one at a time)
