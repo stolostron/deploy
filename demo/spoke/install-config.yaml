@@ -1,7 +1,7 @@
 apiVersion: v1
 metadata:
-  name: spoke
-baseDomain: demo.red-chesterfield.com
+  name: <CLUSTER_NAME>
+baseDomain: <HOST_URL>
 controlPlane:
   hyperthreading: Enabled
   name: master
@@ -34,5 +34,5 @@ networking:
   - 172.30.0.0/16
 platform:
   aws:
-    region: us-east-2
+    region: <CLOUD_REGION>
 pullSecret: "" # skip, hive will inject based on it's secrets

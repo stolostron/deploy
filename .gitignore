@@ -2,6 +2,9 @@ quay-secret.yaml
 pull-secret.yaml
 
 ssh-privatekey
+ssh-privatekey.pub
 id_rsa
 id_rsa.pub
+
+local.rc
 *.bak

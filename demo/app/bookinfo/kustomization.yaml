@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 # namespace to deploy all Resources to
-namespace: open-cluster-management
+namespace: bookinfo
 
 generatorOptions:
   disableNameSuffixHash: true
@@ -11,7 +11,9 @@ generatorOptions:
 # list of Resource Config to be Applied
 resources:
   - namespace.yaml
-  - channel.yaml
+  - chart-channel.yaml
+  # - github-channel.yaml
   - application.yaml
-  - placement-rule.yaml
-  - subscription.yaml
+  - dev-placement-rule.yaml
+  - chart-subscription.yaml
+  # - github-subscription.yaml

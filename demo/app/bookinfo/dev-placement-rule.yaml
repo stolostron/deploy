@@ -1,10 +1,10 @@
-apiVersion: app.ibm.com/v1alpha1
+apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: dev-placementrule
-  namespace: bookinfo-helmrepo
+  namespace: bookinfo
   labels:
-    purpose: bookinfo-helmrepo-demo
+    app: bookinfo
 spec:
   clusterConditions:
     - type: OK

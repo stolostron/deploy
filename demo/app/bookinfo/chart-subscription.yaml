@@ -1,13 +1,13 @@
-apiVersion: app.ibm.com/v1alpha1
+apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
 metadata:
-  name: bookinfo-subscription
-  namespace: bookinfo-helmrepo
+  name: bookinfo-helmchart
+  namespace: bookinfo
   labels:
-    app: bookinfo-helmrepo
-    purpose: bookinfo-helmrepo-demo
+    app: bookinfo
 spec:
-  channel: bookinfo-helmrepo/bookinfo-helmrepo
+  channel: deploy-charts/chartsv1
+  name: bookinfo
   packageFilter:
     version: 1.0.7
   placement:
@@ -27,4 +27,4 @@ spec:
     - path: spec.values
       value: |
         ingress:
-          host: bookinfo.apps.blue-12.dev.multicloudops.io
+          host: bookinfo.apps.spoke-23.demo.red-chesterfield.com

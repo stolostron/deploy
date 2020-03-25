@@ -3,7 +3,8 @@ kind: Cluster
 metadata:
   labels:
     cloud: auto-detect
-    name: spoke
+    name: <CLUSTER_NAME>
     vendor: auto-detect
-  name: spoke
+    environment: Dev
+  name: <CLUSTER_NAME>
 spec: {}

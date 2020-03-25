@@ -1,7 +1,7 @@
 apiVersion: multicloud.ibm.com/v1alpha1
 kind: EndpointConfig
 metadata:
-  name: spoke
+  name: <CLUSTER_NAME>
 spec:
   version: 1.0.0
   bootstrapConfig:
@@ -9,8 +9,8 @@ spec:
   clusterLabels:
     cloud: auto-detect
     vendor: auto-detect
-  clusterName: spoke
-  clusterNamespace: spoke
+  clusterName: <CLUSTER_NAME>
+  clusterNamespace: <CLUSTER_NAME>
   applicationManager:
     enabled: true
   imageRegistry: quay.io/open-cluster-management

@@ -1,10 +1,10 @@
 apiVersion: hive.openshift.io/v1
 kind: MachinePool
 metadata:
-  name: spoke-worker
+  name: <CLUSTER_NAME>-worker
 spec:
   clusterDeploymentRef:
-    name: spoke
+    name: <CLUSTER_NAME>
   name: worker
   platform:
     aws:

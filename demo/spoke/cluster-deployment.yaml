@@ -1,15 +1,15 @@
 apiVersion: hive.openshift.io/v1
 kind: ClusterDeployment
 metadata:
-  name: spoke
+  name: <CLUSTER_NAME>
   labels:
     cloud: 'AWS'
-    region: 'us-east-2'
+    region: '<CLOUD_REGION>'
     environment: 'dev'
     vendor: 'OCP'
 spec:
-  baseDomain: demo.red-chesterfield.com
-  clusterName: spoke
+  baseDomain: <HOST_URL>
+  clusterName: <CLUSTER_NAME>
   controlPlaneConfig:
     servingCertificates: {}
   installed: false
@@ -17,7 +17,7 @@ spec:
     aws:
       credentialsSecretRef:
         name: aws-creds
-      region: us-east-2
+      region: <CLOUD_REGION>
   provisioning:
     installConfigSecretRef:
       name: install-config
