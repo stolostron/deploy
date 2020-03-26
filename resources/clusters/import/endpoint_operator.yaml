@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: endpoint-operator
+  namespace: multicluster-endpoint
+spec:
+  selector:
+    matchLabels:
+      name: endpoint-operator
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: endpoint-operator
+    spec:
+      containers:
+      - env:
+        - name: WATCH_NAMESPACE
+        - name: OPERATOR_NAME
+          value: endpoint-operator
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: IMAGE_TAG_POSTFIX
+          value: -SNAPSHOT-2020-03-23-20-27-42
+        image: quay.io/open-cluster-management/endpoint-operator:1.0.0-SNAPSHOT-2020-03-23-20-27-42
+        imagePullPolicy: Always
+        name: endpoint-operator
+        resources: {}
+      imagePullSecrets:
+      - name: multiclusterhub-operator-pull-secret
+      serviceAccountName: endpoint-operator

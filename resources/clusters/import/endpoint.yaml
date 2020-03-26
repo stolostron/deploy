@@ -1,0 +1,39 @@
+apiVersion: multicloud.ibm.com/v1beta1
+kind: Endpoint
+metadata:
+  creationTimestamp: null
+  name: endpoint
+  namespace: multicluster-endpoint
+spec:
+  applicationManager:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  cisController:
+    enabled: false
+  clusterLabels:
+    cloud: GCP
+    vendor: OCP
+  clusterName: kind-cluster
+  clusterNamespace: kind-cluster
+  connectionManager: {}
+  iamPolicyController:
+    enabled: true
+  imagePullSecret: multiclusterhub-operator-pull-secret
+  imageRegistry: quay.io/open-cluster-management
+  policyController:
+    enabled: true
+  prometheusIntegration:
+    enabled: true
+  searchCollector:
+    enabled: true
+  serviceRegistry:
+    dnsSuffix: mcm.svc
+    enabled: true
+    plugins: kube-service
+  topologyCollector:
+    enabled: true
+    updateInterval: 15
+  weaveCollector:
+    enabled: false
+  version: 1.0.0
