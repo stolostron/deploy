@@ -1,5 +1,6 @@
 #!/bin/bash
 
+./clean-clusters.sh
 
 kubectl delete -k multiclusterhub/ --ignore-not-found
 ./multiclusterhub/uninstall.sh

@@ -13,7 +13,8 @@ remove-apiservices () {
 
 oc project open-cluster-management
 remove-apiservices
-for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
+# cluster deployment cleanup now being done by clean-clusters.sh
+# for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
 for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 oc delete appsub --all --ignore-not-found || true
 oc delete crd endpointconfigs.multicloud.ibm.com --ignore-not-found || true

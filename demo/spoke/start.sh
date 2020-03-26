@@ -177,6 +177,25 @@ read -r CONTINUE
 kubectl apply -k .
 
 printf "\n"
-echo "Deploying spoke cluster ${CLUSTER_NAME}, use \"watch oc -n ${CLUSTER_NAME} get jobs\" to monitor progress."
-echo "Once the provision job has completed you will see the cluster in your OCM here: "
+echo "Deploying spoke cluster ${CLUSTER_NAME}..."
+
+printf "\n"
+echo "Press ENTER to watch cluster provisioning job logs"
+read -r CONTINUE
+
+podName=''
+while [ "${podName}" == "" ]
+do
+    podName=`oc -n ${CLUSTER_NAME} get pods | grep provision | awk '{ print $1 }'`
+done
+echo "Found provisioning job pod ${podName}, retrieving logs... (waiting 30s for job containers to be in RUNNING state)"
+sleep 30
+oc -n ${CLUSTER_NAME} logs ${podName} --container hive -f
+
+printf "\n"
+echo "Provision job complete. You should now be able see your cluster in OCM here: "
 echo "https://multicloud-console.apps.${HOST_URL}/multicloud/clusters"
+
+printf "\n"
+echo "Note: It may take a few minutes for the cluster import to complete."
+echo "Until import complete the cluster will show as \"Pending Import\"."

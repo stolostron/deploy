@@ -3,7 +3,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   name: chart
-  namespace: open-cluster-management
+  namespace: bookinfo
 spec:
   type: HelmRepo
   pathname: https://raw.githubusercontent.com/open-cluster-management/deploy/master/resources/bookinfo/charts/repo/incubator/

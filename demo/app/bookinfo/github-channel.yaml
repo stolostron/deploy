@@ -3,7 +3,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   name: github
-  namespace: open-cluster-management
+  namespace: bookinfo
 spec:
   type: GitHub
   pathname: https://github.com/open-cluster-management/deploy.git

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: bookinfo
 spec:
-  channel: open-cluster-management/chart
+  channel: bookinfo/chart
   name: bookinfo
   packageFilter:
     version: 1.0.7
