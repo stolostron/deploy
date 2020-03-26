@@ -140,11 +140,11 @@ echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluste
 oc apply -k multiclusterhub
 waitForPod "multicluster-operators-application" "" "4/4"
 #Issues #1025 = This is needed to work around the fact that the Subscription Operator incluses the clusters.clusterregistry.k8s.io
-echo "Remove the clusters.clusterregistry.k8s.io CustomResourceDefinition"
-oc get crd clusters.clusterregistry.k8s.io > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-  oc delete crd clusters.clusterregistry.k8s.io
-fi
+# echo "Remove the clusters.clusterregistry.k8s.io CustomResourceDefinition"
+# oc get crd clusters.clusterregistry.k8s.io > /dev/null 2>&1
+# if [ $? -eq 0 ]; then
+#   oc delete crd clusters.clusterregistry.k8s.io
+# fi
 
 COMPLETE=1
 if [ "$1" == "--watch" ]; then

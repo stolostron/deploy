@@ -2,11 +2,11 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
 metadata:
   name: bookinfo-github
-  namespace: bookinfo
+  namespace: open-cluster-management
   labels:
     app: bookinfo
 spec:
-  channel: deploy-github/master
+  channel: open-cluster-management/github
   placement:
     placementRef:
       kind: PlacementRule
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bookinfo-resource-filter-configmap
-  namespace: bookinfo
+  namespace: open-cluster-management
   labels:
     app: bookinfo
 data:
