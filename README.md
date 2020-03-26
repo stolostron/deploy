@@ -125,7 +125,7 @@ Note: This script can be run multiple times and will attempt to continue where i
 
 4. Wait for subscription to be healthy:
     ```bash
-    oc get subscription multiclusterhub-operator-bundle --namespace open-cluster-management -o yaml
+    oc get subscription.operators.coreos.com multiclusterhub-operator-bundle --namespace open-cluster-management -o yaml
     ...
     status:
       catalogHealth:
