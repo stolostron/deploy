@@ -14,13 +14,3 @@ spec:
   packageFilter:
     filterRef:
       name: bookinfo-resource-filter-configmap
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: bookinfo-resource-filter-configmap
-  namespace: bookinfo
-  labels:
-    app: bookinfo
-data:
-    path: resources/bookinfo/manifest
