@@ -72,7 +72,6 @@ echo "* oc CLI ${VER}"
 
 if [[ $VER =~ .*[4-9]\.[3-9]\..* ]]
 then
-    echo "test fail"
     apply_command="oc apply -k"
 
 else
