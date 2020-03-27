@@ -6,6 +6,7 @@ metadata:
   labels:
     app: productpage
   name: productpage
+  namespace: open-cluster-management
 spec:
   port:
     targetPort: https

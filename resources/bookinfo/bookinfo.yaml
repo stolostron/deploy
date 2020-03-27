@@ -33,7 +33,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: details
-  namespace: github-bookinfo
   labels:
     app: details
     service: details
@@ -48,7 +47,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-details
-  namespace: github-bookinfo
   labels:
     account: details
 ---
@@ -56,7 +54,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: details-v1
-  namespace: github-bookinfo
   labels:
     app: details
     version: v1
@@ -87,7 +84,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ratings
-  namespace: github-bookinfo
   labels:
     app: ratings
     service: ratings
@@ -102,7 +98,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-ratings
-  namespace: github-bookinfo
+
   labels:
     account: ratings
 ---
@@ -110,7 +106,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ratings-v1
-  namespace: github-bookinfo
   labels:
     app: ratings
     version: v1
@@ -141,7 +136,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: reviews
-  namespace: github-bookinfo
   labels:
     app: reviews
     service: reviews
@@ -156,7 +150,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-reviews
-  namespace: github-bookinfo
+
   labels:
     account: reviews
 ---
@@ -164,7 +158,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v1
-  namespace: github-bookinfo
   labels:
     app: reviews
     version: v1
@@ -205,7 +198,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v2
-  namespace: github-bookinfo
   labels:
     app: reviews
     version: v2
@@ -246,7 +238,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v3
-  namespace: github-bookinfo
   labels:
     app: reviews
     version: v3
@@ -290,7 +281,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: productpage
-  namespace: github-bookinfo
   labels:
     app: productpage
     service: productpage
@@ -305,7 +295,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-productpage
-  namespace: github-bookinfo
   labels:
     account: productpage
 ---
@@ -313,7 +302,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productpage-v1
-  namespace: github-bookinfo
   labels:
     app: productpage
     version: v1
