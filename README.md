@@ -212,6 +212,11 @@ After completing the steps above you can redeploy the `multiclusterhub` instance
 1. run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters
 2. run the `uninstall.sh` script in the root of this repo
 
+### Troubleshooting
+1. If uninstall hangs on the helmRelease delete, you can run this command to move it along.  This is distructive and can result in orphaned objects.
+```bash
+for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc patch helmreleases.apps.open-cluster-management.io $helmrelease --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; done
+```
 
 ## To Delete the multiclusterhub-operator (the hard way)
 

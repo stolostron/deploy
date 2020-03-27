@@ -14,7 +14,7 @@ function waitForPod() {
     podName=$1
     ignore=$2
     runnings="$3"
-    echo "Wait for ${podName} to reach running state (4min)."
+    printf "\n#####\nWait for ${podName} to reach running state (4min)."
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
@@ -40,7 +40,6 @@ function waitForPod() {
         sleep 3
         (( MINUTE = MINUTE + 3 ))
     done
-    printf "#####\n\n"
 }
 
 # fix sed issue on mac
@@ -96,12 +95,12 @@ fi
 DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
     DEFAULT_SNAPSHOT=`cat ./snapshot.ver`
-elif [ "$1" == "--silent" ]; then
+elif [[ " $@ " =~ " --silent " ]]; then
     echo "Silent mode will not work when ./snapshot.ver is missing"
     exit 1
 fi
 
-if [ "$1" != "--silent" ]; then
+if [[ " $@ " =~ " --silent " ]]; then
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
@@ -121,19 +120,18 @@ echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
-if [ "$1" == "-t" ]; then
+if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
     exit 0
 fi
 
-echo "##### Applying prerequisites"
+printf "\n##### Applying prerequisites\n"
 oc apply -k prereqs/
-printf "#####\n\n"
 
-echo "##### Applying multicluster-hub-operator subscription #####"
+printf "\n##### Applying multicluster-hub-operator subscription #####\n"
 oc apply -k multiclusterhub-operator/
 waitForPod "multiclusterhub-operator" "registry" "1/1"
-echo "Beginning deploy..."
+printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
@@ -141,7 +139,7 @@ oc apply -k multiclusterhub
 waitForPod "multicluster-operators-application" "" "4/4"
 
 COMPLETE=1
-if [ "$1" == "--watch" ]; then
+if [[ " $@ " =~ " --watch " ]]; then
     for i in {1..60}; do
         clear
         oc -n ${TARGET_NAMESPACE} get pods
