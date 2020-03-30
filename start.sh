@@ -14,7 +14,7 @@ function waitForPod() {
     podName=$1
     ignore=$2
     runnings="$3"
-    printf "\n#####\nWait for ${podName} to reach running state (4min)."
+    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
