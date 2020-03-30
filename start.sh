@@ -101,6 +101,8 @@ elif [[ " $@ " =~ " --silent " ]]; then
 fi
 
 if [[ " $@ " =~ " --silent " ]]; then
+    echo "* Silent mode"
+else
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
