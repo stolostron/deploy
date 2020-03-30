@@ -92,7 +92,7 @@ $>: ./start.sh --watch
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new tag.<br>
 Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/multiclusterhub-operator-index)
 ```bash
-1.0.0-SNAPSHOT-2020-03-13-23-07-54
+1.0.0-SNAPSHOT-2020-03-30-18-55-25
 ```
 2. Depending on your script Option choice, `OCM` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
 
