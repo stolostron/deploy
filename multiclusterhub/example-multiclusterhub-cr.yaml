@@ -9,30 +9,3 @@ spec:
   imageTagSuffix: SNAPSHOT-2020-03-26-01-27-33
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
-  foundation:
-    apiserver:
-      configuration:
-        http2-max-streams-per-connection: "1000"
-      replicas: 1
-      apiserverSecret: "mcm-apiserver-self-signed-secrets"
-      klusterletSecret: "mcm-klusterlet-self-signed-secrets"
-    controller:
-      configuration:
-        enable-rbac: "true"
-        enable-service-registry: "true"
-      replicas: 1
-  mongo:
-    endpoints: multicluster-mongodb
-    replicaSet: rs0
-    tlsSecret: multicluster-mongodb-client-cert
-    caSecret: multicloud-ca-cert
-  hive:
-    additionalCertificateAuthorities:
-      - name: letsencrypt-ca
-    globalPullSecret:
-      name: private-secret
-    failedProvisionConfig:
-      skipGatherLogs: true
-  etcd:
-    storage: "1Gi"
-    # storageClass: gp2
