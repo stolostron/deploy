@@ -12,45 +12,29 @@ remove-apiservices () {
 }
 
 oc project open-cluster-management
-remove-apiservices
+
 # cluster deployment cleanup now being done by clean-clusters.sh
 # for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
 for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
-# Deletes all subscriptions in the system
-oc delete appsub --all --ignore-not-found || true
+
+# Consider delete complete when all helmreleases are gone
+echo "Wait until helmreleases are deleted..."
+until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
+
 oc delete crd endpointconfigs.multicloud.ibm.com --ignore-not-found || true
 
-#for subscription in $(oc get subscriptions.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc delete subscriptions.apps.open-cluster-management.io $subscription --wait=false --ignore-not-found; done
-#for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc patch helmreleases.apps.open-cluster-management.io $helmrelease --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; done
-
-#Run through twice, first time initiate all the deletes, 2nd time wait. This makes it more likely if the user runs the finalizer patch there will be NO orphans
-for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc delete helmreleases.apps.open-cluster-management.io $helmrelease --wait=false --ignore-not-found; done
-for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc delete helmreleases.apps.open-cluster-management.io $helmrelease --ignore-not-found; done
-
-for webhook in $(oc get validatingwebhookconfiguration | grep cert-manager | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
 for configmap in $(oc get configmap  | grep cert-manager | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
 for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
+
 for apiservice in $(oc get apiservice | grep mcm | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
 for apiservice in $(oc get apiservice | grep certmanager | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
 for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
 for apiservice in $(oc get apiservice | grep clusterregistry.k8s.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
-for role in $(oc get clusterrole | grep multicluster-mongo | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
-for role in $(oc get clusterrole | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
-for role in $(oc get clusterrole | grep mcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
-for role in $(oc get clusterrole | grep rcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
-for role in $(oc get clusterrolebinding | grep multicluster-mongo | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found; done
-for role in $(oc get clusterrolebinding | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found; done
-for role in $(oc get clusterrolebinding | grep mcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found; done
-for role in $(oc get clusterrolebinding | grep rcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found; done
+
 for secret in $(oc get Secret | grep search | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
 for secret in $(oc get Secret | grep multicloud | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
-for secret in $(oc get Secret | grep kui | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
-for secret in $(oc get Secret | grep search | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
-for secret in $(oc get Secret | grep sh.helm.release | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
-for secret in $(oc get Secret | grep topology| cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
-for secret in $(oc get Secret | grep console-chart | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
 for secret in $(oc get Secret | grep aws | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
 
 remove-apiservices
