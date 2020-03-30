@@ -99,7 +99,7 @@ if [ "${AWS_ACCESS_KEY}" == "" ]; then
 fi
 
 AWS_ACCESS_KEY=${DEFAULT_AWS_ACCESS_KEY}
-printf "using aws access key: ${AWS_ACCESS_KEY}\n"
+printf "using aws access key: ****\n"
 
 # aws secret access key
 DEFAULT_AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -117,7 +117,7 @@ if [ "${AWS_SECRET_ACCESS_KEY}" == "" ]; then
 fi
 
 AWS_SECRET_ACCESS_KEY=${DEFAULT_AWS_SECRET_ACCESS_KEY}
-printf "using aws secret access key: ${AWS_SECRET_ACCESS_KEY}\n"
+printf "using aws secret access key: ****\n"
 
 # ocp pull secret
 if [ "${OCP_PULL_SECRET}" == "" ]; then
@@ -160,10 +160,10 @@ printf "* Applying CLOUD_REGION (${CLOUD_REGION}) to ./*.yaml\n"
 ${SED} -i "s/<CLOUD_REGION>/${CLOUD_REGION}/g" ./cluster-deployment.yaml
 ${SED} -i "s/<CLOUD_REGION>/${CLOUD_REGION}/g" ./install-config.yaml
 
-printf "* Applying AWS_ACCESS_KEY (${AWS_ACCESS_KEY}) to ./kustomization.yaml\n"
+printf "* Applying AWS_ACCESS_KEY (****) to ./kustomization.yaml\n"
 ${SED} -i "s/<AWS_ACCESS_KEY>/${AWS_ACCESS_KEY}/g" ./kustomization.yaml
 
-printf "* Applying AWS_SECRET_ACCESS_KEY (${AWS_SECRET_ACCESS_KEY}) to ./kustomization.yaml\n"
+printf "* Applying AWS_SECRET_ACCESS_KEY (****) to ./kustomization.yaml\n"
 ${SED} -i "s/<AWS_SECRET_ACCESS_KEY>/${AWS_SECRET_ACCESS_KEY}/g" ./kustomization.yaml
 
 printf "* Applying OCP_PULL_SECRET to ./kustomization.yaml\n"
