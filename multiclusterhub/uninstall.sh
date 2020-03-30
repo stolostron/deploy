@@ -1,16 +1,5 @@
 #!/bin/bash
 
-remove-apiservices () {
-  echo "Remove Orphaned Apiservices"
-  for apiservice in `kubectl get apiservices 2>/dev/null | grep "False" | awk '{ print $1; }'`; do
-    if [[ $apiservice =~ "clusterapi.io" ]] || [[ $apiservice =~ "clusterregistry.k8s.io" ]] || [[ $apiservice =~ "mcm.ibm.com" ]] || [[ $apiservice =~ "v1beta1.webhook.certmanager.k8s.io" ]] || [[ $apiservice =~ "hive.openshift.io" ]]; then
-      kubectl delete apiservice $apiservice
-    else
-      echo "Skipping apiservice $apiservice"
-    fi
-  done
-}
-
 oc project open-cluster-management
 
 # cluster deployment cleanup now being done by clean-clusters.sh
@@ -21,23 +10,21 @@ for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2
 echo "Wait until helmreleases are deleted..."
 until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
 
-oc delete crd endpointconfigs.multicloud.ibm.com --ignore-not-found || true
+# Issue https://github.com/open-cluster-management/backlog/issues/1286
+oc delete crd compliances.compliance.mcm.ibm.com --ignore-not-found || true
+oc delete crd policies.policy.mcm.ibm.com --ignore-not-found || true
 
-for configmap in $(oc get configmap  | grep cert-manager | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
+# Working on in https://github.com/open-cluster-management/backlog/issues/786
 for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
 
-for apiservice in $(oc get apiservice | grep mcm | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
-for apiservice in $(oc get apiservice | grep certmanager | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
-for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
-for apiservice in $(oc get apiservice | grep clusterregistry.k8s.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
-
-for secret in $(oc get Secret | grep search | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret | grep multicloud | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
+# Working on in https://github.com/open-cluster-management/backlog/issues/787
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
+
+# Not seen on cluster
+for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
 for secret in $(oc get Secret | grep aws | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
 
-remove-apiservices
+# Hive cleanup
 oc get crd | grep "hive" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get csv | grep "hive" | awk '{ print $1 }' | xargs oc delete csv --wait=false --ignore-not-found || true
 for deployment in $(oc get deploy -n hive | grep hive | cut -f 1 -d ' '); do oc delete deploy $deployment --ignore-not-found; done
@@ -47,12 +34,6 @@ for rolebinding in $(oc get clusterrolebindings | grep hive | cut -f 1 -d ' '); 
 for webhook in $(oc get validatingwebhookconfiguration | grep hive | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
 for configmap in $(oc get configmap -n hive | tail -n +2 | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
 for secret in $(oc get Secret -n hive | grep hive | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret -n hive | grep console | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret -n hive | grep kui | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret -n hive | grep management-ingress | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret -n hive | grep multicluster | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret -n hive | grep sh.helm.release.v1 | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-for secret in $(oc get Secret -n hive | grep topology | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
 oc delete namespace hive --wait=false
 
 #Additonal cleanup
