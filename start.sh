@@ -171,11 +171,12 @@ fi
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
-echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
-
-OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 if [ "${OS}" == "darwin" ]; then
-    if [ ! -x "$(command -v watch)"  ]; then
+    if [ ! -x "$(command -v watch)" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
+else
+  echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
 fi
+
+
