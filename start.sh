@@ -14,7 +14,7 @@ function waitForPod() {
     podName=$1
     ignore=$2
     runnings="$3"
-    printf "\n#####\nWait for ${podName} to reach running state (4min)."
+    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
@@ -69,11 +69,17 @@ echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
-#echo "Pick a namepsace to deploy into"
-#read -r TARGET_NAMESPACE
-#if [ "$TARGET_NAMESPACE" == "" ]; then
-#  TARGET_NAMESPACE=multicluster-system
-#fi
+# ensure default storage class defined on ocp cluster
+SC_RESOLVE=$(oc get sc 2>&1)
+if [[ $SC_RESOLVE =~ (default) ]];
+then
+  echo "OK: Default Storage Class defined"
+else
+  echo "ERROR: No default Storage Class defined."
+  echo "    Add Annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
+  echo "    Aborting."
+  exit 1
+fi
 
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
@@ -101,6 +107,8 @@ elif [[ " $@ " =~ " --silent " ]]; then
 fi
 
 if [[ " $@ " =~ " --silent " ]]; then
+    echo "* Silent mode"
+else
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
@@ -169,11 +177,12 @@ fi
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
-echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
-
-OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 if [ "${OS}" == "darwin" ]; then
-    if [ ! -x "$(command -v watch)"  ]; then
+    if [ ! -x "$(command -v watch)" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
+else
+  echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
 fi
+
+
