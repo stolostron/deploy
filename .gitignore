@@ -7,4 +7,5 @@ id_rsa
 id_rsa.pub
 
 local.rc
+kubeconfig
 *.bak
