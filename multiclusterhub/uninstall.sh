@@ -26,6 +26,7 @@ oc delete crd endpointconfigs.multicloud.ibm.com --ignore-not-found || true
 #Run through twice, first time initiate all the deletes, 2nd time wait. This makes it more likely if the user runs the finalizer patch there will be NO orphans
 for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc delete helmreleases.apps.open-cluster-management.io $helmrelease --wait=false --ignore-not-found; done
 for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc delete helmreleases.apps.open-cluster-management.io $helmrelease --ignore-not-found; done
+for policy in $(oc get policies.policy.mcm.ibm.com | tail -n +2 | cut -f 1 -d ' '); do oc patch policies.policy.mcm.ibm.com $policy --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; oc delete policies.policy.mcm.ibm.com $policy --ignore-not-found; done
 
 for webhook in $(oc get validatingwebhookconfiguration | grep cert-manager | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
 for configmap in $(oc get configmap  | grep cert-manager | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
