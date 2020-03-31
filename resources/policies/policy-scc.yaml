@@ -2,7 +2,7 @@ apiVersion: policy.mcm.ibm.com/v1alpha1
 kind: Policy
 metadata:
   name: policy-scc
-  namespace: default
+  namespace: open-cluster-management-policies
   annotations:
     policy.mcm.ibm.com/standards: NIST-CSF
     policy.mcm.ibm.com/categories: PR.PT Protective Technology
@@ -62,9 +62,23 @@ apiVersion: mcm.ibm.com/v1alpha1
 kind: PlacementBinding
 metadata:
   name: binding-policy-scc
-  namespace: default
+  namespace: open-cluster-management-policies
 placementRef:
   name: placement-policy-scc
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-scc
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: policy-scc-production-clusters
+  namespace: open-cluster-management-policies
+placementRef:
+  name: production-clusters
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
@@ -76,7 +90,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: placement-policy-scc
-  namespace: default
+  namespace: open-cluster-management-policies
 spec:
   clusterConditions:
   - type: OK

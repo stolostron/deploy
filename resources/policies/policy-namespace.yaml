@@ -2,7 +2,7 @@ apiVersion: policy.mcm.ibm.com/v1alpha1
 kind: Policy
 metadata:
   name: policy-namespace
-  namespace: default
+  namespace: open-cluster-management-policies
   annotations:
     policy.mcm.ibm.com/standards: NIST-CSF
     policy.mcm.ibm.com/categories: PR.IP Information Protection Processes and Procedures
@@ -26,9 +26,9 @@ apiVersion: mcm.ibm.com/v1alpha1
 kind: PlacementBinding
 metadata:
   name: binding-policy-namespace
-  namespace: default
+  namespace: open-cluster-management-policies
 placementRef:
-  name: placement-policy-namespace
+  name: production-clusters
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
@@ -40,7 +40,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: placement-policy-namespace
-  namespace: default
+  namespace: open-cluster-management-policies
 spec:
   clusterConditions:
   - type: OK

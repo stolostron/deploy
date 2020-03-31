@@ -2,7 +2,7 @@ apiVersion: policy.mcm.ibm.com/v1alpha1
 kind: Policy
 metadata:
   name: policy-certificatepolicy
-  namespace: default
+  namespace: open-cluster-management-policies
   annotations:
     policy.mcm.ibm.com/standards: NIST-CSF
     policy.mcm.ibm.com/categories: PR.DS DataSecurity
@@ -32,9 +32,23 @@ apiVersion: mcm.ibm.com/v1alpha1
 kind: PlacementBinding
 metadata:
   name: binding-policy-certificatepolicy
-  namespace: default
+  namespace: open-cluster-management-policies
 placementRef:
   name: placement-policy-certificatepolicy
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-certificatepolicy
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: policy-certificatepolicy-production-clusters
+  namespace: open-cluster-management-policies
+placementRef:
+  name: production-clusters
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
@@ -46,7 +60,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: placement-policy-certificatepolicy
-  namespace: default
+  namespace: open-cluster-management-policies
 spec:
   clusterConditions:
   - type: OK

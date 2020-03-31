@@ -1,0 +1,28 @@
+namespace: multicluster-endpoint
+
+
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+# Provide a kubeconfig file for your Hub cluster.
+# NOTE: Using the default kubeconfig for your Hub is
+# insecure and should only be used for dev/test/demo.
+secretGenerator:
+  - name: klusterlet-bootstrap
+    type: Opaque
+    files:
+      - kubeconfig
+
+images:
+  - name: endpoint-operator
+    newName: quay.io/open-cluster-management/endpoint-operator
+    newTag: 1.0.0-SNAPSHOT-2020-03-30-21-19-06
+
+resources:
+- namespace.yaml
+- v1beta1_endpoint_multicloud_ibm_com_cr.yaml
+- endpoint_operator_sa.yaml
+- endpoint_operator_crb.yaml
+- pull-secret.yaml
+- endpoint_operator.yaml

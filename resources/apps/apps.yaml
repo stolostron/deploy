@@ -1,0 +1,118 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: call-center-app
+  namespace: call-center
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - call-center
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: core-banking-app
+  namespace: core-banking
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - core-banking
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: digital-banking-app
+  namespace: digital-banking
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - digital-banking
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: fraud-management-app
+  namespace: fraud-management
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - fraud-management
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  labels:
+    app: nginx-app-details
+  name: nginx-app-3
+  namespace: my-app
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchLabels:
+      app: nginx-app-details
+status: {}
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: payments-app
+  namespace: payments
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - payments
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: guestbook-app
+  namespace: guestbook-app
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - guestbook-app
