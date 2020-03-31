@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# oc project open-cluster-management
+oc project open-cluster-management
 
 # cluster deployment cleanup now being done by clean-clusters.sh
 # for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
@@ -25,9 +25,7 @@ for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' ')
 # Working on in https://github.com/open-cluster-management/backlog/issues/787
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
 
-# Issues pending
-oc delete validatingwebhookconfiguration multiclusterhub-operator-validating-webhook --ignore-not-found
-oc delete mutatingwebhookconfiguration multiclusterhub-operator-mutating-webhook --ignore-not-found
+# Issue pending
 oc delete mutatingwebhookconfiguration mcm-mutating-webhook --ignore-not-found
 
 

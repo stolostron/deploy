@@ -8,6 +8,9 @@ oc delete csv multiclusterhub-operator.v0.0.1
 oc delete catalogsource multiclusterhub-operator-registry
 oc delete crd multiclusterhubs.operators.open-cluster-management.io
 
+oc delete validatingwebhookconfiguration multiclusterhub-operator-validating-webhook --ignore-not-found
+oc delete mutatingwebhookconfiguration multiclusterhub-operator-mutating-webhook --ignore-not-found
+
 # Remove etcd resources
 oc delete subscriptions.operators.coreos.com etcd-singlenamespace-alpha-community-operators-openshift-marketplace --ignore-not-found
 oc get csv | grep "etcd" | awk '{ print $1 }' | xargs oc delete csv --wait=false --ignore-not-found
