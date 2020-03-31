@@ -38,6 +38,9 @@ ${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./import/endpoint.yaml
 ${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./import/kustomization.yaml
 ${SED} -i "s/<SNAPSHOT>/${DEFAULT_SNAPSHOT/1.0.0/}/g" ./import/endpoint_operator.yaml
 
+# copy pull-secret from prereqs folder into import folder
+cp ../../prereqs/pull-secret.yaml ./import/
+
 printf "Ready to create kind cluster on your machine... Press ENTER to continue: "
 read -r CONTINUE
 

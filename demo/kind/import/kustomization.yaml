@@ -24,6 +24,6 @@ resources:
 - v1beta1_endpoint_multicloud_ibm_com_cr.yaml
 - endpoint_operator_sa.yaml
 - endpoint_operator_crb.yaml
-- multicluster_operator_pull_secret.yaml
+- pull-secret.yaml
 - endpoint_operator.yaml
 - endpoint.yaml
