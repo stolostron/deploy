@@ -47,12 +47,18 @@ read -r CONTINUE
 # copy kubeconfig to import folder
 cp ~/.kube/config ./import/kubeconfig
 
+kubectl apply -f kind-cluster.yaml
+
 echo "Creating kind cluster (${CLUSTER_NAME}) on your machine..."
 kind create cluster --name=${CLUSTER_NAME}
 
-kubectl apply -f kind-cluster.yaml
 kubectl config use-context kind-${CLUSTER_NAME}
 kubectl apply -k import/
+
+echo "Waiting for endpoint operator to finish installation..."
+sleep 10
+
+kubectl apply -f import/endpoint.yaml
 
 printf "\n"
 echo "You can now use kubectl with your kind cluster."
