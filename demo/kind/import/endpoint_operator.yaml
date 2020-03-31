@@ -25,8 +25,8 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: IMAGE_TAG_POSTFIX
-          value: -SNAPSHOT-2020-03-23-20-27-42
-        image: quay.io/open-cluster-management/endpoint-operator:1.0.0-SNAPSHOT-2020-03-23-20-27-42
+          value: <SNAPSHOT>
+        image: endpoint-operator:1.0.0
         imagePullPolicy: Always
         name: endpoint-operator
         resources: {}

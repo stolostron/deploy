@@ -14,8 +14,8 @@ spec:
   clusterLabels:
     cloud: GCP
     vendor: OCP
-  clusterName: kind-cluster
-  clusterNamespace: kind-cluster
+  clusterName: <CLUSTER_NAME>
+  clusterNamespace: <CLUSTER_NAME>
   connectionManager: {}
   iamPolicyController:
     enabled: true

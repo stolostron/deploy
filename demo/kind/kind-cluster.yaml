@@ -2,17 +2,17 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: kind-kind
+  name: <CLUSTER_NAME>
 ---
 apiVersion: clusterregistry.k8s.io/v1alpha1
 kind: Cluster
 metadata:
   labels:
-    cloud: GCP
-    name: kind-kind
+    cloud: KIND
+    name: <CLUSTER_NAME>
     vendor: auto-detect
-  name: kind-kind
-  namespace: kind-kind
+  name: <CLUSTER_NAME>
+  namespace: <CLUSTER_NAME>
 spec:
   authInfo: {}
   kubernetesApiEndpoints: {}
@@ -20,8 +20,8 @@ spec:
 apiVersion: multicloud.ibm.com/v1alpha1
 kind: EndpointConfig
 metadata:
-  name: kind-kind
-  namespace: kind-kind
+  name: <CLUSTER_NAME>
+  namespace: <CLUSTER_NAME>
 spec:
   applicationManager:
     enabled: true
@@ -32,8 +32,8 @@ spec:
   clusterLabels:
     cloud: auto-detect
     vendor: auto-detect
-  clusterName: kind-kind
-  clusterNamespace: kind-kind
+  clusterName: <CLUSTER_NAME>
+  clusterNamespace: <CLUSTER_NAME>
   iamPolicyController:
     enabled: true
   imageRegistry: quay.io/open-cluster-management
