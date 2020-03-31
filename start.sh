@@ -69,11 +69,17 @@ echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
-#echo "Pick a namepsace to deploy into"
-#read -r TARGET_NAMESPACE
-#if [ "$TARGET_NAMESPACE" == "" ]; then
-#  TARGET_NAMESPACE=multicluster-system
-#fi
+# ensure default storage class defined on ocp cluster
+SC_RESOLVE=$(oc get sc 2>&1)
+if [[ $SC_RESOLVE =~ (default) ]];
+then
+  echo "OK: Default Storage Class defined"
+else
+  echo "ERROR: No default Storage Class defined."
+  echo "    Add Annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
+  echo "    Aborting."
+  exit 1
+fi
 
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
