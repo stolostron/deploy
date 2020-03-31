@@ -1,0 +1,97 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: guestbook
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: guestbook-app-latest
+  namespace: open-cluster-management
+spec:
+  type: GitHub
+  pathname: https://github.com/open-cluster-management/deploy.git
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: guestbook-app
+  namespace: open-cluster-management
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - guestbook-app
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: guestbook-app
+  namespace: open-cluster-management
+  labels:
+    app: guestbook-app
+spec:
+  channel: open-cluster-management/guestbook-app-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters
+  packageFilter:
+    filterRef:
+      name: resource-filter-configmap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: resource-filter-configmap
+  namespace: open-cluster-management
+  labels:
+    app: guestbook-app
+data:
+    path: resources/guestbook
+---
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: policy-subscription-configmap
+  namespace: open-cluster-management
+spec:
+  complianceType: musthave
+  remediationAction: enforce
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["open-cluster-management"]
+  object-templates:
+    - complianceType: musthave
+      objectDefinition:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: resource-filter-configmap
+          namespace: open-cluster-management
+          labels:
+            app: guestbook-app
+        data:
+            path: resources/guestbook
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-subscription-configmap
+  namespace: open-cluster-management
+placementRef:
+  name: dev-clusters
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-subscription-configmap
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
