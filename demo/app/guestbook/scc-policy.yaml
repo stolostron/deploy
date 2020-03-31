@@ -1,0 +1,71 @@
+---
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: guestbook-policy-scc
+  namespace: open-cluster-management
+spec:
+  complianceType: musthave
+  remediationAction: enforce
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["open-cluster-management"]
+  object-templates:
+    - complianceType: musthave
+      objectDefinition:
+        allowHostDirVolumePlugin: false
+        allowHostIPC: false
+        allowHostNetwork: false
+        allowHostPID: false
+        allowHostPorts: false
+        allowPrivilegeEscalation: true
+        allowPrivilegedContainer: false
+        allowedCapabilities: null
+        apiVersion: security.openshift.io/v1
+        defaultAddCapabilities: null
+        fsGroup:
+          type: RunAsAny
+        groups:
+        - system:cluster-admins
+        kind: SecurityContextConstraints
+        metadata:
+          annotations:
+            kubernetes.io/description: anyuid provides all features of the restricted SCC
+              but allows users to run with any UID and any GID.
+          name: guestbook-scc
+          labels:
+            app: guestbook-app
+        priority: 10
+        readOnlyRootFilesystem: false
+        requiredDropCapabilities:
+        - MKNOD
+        runAsUser:
+          type: RunAsAny
+        seLinuxContext:
+          type: MustRunAs
+        supplementalGroups:
+          type: RunAsAny
+        users:
+          - 'system:serviceaccount:open-cluster-management:runasanyuid'
+        volumes:
+        - configMap
+        - downwardAPI
+        - emptyDir
+        - persistentVolumeClaim
+        - projected
+        - secret
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-guestbook-policy-scc
+  namespace: open-cluster-management
+placementRef:
+  name: dev-clusters
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: guestbook-policy-scc
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com

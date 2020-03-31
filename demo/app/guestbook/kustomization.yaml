@@ -12,3 +12,4 @@ generatorOptions:
 resources:
   - dev-placement-rule.yaml
   - application.yaml
+  - scc-policy.yaml
