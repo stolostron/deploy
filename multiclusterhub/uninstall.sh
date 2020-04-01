@@ -7,8 +7,10 @@ oc project open-cluster-management
 for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 
 # Consider delete complete when all helmreleases are gone
-echo "Wait until helmreleases are deleted..."
-until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
+if oc explain helmreleases.apps.open-cluster-management.io; then
+  echo "Wait until helmreleases are deleted..."
+  until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
+fi
 
 # Not seen on cluster
 for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
