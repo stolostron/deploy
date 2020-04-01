@@ -87,7 +87,7 @@ printf "using cloud region: ${CLOUD_REGION}\n"
 DEFAULT_AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
 if [ "${AWS_ACCESS_KEY}" == "" ]; then
     printf "Enter AWS ACCESS KEY:\n"
-    read -r AWS_ACCESS_KEY_CHOICE
+    read -r -s AWS_ACCESS_KEY_CHOICE
     if [ "${AWS_ACCESS_KEY_CHOICE}" != "" ]; then
         DEFAULT_AWS_ACCESS_KEY=${AWS_ACCESS_KEY_CHOICE}
         echo "" >> ./local.rc
@@ -105,7 +105,7 @@ printf "using aws access key: ****\n"
 DEFAULT_AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 if [ "${AWS_SECRET_ACCESS_KEY}" == "" ]; then
     printf "Enter AWS SECRET ACCESS KEY:\n"
-    read -r AWS_SECRET_ACCESS_KEY_CHOICE
+    read -r -s AWS_SECRET_ACCESS_KEY_CHOICE
     if [ "${AWS_SECRET_ACCESS_KEY_CHOICE}" != "" ]; then
         DEFAULT_AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_CHOICE}
         echo "" >> ./local.rc
