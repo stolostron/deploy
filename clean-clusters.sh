@@ -13,7 +13,7 @@ if [ "$?" == "-t" ]; then
 fi
 
 
-echo "Continuing to execute this script will destroy the following Openshift clusters:"
+echo "Continuing to execute this script will destroy the following \"managed\" Openshift clusters:"
 oc get clusterDeployments --all-namespaces
 echo
 echo "If you would like to proceed with cleanup, type: DESTROY"

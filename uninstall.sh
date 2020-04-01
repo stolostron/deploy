@@ -2,7 +2,7 @@
 
 echo "This script will uninstall Open Cluster Management from the current OpenShift target cluster:"
 oc cluster-info | head -n 1 | awk '{print $NF}'
-echo ""
+printf "\n"
 
 ./clean-clusters.sh
 
