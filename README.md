@@ -3,7 +3,7 @@
 
 ### Welcome!
 
-You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)".
+You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes" (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`).
 
 >The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology such as [github.com/openshift/hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
@@ -20,7 +20,7 @@ With Red Hat Advanced Cluster Management for Kubernetes:
 
 ## Let's get started...
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md)(_private link... to be opened 03/27/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md)(_private link... to be opened 04/01/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
@@ -30,7 +30,7 @@ You can find information on how to contribute to this project and our docs proje
 - `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
 - macOS users:
    - `gsed` is required. Install using `brew install gnu-sed`
-   - `wait` is optional. Install using `brew install wait`
+   - `wait` is optional. Install using `brew install juju-wait`
 
 #### Repo Structure and Organization
 This repo contains 3 directories:
@@ -78,6 +78,8 @@ Either way you choose to go you're gonna need a `pull-secret`... we are still in
 ## Deploy using the ./start.sh script (the easy way)
 
 We've added a very simple `start.sh` script to make your life easier... if you want to deploy `OCM` the __"hard way"__ you can find the instructions for deploying `OCM` using nothing but `oc` commands [here](#manually-deploy-using-oc-commands-the-hard-way).
+
+0. First need to export KUBECONFIG=/path/to/some/cluster/kubeconfig
 
 1. Run the `start.sh` script (see )
 Options:  (Only use one at a time)
