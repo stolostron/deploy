@@ -2,16 +2,11 @@
 
 VER=$(oc version | grep "Client Version:")
 
-if [[ $VER =~ .*[4-9]\.[3-9]\..* ]]
-then
-    delete_command="oc delete -k"
-
-else
-    delete_command="kubectl delete -k"
+if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
+    echo "oc cli version 4.3 or greater required. Please visit https://access.redhat.com/downloads/content/290/ver=4.3/rhel---8/4.3.9/x86_64/product-software."
+    exit 1
 fi
 
-    $delete_command multiclusterhub/ --ignore-not-found
-    ./multiclusterhub/uninstall.sh
+oc delete -k multiclusterhub/ --ignore-not-found ./multiclusterhub/uninstall.sh
 
-    $delete_command multiclusterhub-operator/ --ignore-not-found
-    ./multiclusterhub-operator/uninstall.sh
+oc delete -k multiclusterhub-operator/ --ignore-not-found ./multiclusterhub-operator/uninstall.sh
