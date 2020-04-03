@@ -74,13 +74,10 @@ fi
 HOST_URL=${HOST_URL/apps./}
 echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
-OC_VERSION=$(echo "${VER}" | ${SED} "s/Client Version: //g")
-echo "* oc CLI ${OC_VERSION}"
+echo "* oc CLI ${VER}"
 
-if [[ $OC_VERSION == 4.3.* ]] || [[ $OC_VERSION == 4.4.* ]]; then
-    echo "OK: oc minimum required version found."
-else
-    echo "ERROR: oc client version < 4.3, please upgrade your oc client to minimum required version oc >= 4.3."
+if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
+    echo "oc cli version 4.3 or greater required. Please visit https://access.redhat.com/downloads/content/290/ver=4.3/rhel---8/4.3.9/x86_64/product-software."
     exit 1
 fi
 
