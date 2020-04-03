@@ -89,11 +89,12 @@ Options:  (Only use one at a time)
 $>: ./start.sh --watch
 ```
 
-2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new tag.<br>
+2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.<br>
 Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/multiclusterhub-operator-index)
 ```bash
 1.0.0-SNAPSHOT-2020-03-13-23-07-54
 ```
+  NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
 2. Depending on your script Option choice, `OCM` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
 
 3. The script provides you with the `Open Cluster Management` URL
