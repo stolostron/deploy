@@ -112,6 +112,10 @@ else
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
+        if [[ ! $SNAPSHOT_CHOICE == 1.0.0-* ]]; then
+            echo "invalid SNAPSHOT format... must begin with '1.0.0-'"
+            exit 1
+        fi
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
         printf "${DEFAULT_SNAPSHOT}" > ./snapshot.ver
     fi
@@ -134,16 +138,16 @@ if [[ " $@ " =~ " -t " ]]; then
 fi
 
 printf "\n##### Applying prerequisites\n"
-oc apply -k prereqs/
+kubectl apply --openapi-patch=true -k prereqs/
 
 printf "\n##### Applying multicluster-hub-operator subscription #####\n"
-oc apply -k multiclusterhub-operator/
+kubectl apply -k multiclusterhub-operator/
 waitForPod "multiclusterhub-operator" "registry" "1/1"
 printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-oc apply -k multiclusterhub
+kubectl apply -k multiclusterhub
 waitForPod "multicluster-operators-application" "" "4/4"
 
 COMPLETE=1
