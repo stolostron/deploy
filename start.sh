@@ -48,8 +48,15 @@ SED="sed"
 if [ "${OS}" == "darwin" ]; then
     SED="gsed"
     if [ ! -x "$(command -v ${SED})"  ]; then
-       echo "This script requires $SED, but it was not found.  Perform \"brew install gnu-sed\" and try again."
-       exit
+       echo "ERROR: $SED required, but not found.  Perform \"brew install gnu-sed\" and try again."
+       exit 1
+    fi
+fi
+
+if [ "${OS}" == "darwin" ]; then
+    if [ ! -x "$(command -v watch)" ]; then
+        echo "ERROR: watch required, but not found. Perform \"brew install watch\" and try again."
+        exit 1
     fi
 fi
 
@@ -60,14 +67,22 @@ TARGET_NAMESPACE=open-cluster-management
 echo "* Testing connection"
 HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
 if [ $? -ne 0 ]; then
-    echo "* Make sure you are logged into an OpenShift Container Platform before running this script"
+    echo "ERROR: Make sure you are logged into an OpenShift Container Platform before running this script"
     exit 2
 fi
 #Shorten to the basedomain
 HOST_URL=${HOST_URL/apps./}
 echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
-echo "* oc CLI ${VER}"
+OC_VERSION=$(echo "${VER}" | ${SED} "s/Client Version: //g")
+echo "* oc CLI ${OC_VERSION}"
+
+if [[ $OC_VERSION == 4.3.* ]] || [[ $OC_VERSION == 4.4.* ]]; then
+    echo "OK: oc minimum required version found."
+else
+    echo "ERROR: oc client version < 4.3, please upgrade your oc client to minimum required version oc >= 4.3."
+    exit 1
+fi
 
 # ensure default storage class defined on ocp cluster
 SC_RESOLVE=$(oc get sc 2>&1)
@@ -76,8 +91,7 @@ then
   echo "OK: Default Storage Class defined"
 else
   echo "ERROR: No default Storage Class defined."
-  echo "    Add Annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
-  echo "    Aborting."
+  echo "    Please add annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
   exit 1
 fi
 
@@ -102,7 +116,7 @@ DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
     DEFAULT_SNAPSHOT=`cat ./snapshot.ver`
 elif [[ " $@ " =~ " --silent " ]]; then
-    echo "Silent mode will not work when ./snapshot.ver is missing"
+    echo "ERROR: Silent mode will not work when ./snapshot.ver is missing"
     exit 1
 fi
 
@@ -112,18 +126,19 @@ else
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
-        if [[ ! $SNAPSHOT_CHOICE == 1.0.0-* ]]; then
-            echo "invalid SNAPSHOT format... must begin with '1.0.0-'"
-            exit 1
-        fi
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
         printf "${DEFAULT_SNAPSHOT}" > ./snapshot.ver
     fi
 fi
 if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
-    echo "Please specify a valid snapshot tag to continue."
+    echo "ERROR: Please specify a valid snapshot tag to continue."
     exit 2
 fi
+if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* ]]; then
+    echo "ERROR: invalid SNAPSHOT format... snapshot must begin with '1.0.0-'"
+    exit 1
+fi
+
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
