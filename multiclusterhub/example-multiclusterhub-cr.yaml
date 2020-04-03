@@ -6,31 +6,6 @@ metadata:
 spec:
   version: latest
   imageRepository: "quay.io/open-cluster-management"
-  # storageClass: "gp2" # used to override the default storage class
-  imageTagSuffix: SNAPSHOT-2020-03-23-07-17-57
+  imageTagSuffix: SNAPSHOT-2020-04-01-02-43-31
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
-  foundation:
-    apiserver:
-      configuration:
-        http2-max-streams-per-connection: "1000"
-      replicas: 1
-      apiserverSecret: "mcm-apiserver-self-signed-secrets"
-      klusterletSecret: "mcm-klusterlet-self-signed-secrets"
-    controller:
-      configuration:
-        enable-rbac: "true"
-        enable-service-registry: "true"
-      replicas: 1
-  mongo:
-    endpoints: multicluster-mongodb
-    replicaSet: rs0
-    tlsSecret: multicluster-mongodb-client-cert
-    caSecret: multicloud-ca-cert
-  hive:
-    additionalCertificateAuthorities:
-      - name: letsencrypt-ca
-    globalPullSecret:
-      name: private-secret
-    failedProvisionConfig:
-      skipGatherLogs: true

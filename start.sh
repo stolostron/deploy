@@ -14,7 +14,7 @@ function waitForPod() {
     podName=$1
     ignore=$2
     runnings="$3"
-    echo "Wait for ${podName} to reach running state (4min)."
+    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
@@ -40,7 +40,6 @@ function waitForPod() {
         sleep 3
         (( MINUTE = MINUTE + 3 ))
     done
-    printf "#####\n\n"
 }
 
 # fix sed issue on mac
@@ -49,8 +48,15 @@ SED="sed"
 if [ "${OS}" == "darwin" ]; then
     SED="gsed"
     if [ ! -x "$(command -v ${SED})"  ]; then
-       echo "This script requires $SED, but it was not found.  Perform \"brew install gnu-sed\" and try again."
-       exit
+       echo "ERROR: $SED required, but not found.  Perform \"brew install gnu-sed\" and try again."
+       exit 1
+    fi
+fi
+
+if [ "${OS}" == "darwin" ]; then
+    if [ ! -x "$(command -v watch)" ]; then
+        echo "ERROR: watch required, but not found. Perform \"brew install watch\" and try again."
+        exit 1
     fi
 fi
 
@@ -61,7 +67,7 @@ TARGET_NAMESPACE=open-cluster-management
 echo "* Testing connection"
 HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
 if [ $? -ne 0 ]; then
-    echo "* Make sure you are logged into an OpenShift Container Platform before running this script"
+    echo "ERROR: Make sure you are logged into an OpenShift Container Platform before running this script"
     exit 2
 fi
 #Shorten to the basedomain
@@ -75,11 +81,16 @@ if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
     exit 1
 fi
 
-#echo "Pick a namepsace to deploy into"
-#read -r TARGET_NAMESPACE
-#if [ "$TARGET_NAMESPACE" == "" ]; then
-#  TARGET_NAMESPACE=multicluster-system
-#fi
+# ensure default storage class defined on ocp cluster
+SC_RESOLVE=$(oc get sc 2>&1)
+if [[ $SC_RESOLVE =~ (default) ]];
+then
+  echo "OK: Default Storage Class defined"
+else
+  echo "ERROR: No default Storage Class defined."
+  echo "    Please add annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
+  exit 1
+fi
 
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
@@ -101,12 +112,14 @@ fi
 DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
     DEFAULT_SNAPSHOT=`cat ./snapshot.ver`
-elif [ "$1" == "--silent" ]; then
-    echo "Silent mode will not work when ./snapshot.ver is missing"
+elif [[ " $@ " =~ " --silent " ]]; then
+    echo "ERROR: Silent mode will not work when ./snapshot.ver is missing"
     exit 1
 fi
 
-if [ "$1" != "--silent" ]; then
+if [[ " $@ " =~ " --silent " ]]; then
+    echo "* Silent mode"
+else
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
@@ -115,9 +128,14 @@ if [ "$1" != "--silent" ]; then
     fi
 fi
 if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
-    echo "Please specify a valid snapshot tag to continue."
+    echo "ERROR: Please specify a valid snapshot tag to continue."
     exit 2
 fi
+if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* ]]; then
+    echo "ERROR: invalid SNAPSHOT format... snapshot must begin with '1.0.0-'"
+    exit 1
+fi
+
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
@@ -126,39 +144,32 @@ echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
-if [ "$1" == "-t" ]; then
+if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
     exit 0
 fi
 
-echo "##### Applying prerequisites"
-oc apply -k prereqs/
-printf "#####\n\n"
+printf "\n##### Applying prerequisites\n"
+kubectl apply --openapi-patch=true -k prereqs/
 
-echo "##### Applying multicluster-hub-operator subscription #####"
-oc apply -k multiclusterhub-operator/
+printf "\n##### Applying multicluster-hub-operator subscription #####\n"
+kubectl apply -k multiclusterhub-operator/
 waitForPod "multiclusterhub-operator" "registry" "1/1"
-echo "Beginning deploy..."
+printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-oc apply -k multiclusterhub
+kubectl apply -k multiclusterhub
 waitForPod "multicluster-operators-application" "" "4/4"
-#Issues #1025 = This is needed to work around the fact that the Subscription Operator incluses the clusters.clusterregistry.k8s.io
-echo "Remove the clusters.clusterregistry.k8s.io CustomResourceDefinition"
-oc get crd clusters.clusterregistry.k8s.io > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-  oc delete crd clusters.clusterregistry.k8s.io
-fi
 
 COMPLETE=1
-if [ "$1" == "--watch" ]; then
+if [[ " $@ " =~ " --watch " ]]; then
     for i in {1..60}; do
         clear
         oc -n ${TARGET_NAMESPACE} get pods
         CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
         whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
-        if [ "$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
+        if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
             COMPLETE=0
             break
         fi
@@ -173,7 +184,7 @@ if [ "$1" == "--watch" ]; then
         exit 1
     fi
     echo "#####"
-    echo "* Red Hat ACM URL: $CONSOLE_URL"
+    echo "* Red Hat ACM URL: https://$CONSOLE_URL"
     echo "#####"
     echo "Done!"
     exit 0
@@ -182,11 +193,12 @@ fi
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
-echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
-
-OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 if [ "${OS}" == "darwin" ]; then
-    if [ ! -x "$(command -v watch)"  ]; then
+    if [ ! -x "$(command -v watch)" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
+else
+  echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 36 pods"
 fi
+
+

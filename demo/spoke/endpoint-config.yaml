@@ -1,0 +1,37 @@
+apiVersion: multicloud.ibm.com/v1alpha1
+kind: EndpointConfig
+metadata:
+  name: <CLUSTER_NAME>
+spec:
+  version: 1.0.0
+  bootstrapConfig:
+    hubSecret: multicluster-endpoint/klusterlet-bootstrap
+  clusterLabels:
+    cloud: auto-detect
+    vendor: auto-detect
+  clusterName: <CLUSTER_NAME>
+  clusterNamespace: <CLUSTER_NAME>
+  applicationManager:
+    enabled: true
+  imageRegistry: quay.io/open-cluster-management
+  metering:
+    enabled: true
+  policyController:
+    enabled: true
+  prometheusIntegration:
+    enabled: true
+  searchCollector:
+    enabled: true
+  serviceRegistry:
+    enabled: true
+  tillerIntegration:
+    enabled: true
+  topologyCollector:
+    enabled: true
+    updateInterval: 0
+  certPolicyController:
+    enabled: true
+  cisController:
+    enabled: true
+  iamPolicyController:
+    enabled: true

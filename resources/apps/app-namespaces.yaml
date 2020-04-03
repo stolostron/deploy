@@ -1,0 +1,61 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: call-center
+    namespace: ""
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: core-banking
+    namespace: ""
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: digital-banking
+    namespace: ""
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: fraud-management
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: my-app
+    namespace: ""
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: payments
+    namespace: ""
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: summit-games
+    namespace: ""
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      role: app
+    name: guestbook-app
+    namespace: ""
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

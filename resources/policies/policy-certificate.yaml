@@ -1,0 +1,68 @@
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: policy-certificatepolicy
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.mcm.ibm.com/standards: NIST-CSF
+    policy.mcm.ibm.com/categories: PR.DS DataSecurity
+    policy.mcm.ibm.com/controls: PR.DS-2 Data-in-transit
+spec:
+  complianceType: musthave
+  remediationAction: inform
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["default"]
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policies.ibm.com/v1alpha1
+        kind: CertificatePolicy # cert management expiration
+        metadata:
+          name: policy-certificatepolicy-example
+        spec:
+          namespaceSelector:
+            include: ["default"]
+            exclude: []
+          remediationAction: inform
+          severity: low
+          minimumDuration: 300h
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-certificatepolicy
+  namespace: open-cluster-management-policies
+placementRef:
+  name: placement-policy-certificatepolicy
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-certificatepolicy
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: policy-certificatepolicy-production-clusters
+  namespace: open-cluster-management-policies
+placementRef:
+  name: production-clusters
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-certificatepolicy
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-certificatepolicy
+  namespace: open-cluster-management-policies
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchExpressions: []
