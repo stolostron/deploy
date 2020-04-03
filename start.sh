@@ -70,12 +70,9 @@ echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
-if [[ $VER =~ .*[4-9]\.[3-9]\..* ]]
-then
-    apply_command="oc apply -k"
-
-else
-    apply_command="kubectl apply -k"
+if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
+    echo "oc cli version 4.3 or greater required. Please visit https://access.redhat.com/downloads/content/290/ver=4.3/rhel---8/4.3.9/x86_64/product-software."
+    exit 1
 fi
 
 #echo "Pick a namepsace to deploy into"
@@ -135,17 +132,17 @@ if [ "$1" == "-t" ]; then
 fi
 
 echo "##### Applying prerequisites"
-$apply_command prereqs/
+oc apply -k prereqs/
 printf "#####\n\n"
 
 echo "##### Applying multicluster-hub-operator subscription #####"
-$apply_command multiclusterhub-operator/
+oc apply -k multiclusterhub-operator/
 waitForPod "multiclusterhub-operator" "registry" "1/1"
 echo "Beginning deploy..."
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-$apply_command multiclusterhub
+oc apply -k multiclusterhub
 waitForPod "multicluster-operators-application" "" "4/4"
 #Issues #1025 = This is needed to work around the fact that the Subscription Operator incluses the clusters.clusterregistry.k8s.io
 echo "Remove the clusters.clusterregistry.k8s.io CustomResourceDefinition"
