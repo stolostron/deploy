@@ -20,7 +20,7 @@ With Red Hat Advanced Cluster Management for Kubernetes:
 
 ## Let's get started...
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md)(_private link... to be opened 03/27/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
