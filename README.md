@@ -26,11 +26,12 @@ You can find information on how to contribute to this project and our docs proje
 
 #### Prereqs
 - an OpenShift Container Platform (OCP) 4.3+ cluster available
-- `oc` & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
+  - must have a default storage class defined
+- `oc` (ver. 4.3+) & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
 - `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
 - macOS users:
    - `gsed` is required. Install using `brew install gnu-sed`
-   - `wait` is optional. Install using `brew install wait`
+   - `watch` is optional. Install using `brew install watch`
 
 #### Repo Structure and Organization
 This repo contains 3 directories:
