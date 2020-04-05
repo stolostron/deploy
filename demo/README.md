@@ -28,10 +28,10 @@ You're going to need to have an OCP cluster with OCM already deployed (see the [
 You've gotta have something to manage... [Provision a "spoke" cluster using OCM](./spoke/README.md)
 
 ### Step 2
-You ever wanted to be a govenor?  Well now is you're opportunity... [Import policies into your OCM](./policies/README.md)
+Now we're getting to the good stuff... [Add applications, channels, subscriptions, and placement rules to your OCM](./app/README.md)
 
 ### Step 3
-Now we're getting to the good stuff... [Add applications, channels, subscriptions, and placement rules to your OCM](./app/README.md)
+You ever wanted to be a govenor?  Well now is you're opportunity... [Import policies into your OCM](./policies/README.md)
 
 ### Step 4
 Hey you didn't think all this was completely free did you?  You owe us some feedback... create some [product issues](https://github.com/open-cluster-management/deploy/issues) or maybe some [doc issues](https://github.com/open-cluster-management/rhacm-docs/issues).  We want to hear from you.  If you just have questions you can find us on Slack ([#forum-acm](https://coreos.slack.com/archives/CTDEY6EEA)).
