@@ -15,6 +15,11 @@ fi
 # Not seen on cluster
 for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
 for secret in $(oc get Secret | grep aws | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
+for role in $(oc get clusterrole | grep multicluster | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
+for rolebinding in $(oc get clusterrolebindings | grep multicluster | cut -f 1 -d ' '); do oc delete clusterrolebinding $rolebinding --ignore-not-found; done
+for role in $(oc get clusterrole | grep mcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
+for rolebinding in $(oc get clusterrolebindings | grep mcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $rolebinding --ignore-not-found; done
+
 
 oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print $2 " -n " $1 }' | xargs oc patch policies.policy.mcm.ibm.com --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]' || true
 oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print $2 " -n " $1 }' | xargs oc delete policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true

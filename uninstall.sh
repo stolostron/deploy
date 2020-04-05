@@ -14,8 +14,8 @@ printf "\n"
 
 ./clean-clusters.sh
 
-kubectl delete -k multiclusterhub/ --ignore-not-found
+kubectl delete -k --ignore-not-found multiclusterhub/
 ./multiclusterhub/uninstall.sh
 
-kubectl delete -k multiclusterhub-operator/ --ignore-not-found
+kubectl delete -k --ignore-not-found multiclusterhub-operator/
 ./multiclusterhub-operator/uninstall.sh
