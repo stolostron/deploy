@@ -6,11 +6,17 @@ oc project open-cluster-management
 # for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
 for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 
-# Consider delete complete when all helmreleases are gone
-if oc explain helmreleases.apps.open-cluster-management.io; then
-  echo "Wait until helmreleases are deleted..."
-  until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
-fi
+# Consider delete complete when all helmreleases are gone or CRD doesn't exist
+while [ true ]; do
+  oc get helmreleases.apps.open-cluster-management.io > /dev/null
+  if [ $? -ne 0 ]; then
+    break
+  elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then 
+    break
+  else
+    sleep 2
+  fi
+done
 
 # Not seen on cluster
 for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
