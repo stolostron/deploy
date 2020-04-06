@@ -7,17 +7,26 @@ oc project open-cluster-management
 for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 
 # Consider delete complete when all helmreleases are gone
-echo "Wait until helmreleases are deleted..."
-until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
+if oc explain helmreleases.apps.open-cluster-management.io; then
+  echo "Wait until helmreleases are deleted..."
+  until [[ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]]; do sleep 2; done
+fi
 
 # Not seen on cluster
 for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
 for secret in $(oc get Secret | grep aws | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
-for policy in $(oc get policies.policy.mcm.ibm.com | tail -n +2 | cut -f 1 -d ' '); do oc patch policies.policy.mcm.ibm.com $policy --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; oc delete policies.policy.mcm.ibm.com $policy --ignore-not-found; done
+for role in $(oc get clusterrole | grep multicluster | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
+for rolebinding in $(oc get clusterrolebindings | grep multicluster | cut -f 1 -d ' '); do oc delete clusterrolebinding $rolebinding --ignore-not-found; done
+for role in $(oc get clusterrole | grep mcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found; done
+for rolebinding in $(oc get clusterrolebindings | grep mcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $rolebinding --ignore-not-found; done
+
+
+oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print $2 " -n " $1 }' | xargs oc patch policies.policy.mcm.ibm.com --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]' || true
+oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print $2 " -n " $1 }' | xargs oc delete policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true
 
 # Issue https://github.com/open-cluster-management/backlog/issues/1286
-oc delete crd compliances.compliance.mcm.ibm.com --ignore-not-found || true
-oc delete crd policies.policy.mcm.ibm.com --ignore-not-found || true
+oc delete crd compliances.compliance.mcm.ibm.com --wait=false --ignore-not-found || true
+oc delete crd policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true
 
 # Working on in https://github.com/open-cluster-management/backlog/issues/786
 for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' '); do oc delete configmap $configmap --ignore-not-found; done

@@ -13,7 +13,7 @@ if [ "$?" == "-t" ]; then
 fi
 
 
-echo "Continuing to execute this script will destroy the following Openshift clusters:"
+echo "Continuing to execute this script will destroy the following \"managed\" Openshift clusters:"
 oc get clusterDeployments --all-namespaces
 echo
 echo "If you would like to proceed with cleanup, type: DESTROY"
@@ -36,7 +36,7 @@ echo "Detaching imported clusters"
 for clusterName in `oc get clusters --all-namespaces --ignore-not-found | grep -v "NAMESPACE" | awk '{ print $1 }'`; do
     printf " Detaching cluster ${clusterName}\n  "
     if [ $CLEAN_RESOURCES ]; then
-        oc -n ${clusterName} delete cluster ${clustername}
+        oc -n ${clusterName} delete cluster ${clusterName}
         printf "  "  #Spacing
         oc delete namespace ${clusterName} --wait=false
     fi
@@ -47,7 +47,7 @@ echo "Second pass cleaning, by endpointConfig"
 for clusterName in `oc get endpointconfig --all-namespaces --ignore-not-found | grep -v "NAMESPACE" | awk '{ print $1 }'`; do
     printf " Detaching cluster ${clusterName}\n  "
     if [ $CLEAN_RESOURCES ]; then
-        oc -n ${clusterName} delete cluster ${clustername}
+        oc -n ${clusterName} delete cluster ${clusterName}
         printf "  "  #Spacing
         oc delete namespace ${clusterName} --wait=false
     fi
