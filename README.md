@@ -3,13 +3,13 @@
 
 ### Welcome!
 
-You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)".
+You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)". View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
+
+![Architecture diagram](images/arch.jpg)
 
 >The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology such as [github.com/openshift/hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
-Kubernetes provides a platform for deploying and managing containers in a standard, consistent control plane. However, as applications workloads move from development to production, they often require multiple fit for purpose Kubernetes clusters to support DevOps pipelines. Users, such as administrators and site reliability engineers, face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges. View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
-
-![Architecture diagram](images/arch.jpg)
+Kubernetes provides a platform for deploying and managing containers in a standard, consistent control plane. However, as applications workloads move from development to production, they often require multiple fit for purpose Kubernetes clusters to support DevOps pipelines. Users, such as administrators and site reliability engineers, face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges. 
 
 Red Hat Advanced Cluster Management for Kubernetes provides end-to-end management visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console, with built-in security policies. Run your operations from anywhere that Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
 
