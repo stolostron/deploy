@@ -3,7 +3,7 @@
 
 ### Welcome!
 
-You might be asking yourself, "What is Open Cluster Management?", well it is the `github.com/open-cluster-management` org that is the upstream staging area for a new product to be introduced: **Red Hat Advanced Cluster Management for Kubernetes**  (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`). View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
+You might be asking yourself, "What is Open Cluster Management?", well it is the `github.com/open-cluster-management` org that is the upstream staging area for a new product to be introduced: **Red Hat Advanced Cluster Management for Kubernetes**  (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)<!--we should remove the pronunciation-->. View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
 
 ![Architecture diagram](images/arch.jpg)
 
