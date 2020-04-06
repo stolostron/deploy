@@ -9,7 +9,7 @@ You might be asking yourself, "What is Open Cluster Management?", well it is the
 
 >The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology, such as [Hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
-Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit for purpose <!--what does "fit for purpose" mean? MD-->  Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges. 
+Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit-for-purpose Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges. 
 
 Red Hat Advanced Cluster Management for Kubernetes provides end-to-end visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console with built-in security policies. Run your operations where Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
 
@@ -22,7 +22,7 @@ With Red Hat Advanced Cluster Management for Kubernetes, you can complete the fo
 
 ## Let's get started...
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use RHCAM <!--not sure if we want to use abbreviations-->. Oh, and please submit issues for any problems you may find or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use RHCAM <!--not sure if we want to use abbreviations-->. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
@@ -39,7 +39,7 @@ You must meet the following requirements to install Red Hat Advanced Cluster Man
    - `watch` is optional. Install using: `brew install watch`
 
 #### Repo Structure and Organization
-This repo contains 3 directories:
+This repo contains the 3 directories:
   - `prereqs` - YAML definitions for prerequisite objects (namespaces and pull-secrets)
   - `multiclusterhub-operator` - YAML definitions for setting up a `CatalogSource` for our operator
   - `multiclusterhub` -  YAML definitions for creating an instance of `MultiClusterHub`
@@ -50,7 +50,7 @@ There are __helper__ scripts in the root of this repo:
   - `start.sh` - takes the edge off having to manually edit YAML files
   - `uninstall.sh` - we're not perfect yet; includes additional scripting to ensure we clean up our mess on your OCP cluster.
 
-You have two choices of installation...
+You have two choices of installation:
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will hand hold you through the process
 
 #### the hard way
