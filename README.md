@@ -3,7 +3,7 @@
 
 ### Welcome!
 
-You might be asking yourself, "What is Open Cluster Management?", well it is the _open-cluster-management_ org. View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
+You might be asking yourself, "What is Open Cluster Management?", well it is the _open-cluster-management_ project. View the _open-cluster-management_ architecture diagram:
 
 ![Architecture diagram](images/arch.jpg)
 
