@@ -98,6 +98,7 @@ oc get scc | grep "multicluster" | awk '{ print $1 }' | xargs oc delete scc --wa
 oc get scc | grep "multicloud" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
 oc get crd | grep "certmanager" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get crd | grep "mcm" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
+oc get crd | grep "ibm" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get clusterrole | grep "cert-manager" | awk '{ print $1 }' | xargs oc delete clusterrole --wait=false --ignore-not-found || true
 oc get clusterrolebinding | grep "cert-manager" | awk '{ print $1 }' | xargs oc delete clusterrolebinding --wait=false --ignore-not-found || true
 oc get mutatingwebhookconfiguration | grep "cert-manager" | awk '{ print $1 }' | xargs oc delete mutatingwebhookconfiguration --wait=false --ignore-not-found || true
