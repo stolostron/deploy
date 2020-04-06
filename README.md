@@ -3,17 +3,17 @@
 
 ### Welcome!
 
-You might be asking yourself, "What is Open Cluster Management?", well it is the `github.com/open-cluster-management` org that is the upstream staging area for a new product to be introduced: **Red Hat Advanced Cluster Management for Kubernetes**  (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`)<!--we should remove the pronunciation-->. View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
+You might be asking yourself, "What is Open Cluster Management?", well it is the _open-cluster-management_ org. View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
 
 ![Architecture diagram](images/arch.jpg)
 
->The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology, such as [Hive](https://github.com/openshift/hive) is already shared between the two offerings.
+>The GitHub org and project are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology, such as [Hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
-Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit-for-purpose Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges. 
+Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit-for-purpose Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. The _open-cluster-management_ project provides the tools and capabilities to address these common challenges. 
 
-Red Hat Advanced Cluster Management for Kubernetes provides end-to-end visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console with built-in security policies. Run your operations where Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
+_open-cluster-management_ provides end-to-end visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console with built-in security policies. Run your operations where Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
 
-With Red Hat Advanced Cluster Management for Kubernetes, you can complete the following functionality tasks:
+With the _open-cluster-management_ project, you can complete the following functionality tasks:
 
   - Work across a range of environments, including multiple data centers, private clouds and public clouds that run Kubernetes clusters.
   - Easily create Kubernetes clusters and offer cluster lifecycle management in a single console.
@@ -22,13 +22,13 @@ With Red Hat Advanced Cluster Management for Kubernetes, you can complete the fo
 
 ## Let's get started...
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use RHCAM <!--not sure if we want to use abbreviations-->. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use the _open-cluster-management_ project. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
 #### Prereqs
 
-You must meet the following requirements to install Red Hat Advanced Cluster Management for Kubernetes:
+You must meet the following requirements to install the _open-cluster-management_ project:
 
 - An OpenShift Container Platform (OCP) 4.3+ cluster available
   - You must have a default storage class defined
@@ -51,7 +51,7 @@ There are __helper__ scripts in the root of this repo:
   - `uninstall.sh` - we're not perfect yet; includes additional scripting to ensure we clean up our mess on your OCP cluster.
 
 You have two choices of installation:
-  - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will hand hold you through the process
+  - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will assist you through the process.
 
 #### the hard way
 <details><summary>Click if you dare</summary>
@@ -59,12 +59,12 @@ You have two choices of installation:
 
 ## Manually deploy using `kubectl` commands
 
-1. create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
+1. Create the prereq objects by applying the yaml definitions contained in the `prereqs` dir:
   ```bash
   kubectl apply --openapi-patch=true -k prereqs/
   ```
 
-2. update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
+2. Update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multiclusterhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
     ```bash
     namespace: open-cluster-management
@@ -74,8 +74,8 @@ You have two choices of installation:
         newName: quay.io/open-cluster-management/multiclusterhub-operator-index
         newTag: "1.0.0-SNAPSHOT-2020-03-13-23-07-54"
     ```
-
-3. create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
+    
+3. Create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
     ```bash
     kubectl apply -k multiclusterhub-operator/
     ```
@@ -138,7 +138,7 @@ You have two choices of installation:
           skipGatherLogs: true
     ```
 
-6. create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
+6. Create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
     ```bash
     kubectl apply -k multiclusterhub/
     ```
@@ -166,7 +166,7 @@ After completing the steps above you can redeploy the `multiclusterhub` instance
     kubectl delete -k multiclusterhub-operator/
     ```
 
-2. Not all objects are currently being cleaned up by the `multiclusterhub-operator` upon deletion... you can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multiclusterhub-operator` dir:
+2. Not all objects are currently being cleaned up by the `multiclusterhub-operator` upon deletion. You can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multiclusterhub-operator` dir:
     ```bash
     ./multiclusterhub-operator/uninstall.sh
     ```
@@ -178,16 +178,16 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
 </p>
 </details>
 
-Either way you choose to go, you are going to need a `pull-secret`... we are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time you'll require access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
+Either way you choose to go, you are going to need a `pull-secret`. We are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time, you must gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
 
 ## Prepare to deploy Open Cluster Management Instance (only do once)
 
-1. clone this repo locally
+1. Clone this repo locally
     ```bash
     git clone https://github.com/open-cluster-management/deploy.git
     ```
 
-2. generate your pull-secret
+2. Generate your pull-secre:
    - ensure you have access to the quay org ([open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags))
      - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please contact us on our Slack Channel [#forum-acm](https://coreos.slack.com/archives/CTDEY6EEA)).
    - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
@@ -209,10 +209,10 @@ Either way you choose to go, you are going to need a `pull-secret`... we are sti
 
 We've added a very simple `start.sh` script to make your life easier. If you want to deploy `OCM` the __"hard way"__ you can find the instructions for deploying `OCM` using nothing but `oc` commands [here](#manually-deploy-using-oc-commands-the-hard-way).
 
-0. First need to export KUBECONFIG=/path/to/some/cluster/kubeconfig
+First, you need to export KUBECONFIG=/path/to/some/cluster/kubeconfig <!--would it be accurate to state that the user is updating the Kubernetes configuration path by running the export command?-->
 
-1. Run the `start.sh` script (see )
-Options:  (Only use one at a time)
+1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
+
 ```
 -t modify the YAML but exit before apply the resources
 --silent, skip all prompting, uses the previous configuration
@@ -229,19 +229,19 @@ Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/mu
   NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
 2. Depending on your script Option choice, `OCM` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
 
-3. The script provides you with the `Open Cluster Management` URL
+3. The script provides you with the `Open Cluster Management` URL.
 
 Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
 
 ## To Delete a MultiClusterHub Instance (the easy way)
 
-1. run the `uninstall.sh` script in the root of this repo
+1. Run the `uninstall.sh` script in the root of this repo.
 
 
 ## To Delete the multiclusterhub-operator (the easy way)
 
-1. run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters
-2. run the `uninstall.sh` script in the root of this repo
+1. Run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters.
+2. Run the `uninstall.sh` script in the root of this repo.
 
 ### Troubleshooting
 1. If uninstall hangs on the helmRelease delete, you can run this command to move it along.  This is distructive and can result in orphaned objects.
