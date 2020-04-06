@@ -3,15 +3,17 @@
 
 ### Welcome!
 
-You might be asking yourself "What is Open Cluster Management", well... the org `github.com/open-cluster-management` is the upstream staging area for a new product to be introduced, named "Red Hat Advanced Cluster Management for Kubernetes" (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`).
+You might be asking yourself, "What is Open Cluster Management?", well it is the `github.com/open-cluster-management` org that is the upstream staging area for a new product to be introduced: **Red Hat Advanced Cluster Management for Kubernetes**  (`RHACM4K` pronounced \`rack-um-4k\` or for short `RHACM` pronounced \`rack-um\`). View the Red Hat Advanced Cluster Management for Kubernetes architecture diagram:
 
->The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology such as [github.com/openshift/hive](https://github.com/openshift/hive) is already shared between the two offerings.
+![Architecture diagram](images/arch.jpg)
 
-Kubernetes provides a platform for deploying and managing containers in a standard, consistent control plane. However, as applications workloads move from development to production, they often require multiple fit for purpose Kubernetes clusters to support DevOps pipelines. Users, such as administrators and site reliability engineers, face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges.
+>The GitHub org and product are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology, such as [Hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
-Red Hat Advanced Cluster Management for Kubernetes provides end-to-end management visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console, with built-in security policies. Run your operations from anywhere that Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
+Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit for purpose <!--what does "fit for purpose" mean? MD-->  Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. Red Hat Advanced Cluster Management for Kubernetes provides the tools and capabilities to address these common challenges. 
 
-With Red Hat Advanced Cluster Management for Kubernetes:
+Red Hat Advanced Cluster Management for Kubernetes provides end-to-end visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console with built-in security policies. Run your operations where Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
+
+With Red Hat Advanced Cluster Management for Kubernetes, you can complete the following functionality tasks:
 
   - Work across a range of environments, including multiple data centers, private clouds and public clouds that run Kubernetes clusters.
   - Easily create Kubernetes clusters and offer cluster lifecycle management in a single console.
@@ -20,28 +22,32 @@ With Red Hat Advanced Cluster Management for Kubernetes:
 
 ## Let's get started...
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md)(_private link... to be opened 04/01/20_).  Please read through the docs to find out how you can use OCM. Oh and please submit issues for any problems you may find or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use RHCAM <!--not sure if we want to use abbreviations-->. Oh, and please submit issues for any problems you may find or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
 #### Prereqs
-- an OpenShift Container Platform (OCP) 4.3+ cluster available
-- `oc` & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
+
+You must meet the following requirements to install Red Hat Advanced Cluster Management for Kubernetes:
+
+- An OpenShift Container Platform (OCP) 4.3+ cluster available
+  - You must have a default storage class defined
+- `oc` (ver. 4.3+) & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
 - `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
-- macOS users:
-   - `gsed` is required. Install using `brew install gnu-sed`
-   - `wait` is optional. Install using `brew install juju-wait`
+- For macOS users:
+   - `gsed` is required. Install using: `brew install gnu-sed`
+   - `watch` is optional. Install using: `brew install watch`
 
 #### Repo Structure and Organization
 This repo contains 3 directories:
-  - `prereqs` - yaml definitions for prerequisite objects (namespaces and pull-secrets)
-  - `multiclusterhub-operator` - yaml definitions for setting up a `CatalogSource` for our operator
-  - `multiclusterhub` - yaml definitions for creating an instance of `MultiClusterHub`
+  - `prereqs` - YAML definitions for prerequisite objects (namespaces and pull-secrets)
+  - `multiclusterhub-operator` - YAML definitions for setting up a `CatalogSource` for our operator
+  - `multiclusterhub` -  YAML definitions for creating an instance of `MultiClusterHub`
 
-Each of the three directories contains a `kustomization.yaml` file that will apply the yaml definitions to your OCP instance using `kubectl apply -k`.
+Each of the three directories contains a `kustomization.yaml` file that will apply the YAML definitions to your OCP instance with the following command: `kubectl apply -k`.
 
-You will find __helper__ scripts in the root of this repo:
-  - `start.sh` - takes the edge off having to hand edit yaml files
+There are __helper__ scripts in the root of this repo:
+  - `start.sh` - takes the edge off having to manually edit YAML files
   - `uninstall.sh` - we're not perfect yet... includes additional scripting to ensure we clean up our mess on your OCP cluster.
 
 You have two choices of installation...
