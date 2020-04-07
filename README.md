@@ -34,12 +34,12 @@ You must meet the following requirements to install the _open-cluster-management
   - You must have a default storage class defined
 - `oc` (ver. 4.3+) & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
 - `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
-- The following utilities required:
+- The following utilities **required**:
   - `sed`
     - On **macOS** install using: `brew install gnu-sed`
   - `jq`
     - On **macOS** install using: `brew install jq`
-- The following utilities are optional:
+- The following utilities are **optional**:
   - `watch`
     - On **macOS** install using: `brew install watch`
 
@@ -76,8 +76,8 @@ Either way you choose to go, you are going to need a `pull-secret`. We are still
    - enter your quay.io password
    - select `Kubernetes Secret` from left-hand menu
    - click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
-   - save secret file in the `prereqs` directory as `pull-secret.yaml`
-   - edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`
+   - :exclamation: **save secret file in the `prereqs` directory as `pull-secret.yaml`**
+   - :exclamation: **edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`**
       ```bash
       apiVersion: v1
       kind: Secret
