@@ -1,5 +1,16 @@
 #!/bin/bash
 
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+
+# if using --watch option on mac make sure watch is installed
+if [ ! -x "$(command -v jq)" ]; then
+  echo "ERROR: jq required, but not found."
+  if [ "${OS}" == "darwin" ]; then
+    echo "Perform \"brew install jq\" and try again."
+  fi
+  exit 1
+fi
+
 oc project open-cluster-management
 
 # cluster deployment cleanup now being done by clean-clusters.sh

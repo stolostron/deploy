@@ -48,14 +48,19 @@ SED="sed"
 if [ "${OS}" == "darwin" ]; then
     SED="gsed"
     if [ ! -x "$(command -v ${SED})"  ]; then
-       echo "ERROR: $SED required, but not found.  Perform \"brew install gnu-sed\" and try again."
+       echo "ERROR: $SED required, but not found."
+       echo "Perform \"brew install gnu-sed\" and try again."
        exit 1
     fi
 fi
 
-if [ "${OS}" == "darwin" ]; then
+# if using --watch option on mac make sure watch is installed
+if [[ " $@ " =~ " --watch " ]]; then
     if [ ! -x "$(command -v watch)" ]; then
-        echo "ERROR: watch required, but not found. Perform \"brew install watch\" and try again."
+        echo "ERROR: watch required, but not found."
+        if [ "${OS}" == "darwin" ]; then
+            echo "Perform \"brew install watch\" and try again."
+        fi
         exit 1
     fi
 fi

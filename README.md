@@ -34,9 +34,15 @@ You must meet the following requirements to install the _open-cluster-management
   - You must have a default storage class defined
 - `oc` (ver. 4.3+) & `kubectl` (ver. 1.16+) configured to connect to your OCP cluster
 - `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
+- The following utilities required:
+  - `sed`
+  - `jq`
+- The following utilities are optional:
+  - `watch`
 - For macOS users:
-   - `gsed` is required. Install using: `brew install gnu-sed`
-   - `watch` is optional. Install using: `brew install watch`
+   - `gsed` Install using: `brew install gnu-sed`
+   - `watch` Install using: `brew install watch`
+   - `jq` Install using: `brew install jq`
 
 #### Repo Structure and Organization
 This repo contains the 3 directories:
