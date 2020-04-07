@@ -36,13 +36,12 @@ You must meet the following requirements to install the _open-cluster-management
 - `oc` is connected with adequate permissions to create new namespaces in your OCP cluster.
 - The following utilities required:
   - `sed`
+    - On **macOS** install using: `brew install gnu-sed`
   - `jq`
+    - On **macOS** install using: `brew install jq`
 - The following utilities are optional:
   - `watch`
-- For macOS users:
-   - `gsed` Install using: `brew install gnu-sed`
-   - `watch` Install using: `brew install watch`
-   - `jq` Install using: `brew install jq`
+    - On **macOS** install using: `brew install watch`
 
 #### Repo Structure and Organization
 This repo contains the 3 directories:
