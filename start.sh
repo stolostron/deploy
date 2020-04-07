@@ -7,6 +7,8 @@
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
+# CONSTANTS
+TOTAL_POD_COUNT=35
 
 function waitForPod() {
     FOUND=1
@@ -177,9 +179,8 @@ if [[ " $@ " =~ " --watch " ]]; then
             fi
         fi
         echo
-        echo "Number of Running Pods  : $RUNNING_PODS"
+        echo "Number of expected Pods : $RUNNING_PODS/$TOTAL_POD_COUNT"
         echo "Pods still NOT running  : ${whatsLeft}"
-        echo "Expected Number of Running Pods  : 35"
         echo "Detected ACM Console URL: https://${CONSOLE_URL}"
         sleep 10
     done
