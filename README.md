@@ -1,5 +1,5 @@
 
-# Deploy Open Cluster Management (OCM)
+# Deploy the _open-cluster-management_ project 
 
 ### Welcome!
 
@@ -57,6 +57,79 @@ There are __helper__ scripts in the root of this repo:
 
 You have two choices of installation:
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will assist you through the process.
+  - [the hard way](#the-hard-way) - instructions to deploy _open-cluster-management_ with only `oc` commands.
+
+Either way you choose to go, you are going to need a `pull-secret`. We are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time, you must gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
+
+## Prepare to deploy Open Cluster Management Instance (only do once)
+
+1. Clone this repo locally
+    ```bash
+    git clone https://github.com/open-cluster-management/deploy.git
+    ```
+
+2. Generate your pull-secre:
+   - ensure you have access to the quay org ([open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags))
+     - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please contact us on our Slack Channel [#forum-acm](https://coreos.slack.com/archives/CTDEY6EEA)).
+   - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
+   - click on `Generate Encrypted Password`
+   - enter your quay.io password
+   - select `Kubernetes Secret` from left-hand menu
+   - click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
+   - save secret file in the `prereqs` directory as `pull-secret.yaml`
+   - edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`
+      ```bash
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: multiclusterhub-operator-pull-secret
+      ...
+      ```
+
+## Deploy using the ./start.sh script (the easy way)
+
+We've added a very simple `start.sh` script to make your life easier. 
+
+First, you need to export KUBECONFIG=/path/to/some/cluster/kubeconfig
+
+1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
+
+```
+-t modify the YAML but exit before apply the resources
+--silent, skip all prompting, uses the previous configuration
+--watch, will monitor the main Red Hat ACM pod deployments for up to 10min
+
+$>: ./start.sh --watch
+```
+
+2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag. **Note**: Find snapshot tags here: https://quay.io/open-cluster-management/multiclusterhub-operator-index
+
+For example, your SNAPSHOT tag might resemble the following information:
+```bash
+1.0.0-SNAPSHOT-2020-03-13-23-07-54
+```
+  NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
+2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
+
+3. The script provides you with the `Open Cluster Management` URL.
+
+Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
+
+## To Delete a MultiClusterHub Instance (the easy way)
+
+1. Run the `uninstall.sh` script in the root of this repo.
+
+
+## To Delete the multiclusterhub-operator (the easy way)
+
+1. Run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters.
+2. Run the `uninstall.sh` script in the root of this repo.
+
+### Troubleshooting
+1. If uninstall hangs on the helmRelease delete, you can run this command to move it along.  This is distructive and can result in orphaned objects.
+```bash
+for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc patch helmreleases.apps.open-cluster-management.io $helmrelease --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; done
+```
 
 #### the hard way
 <details><summary>Click if you dare</summary>
@@ -182,74 +255,3 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
     ```
 </p>
 </details>
-
-Either way you choose to go, you are going to need a `pull-secret`. We are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time, you must gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
-
-## Prepare to deploy Open Cluster Management Instance (only do once)
-
-1. Clone this repo locally
-    ```bash
-    git clone https://github.com/open-cluster-management/deploy.git
-    ```
-
-2. Generate your pull-secre:
-   - ensure you have access to the quay org ([open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags))
-     - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please contact us on our Slack Channel [#forum-acm](https://coreos.slack.com/archives/CTDEY6EEA)).
-   - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
-   - click on `Generate Encrypted Password`
-   - enter your quay.io password
-   - select `Kubernetes Secret` from left-hand menu
-   - click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
-   - save secret file in the `prereqs` directory as `pull-secret.yaml`
-   - edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`
-      ```bash
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: multiclusterhub-operator-pull-secret
-      ...
-      ```
-
-## Deploy using the ./start.sh script (the easy way)
-
-We've added a very simple `start.sh` script to make your life easier. If you want to deploy `OCM` the __"hard way"__ you can find the instructions for deploying `OCM` using nothing but `oc` commands [here](#manually-deploy-using-oc-commands-the-hard-way).
-
-First, you need to export KUBECONFIG=/path/to/some/cluster/kubeconfig <!--would it be accurate to state that the user is updating the Kubernetes configuration path by running the export command?-->
-
-1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
-
-```
--t modify the YAML but exit before apply the resources
---silent, skip all prompting, uses the previous configuration
---watch, will monitor the main Red Hat ACM pod deployments for up to 10min
-
-$>: ./start.sh --watch
-```
-
-2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.<br>
-Example:  (_Find snapshot tags here:_ https://quay.io/open-cluster-management/multiclusterhub-operator-index)
-```bash
-1.0.0-SNAPSHOT-2020-03-13-23-07-54
-```
-  NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
-2. Depending on your script Option choice, `OCM` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
-
-3. The script provides you with the `Open Cluster Management` URL.
-
-Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
-
-## To Delete a MultiClusterHub Instance (the easy way)
-
-1. Run the `uninstall.sh` script in the root of this repo.
-
-
-## To Delete the multiclusterhub-operator (the easy way)
-
-1. Run the `clean-clusters.sh` script, and enter `DESTROY` to delete any Hive deployments and detach all imported clusters.
-2. Run the `uninstall.sh` script in the root of this repo.
-
-### Troubleshooting
-1. If uninstall hangs on the helmRelease delete, you can run this command to move it along.  This is distructive and can result in orphaned objects.
-```bash
-for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc patch helmreleases.apps.open-cluster-management.io $helmrelease --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; done
-```
