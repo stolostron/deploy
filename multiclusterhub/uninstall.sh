@@ -4,10 +4,10 @@ oc project open-cluster-management
 
 # cluster deployment cleanup now being done by clean-clusters.sh
 # for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
-for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
+# for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 
 # Consider delete complete when all helmreleases are gone or CRD doesn't exist
-while [ true ]; do
+for i in {1..10}; do
   oc get helmreleases.apps.open-cluster-management.io > /dev/null
   if [ $? -ne 0 ]; then
     break
@@ -17,6 +17,44 @@ while [ true ]; do
     sleep 2
   fi
 done
+
+oc get helmreleases.apps.open-cluster-management.io > /dev/null
+if [ $? -ne 0 ]; then
+  echo
+elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then 
+  echo
+else
+  echo "Uninstall stuck... Striping out finalizers from helm releases..."
+  for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc patch helmreleases.apps.open-cluster-management.io $helmrelease --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; done
+
+  # these objects get left-behind when uninstall has to strip finalizers from helm releases, clean them up manually
+
+  # cert-manager cert-manager-webhook
+  for webhook in $(oc get validatingwebhookconfiguration | grep cert-manager | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
+  for webhook in $(oc get mutatingwebhookconfiguration | grep "cert-manager" | cut -f 1 -d ' '); do oc delete mutatingwebhookconfiguration $webhook --ignore-not-found; done
+  for apiservice in $(oc get apiservice | grep certmanager | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
+  oc delete crd certificates.certmanager.k8s.io
+  oc delete crd certificaterequests.certmanager.k8s.io
+  oc delete crd challenges.certmanager.k8s.io
+  oc delete crd clusterissuers.certmanager.k8s.io
+  oc delete crd issuers.certmanager.k8s.io
+  oc delete crd orders.certmanager.k8s.io
+  oc delete clusterrole cert-manager-webhook-requester
+  oc delete clusterrolebinding cert-manager-webhook-auth-delegator
+
+  # console-chart
+  oc delete consolelink acm-console-link
+  oc delete crd userpreferences.console.acm.io
+
+  # multicloud-ingress
+  oc delete oauthclient multicloudingress
+
+  # rcm
+  oc delete crd endpointconfigs.multicloud.ibm.com
+  oc delete clusterrole rcm-controller
+  oc delete clusterrolebinding rcm-controller
+fi
+
 
 # Not seen on cluster
 for apiservice in $(oc get apiservice | grep clusterapi.io | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
