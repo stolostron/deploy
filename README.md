@@ -1,5 +1,5 @@
 
-# Deploy Open Cluster Management (OCM)
+# Deploy the _open-cluster-management_ project 
 
 ### Welcome!
 
@@ -104,7 +104,7 @@ For example, your SNAPSHOT tag might resemble the following information:
 1.0.0-SNAPSHOT-2020-03-13-23-07-54
 ```
   NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
-2. Depending on your script Option choice, `OCM` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
+2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
 
 3. The script provides you with the `Open Cluster Management` URL.
 
