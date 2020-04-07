@@ -171,8 +171,7 @@ if [[ " $@ " =~ " --watch " ]]; then
         whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
         if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
             RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
-            if [ RUNNING_PODS -eq 35 ]; then
-                echo "35/35 pods in RUNNING state"
+            if [ $RUNNING_PODS -ge 35 ]; then
                 COMPLETE=0
                 break
             fi

@@ -88,6 +88,7 @@ oc get crd | grep "acm.io" | awk '{ print $1 }' | xargs oc delete crd --wait=fal
 oc delete consolelink acm-console-link
 oc delete clusterrole search-collector
 oc delete clusterrolebinding search-collector
+oc delete oauthclient multicloudingress
 
 oc get service | grep "multicluster" | awk '{ print $1 }' | xargs oc delete service --wait=false --ignore-not-found || true
 for secret in $(oc get Secret -n open-cluster-management | grep multicluster | cut -f 1 -d ' '); do oc delete Secret $secret -n open-cluster-management --ignore-not-found; done
