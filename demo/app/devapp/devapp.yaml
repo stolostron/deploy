@@ -1,12 +1,9 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ns-sub-1
+###### Application yaml definition
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ns-ch
+  name: ns-sub-1
 ---
 apiVersion: app.k8s.io/v1beta1
 kind: Application
@@ -23,16 +20,13 @@ spec:
     matchLabels:
       app: nginx-app-details
 status: {}
+
+###### Channel yaml definition
 ---
-apiVersion: apps.open-cluster-management.io/v1
-kind: PlacementRule
-metadata:
-  name: towhichcluster
-  namespace: ns-sub-1
-spec:
-  clusterConditions:
-  - type: OK
-  clusterSelector: {}
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: ns-ch
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
@@ -44,6 +38,8 @@ metadata:
 spec:
   type: HelmRepo
   pathname: https://kubernetes-charts.storage.googleapis.com/
+        
+###### Subscription yaml definition
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
@@ -66,22 +62,16 @@ spec:
     clusterOverrides:
     - path: "metadata.namespace"
       value: default
+  
+###### PlacementRule yaml definition
 ---
 apiVersion: apps.open-cluster-management.io/v1
-kind: Deployable
+kind: PlacementRule
 metadata:
-  annotations:
-    apps.open-cluster-management.io/is-local-deployable: "false"
-  labels:
-    app: nginx-app-details
-  name: example-configmap
+  name: towhichcluster
   namespace: ns-sub-1
 spec:
-  template:
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: config1
-      namespace: default
-    data:
-      purpose: for test
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchLabels: {}
