@@ -178,10 +178,10 @@ if [[ " $@ " =~ " --watch " ]]; then
         whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
         RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
         if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
-            if [ $RUNNING_PODS -ge 35 ]; then
+            # if [ $RUNNING_PODS -ge 35 ]; then
                 COMPLETE=0
                 break
-            fi
+            # fi
         fi
         echo
         echo "Number of expected Pods : $RUNNING_PODS/$TOTAL_POD_COUNT"
