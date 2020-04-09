@@ -106,3 +106,28 @@ oc get mutatingwebhookconfiguration | grep "cert-manager" | awk '{ print $1 }' |
 
 cd ../
 echo DESTROY | ./uninstall.sh
+
+# cert-manager cert-manager-webhook
+for webhook in $(oc get validatingwebhookconfiguration | grep cert-manager | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
+for webhook in $(oc get mutatingwebhookconfiguration | grep "cert-manager" | cut -f 1 -d ' '); do oc delete mutatingwebhookconfiguration $webhook --ignore-not-found; done
+for apiservice in $(oc get apiservice | grep certmanager | cut -f 1 -d ' '); do oc delete apiservice $apiservice --ignore-not-found; done
+oc delete crd certificates.certmanager.k8s.io
+oc delete crd certificaterequests.certmanager.k8s.io
+oc delete crd challenges.certmanager.k8s.io
+oc delete crd clusterissuers.certmanager.k8s.io
+oc delete crd issuers.certmanager.k8s.io
+oc delete crd orders.certmanager.k8s.io
+oc delete clusterrole cert-manager-webhook-requester
+oc delete clusterrolebinding cert-manager-webhook-auth-delegator
+
+# console-chart
+oc delete consolelink acm-console-link
+oc delete crd userpreferences.console.acm.io
+
+# multicloud-ingress
+oc delete oauthclient multicloudingress
+
+# rcm
+oc delete crd endpointconfigs.multicloud.ibm.com
+oc delete clusterrole rcm-controller
+oc delete clusterrolebinding rcm-controller
