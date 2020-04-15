@@ -90,7 +90,7 @@ fi
 
 # ensure default storage class defined on ocp cluster
 SC_RESOLVE=$(oc get sc 2>&1)
-if [[ $SC_RESOLVE =~ (default) ]];
+if [[ $SC_RESOLVE =~ '(default)' ]];
 then
   echo "OK: Default Storage Class defined"
 else
