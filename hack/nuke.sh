@@ -1,3 +1,4 @@
+#!/bin/bash
 remove-apiservices () {
   echo "Remove Orphaned Apiservices"
   for apiservice in `kubectl get apiservices 2>/dev/null | grep "False" | awk '{ print $1; }'`; do
