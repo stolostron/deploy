@@ -4,7 +4,7 @@ oc project open-cluster-management
 
 # Remove multicloudhub resources
 oc delete subscriptions.operators.coreos.com multiclusterhub-operator --ignore-not-found
-oc delete csv multiclusterhub-operator.v0.0.1 --ignore-not-found
+oc delete csv multiclusterhub-operator.v1.0.0 --ignore-not-found
 oc delete catalogsource multiclusterhub-operator-registry --ignore-not-found
 oc delete crd multiclusterhubs.operators.open-cluster-management.io --ignore-not-found
 
