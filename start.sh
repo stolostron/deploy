@@ -171,7 +171,7 @@ waitForPod "multicluster-operators-application" "" "4/4"
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
-    for i in {1..60}; do
+    for i in {1..90}; do
         clear
         oc -n ${TARGET_NAMESPACE} get pods
         CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
