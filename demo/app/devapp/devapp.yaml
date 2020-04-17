@@ -52,7 +52,7 @@ spec:
   channel: ns-ch/predev-ch
   name: nginx-ingress
   packageFilter:
-    version: "1.20.x"
+    version: "1.36.x"
   placement:
     placementRef:
       kind: PlacementRule
