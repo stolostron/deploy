@@ -4,7 +4,6 @@ metadata:
   name: multiclusterhub
   namespace: open-cluster-management
 spec:
-  version: latest
   imageRepository: "quay.io/open-cluster-management"
   imageTagSuffix: SNAPSHOT-2020-04-14-16-26-00
   imagePullPolicy: Always

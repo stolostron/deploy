@@ -8,4 +8,4 @@ spec:
   name: multiclusterhub-operator-bundle
   source: open-cluster-management
   sourceNamespace: open-cluster-management
-  startingCSV: multiclusterhub-operator.v0.0.1
+  startingCSV: multiclusterhub-operator.v1.0.0
