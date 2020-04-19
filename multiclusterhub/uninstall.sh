@@ -103,6 +103,7 @@ for rolebinding in $(oc get clusterrolebindings | grep hive | cut -f 1 -d ' '); 
 for webhook in $(oc get validatingwebhookconfiguration | grep hive | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
 for configmap in $(oc get configmap -n hive | tail -n +2 | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
 for secret in $(oc get Secret -n hive | grep hive | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
+oc delete hiveconfig hive
 oc delete namespace hive --wait=false
 
 #Additonal cleanup
