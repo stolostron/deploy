@@ -5,6 +5,6 @@ metadata:
   namespace: open-cluster-management
 spec:
   imageRepository: "quay.io/open-cluster-management"
-  imageTagSuffix: SNAPSHOT-2020-04-14-16-26-00
+  imageTagSuffix: SNAPSHOT-2020-04-20-15-44-28
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
