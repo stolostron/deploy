@@ -8,9 +8,6 @@ generatorOptions:
 # namespace to deploy all Resources to
 namespace: open-cluster-management
 
-bases:
-  - ./hive
-
 patchesStrategicMerge:
 - default-sa-pull-secret-patch.yaml
 
