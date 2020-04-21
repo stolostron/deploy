@@ -11,6 +11,10 @@ namespace: open-cluster-management
 bases:
   - ./hive
 
+patchesStrategicMerge:
+- default-sa-pull-secret-patch.yaml
+
+
 # list of Resource Config to be Applied
 resources:
   - namespace.yaml
