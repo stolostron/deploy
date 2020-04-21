@@ -123,7 +123,7 @@ oc delete clusterrolebinding cert-manager-webhook-auth-delegator || true
 
 # console-chart
 oc delete consolelink acm-console-link || true
-oc delete crd userpreferences.console.acm.io || true
+oc delete crd userpreferences.console.open-cluster-management.io || true
 
 # multicloud-ingress
 oc delete oauthclient multicloudingress || true
