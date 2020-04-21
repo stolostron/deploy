@@ -179,7 +179,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
    - edit the `example-multiclusterhub-cr.yaml` file in the `mulitclusterhub` dir
      - set `imageTagSuffix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above<br>_**Note:** Make sure to remove the VERSION 1.0.0-, from the newTag value taken from kustomization.yaml**_
     ```bash
-    apiVersion: operators.open-cluster-management.io/v1alpha1
+    apiVersion: operators.open-cluster-management.io/v1beta1
     kind: MultiClusterHub
     metadata:
       name: example-multiclusterhub
