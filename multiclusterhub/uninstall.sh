@@ -83,6 +83,9 @@ oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print 
 oc delete crd compliances.compliance.mcm.ibm.com --wait=false --ignore-not-found || true
 oc delete crd policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true
 
+# Issue https://github.com/open-cluster-management/backlog/issues/1794
+oc delete crd searchservices.search.acm.com --wait=false --ignore-not-found || true
+
 # Working on in https://github.com/open-cluster-management/backlog/issues/786
 for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' '); do oc delete configmap $configmap --ignore-not-found; done
 
@@ -103,8 +106,8 @@ for rolebinding in $(oc get clusterrolebindings | grep hive | cut -f 1 -d ' '); 
 for webhook in $(oc get validatingwebhookconfiguration | grep hive | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found; done
 for configmap in $(oc get configmap -n hive | tail -n +2 | cut -f 1 -d ' '); do oc delete configmap $configmap -n hive --ignore-not-found; done
 for secret in $(oc get Secret -n hive | grep hive | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found; done
-oc delete hiveconfig hive
-oc delete namespace hive --wait=false
+oc delete hiveconfig hive --ignore-not-found
+oc delete namespace hive --wait=false --ignore-not-found
 
 #Additonal cleanup
 #oc delete crd userpreferences.console.acm.io --ignore-not-found || true

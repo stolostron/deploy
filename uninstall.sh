@@ -28,3 +28,5 @@ kubectl delete -k multiclusterhub/
 
 kubectl delete -k multiclusterhub-operator/
 ./multiclusterhub-operator/uninstall.sh
+
+exit 0
