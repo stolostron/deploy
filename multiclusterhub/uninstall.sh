@@ -83,6 +83,9 @@ oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print 
 oc delete crd compliances.compliance.mcm.ibm.com --wait=false --ignore-not-found || true
 oc delete crd policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true
 
+# Issue https://github.com/open-cluster-management/backlog/issues/1794
+oc delete crd searchservices.search.acm.com --wait=false --ignore-not-found || true
+
 # Working on in https://github.com/open-cluster-management/backlog/issues/786
 for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' '); do oc delete configmap $configmap --ignore-not-found; done
 
