@@ -182,38 +182,13 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
     apiVersion: operators.open-cluster-management.io/v1beta1
     kind: MultiClusterHub
     metadata:
-      name: example-multiclusterhub
+      name: multiclusterhub
       namespace: open-cluster-management
     spec:
-      version: latest
       imageRepository: "quay.io/open-cluster-management"
-      imageTagSuffix: "SNAPSHOT-2020-03-17-21-24-18"
+      imageTagSuffix: SNAPSHOT-2020-04-21-17-28-34
       imagePullPolicy: Always
       imagePullSecret: multiclusterhub-operator-pull-secret
-      foundation:
-        apiserver:
-          configuration:
-            http2-max-streams-per-connection: "1000"
-          replicas: 1
-          apiserverSecret: "mcm-apiserver-self-signed-secrets"
-          klusterletSecret: "mcm-klusterlet-self-signed-secrets"
-        controller:
-          configuration:
-            enable-rbac: "true"
-            enable-service-registry: "true"
-          replicas: 1
-      mongo:
-        endpoints: mongo-0.mongo.open-cluster-management
-        replicaSet: rs0
-      hive:
-        additionalCertificateAuthorities:
-          - name: letsencrypt-ca
-        managedDomains:
-          - s1.openshiftapps.com
-        globalPullSecret:
-          name: private-secret
-        failedProvisionConfig:
-          skipGatherLogs: true
     ```
 
 6. Create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
