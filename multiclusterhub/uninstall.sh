@@ -55,7 +55,7 @@ else
 
   # console-chart
   oc delete consolelink acm-console-link
-  oc delete crd userpreferences.console.acm.io
+  oc delete crd userpreferences.console.open-cluster-management.io
 
   # multicloud-ingress
   oc delete oauthclient multicloudingress
@@ -110,6 +110,6 @@ oc delete hiveconfig hive --ignore-not-found
 oc delete namespace hive --wait=false --ignore-not-found
 
 #Additonal cleanup
-#oc delete crd userpreferences.console.acm.io --ignore-not-found || true
+#oc delete crd userpreferences.console.open-cluster-management.io --ignore-not-found || true
 #oc delete ConsoleLink acm-console-link --ignore-not-found || true
 #oc delete OAuthClient multicloudingress --ignore-not-found || true
