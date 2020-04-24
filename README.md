@@ -187,9 +187,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
     spec:
       imagePullSecret: multiclusterhub-operator-pull-secret
       overrides:
-        imageRepository: "quay.io/open-cluster-management"
         imageTagSuffix: SNAPSHOT-2020-04-21-17-28-34
-        imagePullPolicy: Always
     ```
 
 6. Create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
