@@ -11,7 +11,7 @@ generatorOptions:
 images:
   - name: multiclusterhub-operator-index
     newName: quay.io/open-cluster-management/multiclusterhub-operator-index
-    newTag: 1.0.0-SNAPSHOT-2020-04-21-17-28-34
+    newTag: 1.0.0-SNAPSHOT-2020-04-24-15-37-39
 
 # list of Resource Config to be Applied
 resources:
