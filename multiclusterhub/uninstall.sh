@@ -56,6 +56,8 @@ else
   # console-chart
   oc delete consolelink acm-console-link
   oc delete crd userpreferences.console.open-cluster-management.io
+  oc delete clusterrole aggregate-clusterimagesets-readonly --ignore-not-found
+  oc delete clusterrolebinding readonly-clusterimagesets --ignore-not-found
 
   # multicloud-ingress
   oc delete oauthclient multicloudingress

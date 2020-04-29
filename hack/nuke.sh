@@ -124,6 +124,8 @@ oc delete clusterrolebinding cert-manager-webhook-auth-delegator || true
 # console-chart
 oc delete consolelink acm-console-link || true
 oc delete crd userpreferences.console.open-cluster-management.io || true
+oc delete clusterrole aggregate-clusterimagesets-readonly || true
+oc delete clusterrolebinding readonly-clusterimagesets || true
 
 # multicloud-ingress
 oc delete oauthclient multicloudingress || true
