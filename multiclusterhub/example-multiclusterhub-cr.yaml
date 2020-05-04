@@ -5,6 +5,4 @@ metadata:
   namespace: open-cluster-management
 spec:
   imagePullSecret: multiclusterhub-operator-pull-secret
-  overrides:
-    imageTagSuffix: SNAPSHOT-2020-04-24-15-37-39
   

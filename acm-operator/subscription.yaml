@@ -6,5 +6,5 @@ spec:
   channel: release-1.0
   installPlanApproval: Automatic
   name: advanced-cluster-management
-  source:
+  source: acm-custom-registry
   sourceNamespace: open-cluster-management

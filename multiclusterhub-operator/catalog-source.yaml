@@ -1,7 +1,0 @@
-apiVersion: operators.coreos.com/v1alpha1
-kind: CatalogSource
-metadata:
-  name: open-cluster-management
-spec:
-  sourceType: grpc
-  address: open-cluster-management-registry.open-cluster-management.svc:50051
