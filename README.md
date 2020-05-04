@@ -46,7 +46,7 @@ You must meet the following requirements to install the _open-cluster-management
 #### Repo Structure and Organization
 This repo contains the 3 directories:
   - `prereqs` - YAML definitions for prerequisite objects (namespaces and pull-secrets)
-  - `multiclusterhub-operator` - YAML definitions for setting up a `CatalogSource` for our operator
+  - `acm-operator` - YAML definitions for setting up a `CatalogSource` for our operator
   - `multiclusterhub` -  YAML definitions for creating an instance of `MultiClusterHub`
 
 Each of the three directories contains a `kustomization.yaml` file that will apply the YAML definitions to your OCP instance with the following command: `kubectl apply -k`.
@@ -142,32 +142,32 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
   kubectl apply --openapi-patch=true -k prereqs/
   ```
 
-2. Update the `kustomization.yaml` file in the `multiclusterhub-operator` dir to set `newTag`
-  You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/multiclusterhub-operator-index) Use a tag that has the word `SNAPSHOT` in it.
+2. Update the `kustomization.yaml` file in the `acm-operator` dir to set `newTag`
+  You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/acm-custom-registry) Use a tag that has the word `SNAPSHOT` in it.
     ```bash
     namespace: open-cluster-management
 
-    images: # updates operator.yaml with the dev image
-      - name: multiclusterhub-operator-index
-        newName: quay.io/open-cluster-management/multiclusterhub-operator-index
-        newTag: "1.0.0-SNAPSHOT-2020-03-13-23-07-54"
+    images:
+      - name: acm-custom-registry
+        newName: quay.io/open-cluster-management/acm-custom-registry
+        newTag: 1.0.0-SNAPSHOT-2020-05-04-17-43-49
     ```
     
-3. Create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `multiclusterhub-operator` dir:
+3. Create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `acm-operator` dir:
     ```bash
-    kubectl apply -k multiclusterhub-operator/
+    kubectl apply -k acm-operator/
     ```
 
 4. Wait for subscription to be healthy:
     ```bash
-    oc get subscription.operators.coreos.com multiclusterhub-operator-bundle --namespace open-cluster-management -o yaml
+    oc get subscription.operators.coreos.com acm-operator-subscription --namespace open-cluster-management -o yaml
     ...
     status:
       catalogHealth:
       - catalogSourceRef:
           apiVersion: operators.coreos.com/v1alpha1
           kind: CatalogSource
-          name: open-cluster-management
+          name: acm-operator-subscription
           namespace: open-cluster-management
           resourceVersion: "1123089"
           uid: f6da232b-e7c1-4fc6-958a-6fb1777e728c
@@ -176,8 +176,6 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
     ```
 
 5. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
-   - edit the `example-multiclusterhub-cr.yaml` file in the `mulitclusterhub` dir
-     - set `imageTagSuffix` to the snapshot value used in the `kustomization.yaml` file in the `multiclusterhub-operator` dir above<br>_**Note:** Make sure to remove the VERSION 1.0.0-, from the newTag value taken from kustomization.yaml**_
     ```bash
     apiVersion: operators.open-cluster-management.io/v1beta1
     kind: MultiClusterHub
@@ -186,8 +184,6 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
       namespace: open-cluster-management
     spec:
       imagePullSecret: multiclusterhub-operator-pull-secret
-      overrides:
-        imageTagSuffix: SNAPSHOT-2020-04-21-17-28-34
     ```
 
 6. Create the `example-multiclusterhub` objects by applying the yaml definitions contained in the `multiclusterhub` dir:
@@ -213,19 +209,19 @@ After completing the steps above you can redeploy the `multiclusterhub` instance
     
 ## To Delete the multiclusterhub-operator
 
-1. Delete the `multiclusterhub-operator` objects by deleting the yaml definitions contained in the `multiclusterhub-operator` dir:
+1. Delete the `multiclusterhub-operator` objects by deleting the yaml definitions contained in the `acm-operator` dir:
     ```bash
-    kubectl delete -k multiclusterhub-operator/
+    kubectl delete -k acm-operator/
     ```
 
-2. Not all objects are currently being cleaned up by the `multiclusterhub-operator` upon deletion. You can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `multiclusterhub-operator` dir:
+2. Not all objects are currently being cleaned up by the `multiclusterhub-operator` upon deletion. You can ensure all objects are cleaned up by executing the `uninstall.sh` script in the `acm-operator` dir:
     ```bash
-    ./multiclusterhub-operator/uninstall.sh
+    ./acm-operator/uninstall.sh
     ```
 
 After completing the steps above you can redeploy the `multiclusterhub-operator` by simply running:
     ```bash
-    kubectl apply -k multiclusterhub-operator/
+    kubectl apply -k acm-operator/
     ```
 </p>
 </details>

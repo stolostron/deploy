@@ -127,7 +127,7 @@ fi
 if [[ " $@ " =~ " --silent " ]]; then
     echo "* Silent mode"
 else
-    printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/acm-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
@@ -146,7 +146,7 @@ fi
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
-${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./multiclusterhub-operator/kustomization.yaml
+${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./acm-operator/kustomization.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
@@ -159,9 +159,9 @@ fi
 printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/
 
-printf "\n##### Applying multicluster-hub-operator subscription #####\n"
-kubectl apply -k multiclusterhub-operator/
-waitForPod "multiclusterhub-operator" "registry" "1/1"
+printf "\n##### Applying acm-operator subscription #####\n"
+kubectl apply -k acm-operator/
+waitForPod "multiclusterhub-operator" "acm-custom-registry" "1/1"
 printf "\n* Beginning deploy...\n"
 
 

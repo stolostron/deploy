@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: open-cluster-management-registry
+  name: acm-custom-registry
   labels:
-    app: open-cluster-management-registry
+    app: acm-custom-registry
 spec:
   selector:
     matchLabels:
-      app: open-cluster-management-registry
+      app: acm-custom-registry
   template:
     metadata:
       labels:
-        app: open-cluster-management-registry
+        app: acm-custom-registry
     spec:
       containers:
-      - name: multiclusterhub-operator-index
-        image: multiclusterhub-operator-index:1.0.0
+      - name: acm-custom-registry
+        image: acm-custom-registry:1.0.0
         ports:
         - containerPort: 50051
       imagePullSecrets:

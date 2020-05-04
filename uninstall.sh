@@ -26,7 +26,7 @@ printf "\n"
 kubectl delete -k multiclusterhub/
 ./multiclusterhub/uninstall.sh
 
-kubectl delete -k multiclusterhub-operator/
-./multiclusterhub-operator/uninstall.sh
+kubectl delete -k acm-operator/
+./acm-operator/uninstall.sh
 
 exit 0

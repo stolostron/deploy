@@ -16,7 +16,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
 for mch in $(oc get multiclusterhub | tail -n +2 | cut -f 1 -d ' '); do oc patch multiclusterhub $mch --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]' || true; done
 
 kubectl delete -k ../multiclusterhub/ || true
-kubectl delete -k ../multiclusterhub-operator/ || true
+kubectl delete -k ../acm-operator/ || true
 
 oc project open-cluster-management
 remove-apiservices

@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: open-cluster-management-registry
+  name: acm-custom-registry
 spec:
   ports:
     - name: grpc
@@ -9,4 +9,4 @@ spec:
       port: 50051
       targetPort: 50051
   selector:
-    app: open-cluster-management-registry
+    app: acm-custom-registry
