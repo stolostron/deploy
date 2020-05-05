@@ -102,7 +102,7 @@ First, you need to export KUBECONFIG=/path/to/some/cluster/kubeconfig
 $>: ./start.sh --watch
 ```
 
-2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag. **Note**: Find snapshot tags here: https://quay.io/open-cluster-management/multiclusterhub-operator-index
+2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag. **Note**: Find snapshot tags here: https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
 
 For example, your SNAPSHOT tag might resemble the following information:
 ```bash
