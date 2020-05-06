@@ -127,7 +127,7 @@ fi
 if [[ " $@ " =~ " --silent " ]]; then
     echo "* Silent mode"
 else
-    printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/acm-operator-index?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
