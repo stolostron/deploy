@@ -13,22 +13,14 @@ spec:
   clusterNamespace: <CLUSTER_NAME>
   applicationManager:
     enabled: true
-  imageRegistry: quay.io/open-cluster-management
-  metering:
-    enabled: true
   policyController:
-    enabled: true
-  prometheusIntegration:
     enabled: true
   searchCollector:
     enabled: true
   serviceRegistry:
     enabled: true
-  tillerIntegration:
-    enabled: true
-  topologyCollector:
-    enabled: true
-    updateInterval: 0
+    dnsSuffix: "mcm.svc"
+    plugins: "kube-service"
   certPolicyController:
     enabled: true
   cisController:
