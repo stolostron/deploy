@@ -157,7 +157,10 @@ if [[ " $@ " =~ " -t " ]]; then
 fi
 
 printf "\n##### Applying prerequisites\n"
-kubectl apply --openapi-patch=true -k prereqs/
+# Why twice? It's because there might be a potential race issue while patching the pull secret
+kubectl apply -k prereqs/
+sleep 2
+kubectl apply -k prereqs/
 
 printf "\n##### Applying acm-operator subscription #####\n"
 kubectl apply -k acm-operator/
