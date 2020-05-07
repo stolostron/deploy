@@ -130,8 +130,10 @@ else
     printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
+        if [ "${SNAPSHOT_CHOICE}" != "${DEFAULT_SNAPSHOT}" ]; then
+            printf "${SNAPSHOT_CHOICE}" > ./snapshot.ver
+        fi
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
-        printf "${DEFAULT_SNAPSHOT}" > ./snapshot.ver
     fi
 fi
 if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
