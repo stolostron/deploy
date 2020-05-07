@@ -9,3 +9,5 @@ id_rsa.pub
 local.rc
 kubeconfig
 *.bak
+
+.DS_Store
