@@ -138,10 +138,10 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     echo "ERROR: Please specify a valid snapshot tag to continue."
     exit 2
 fi
-if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* ]]; then
-    echo "ERROR: invalid SNAPSHOT format... snapshot must begin with '1.0.0-'"
-    exit 1
-fi
+# if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* ]]; then
+#     echo "ERROR: invalid SNAPSHOT format... snapshot must begin with '1.0.0-'"
+#     exit 1
+# fi
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
