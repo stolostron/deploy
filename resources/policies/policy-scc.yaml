@@ -18,11 +18,13 @@ spec:
     - complianceType: musthave
       objectDefinition:
         apiVersion: security.openshift.io/v1
-        kind: SecurityContextConstraints # restricted scc
+        kind: SecurityContextConstraints
         metadata:
           annotations:
-            kubernetes.io/description: restricted denies access to all host features and requires pods to be run with a UID, and SELinux context that are allocated to the namespace.  This is the most restrictive SCC and it is used by default for authenticated users.
-          name: sample-restricted-scc
+            kubernetes.io/description: restricted denies access to all host features and requires
+              pods to be run with a UID, and SELinux context that are allocated to the namespace.  This
+              is the most restrictive SCC and it is used by default for authenticated users.
+          name: restricted
         allowHostDirVolumePlugin: false
         allowHostIPC: false
         allowHostNetwork: false
@@ -72,20 +74,20 @@ subjects:
   kind: Policy
   apiGroup: policy.mcm.ibm.com
 ---
-apiVersion: mcm.ibm.com/v1alpha1
-kind: PlacementBinding
-metadata:
-  name: policy-scc-production-clusters
-  namespace: open-cluster-management-policies
-placementRef:
-  name: production-clusters
-  kind: PlacementRule
-  apiGroup: apps.open-cluster-management.io
-subjects:
-- name: policy-scc
-  kind: Policy
-  apiGroup: policy.mcm.ibm.com
----
+# apiVersion: mcm.ibm.com/v1alpha1
+# kind: PlacementBinding
+# metadata:
+#   name: policy-scc-production-clusters
+#   namespace: open-cluster-management-policies
+# placementRef:
+#   name: production-clusters
+#   kind: PlacementRule
+#   apiGroup: apps.open-cluster-management.io
+# subjects:
+# - name: policy-scc
+#   kind: Policy
+#   apiGroup: policy.mcm.ibm.com
+# ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
