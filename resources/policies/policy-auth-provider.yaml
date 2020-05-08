@@ -1,0 +1,82 @@
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: policy-auth-provider
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.mcm.ibm.com/standards: NIST-CSF
+    policy.mcm.ibm.com/categories: PR.IP Information Protection Processes and Procedures
+    policy.mcm.ibm.com/controls: PR.IP-1 Baseline configuration
+spec:
+  complianceType: musthave
+  remediationAction: enforce
+  disabled: true
+  namespaces:
+    exclude: ["kube-*"]
+    include:
+    - openshift-config
+  object-templates:
+    - complianceType: musthave
+      objectDefinition:
+        apiVersion: config.openshift.io/v1
+        kind: OAuth
+        metadata:
+          name: cluster
+        spec:
+          identityProviders:
+          - htpasswd:
+              fileData:
+                name: htpass-secret
+            mappingMethod: claim
+            name: htpassidp
+            type: HTPasswd
+          tokenConfig:
+            accessTokenMaxAgeSeconds: 7776000
+    - complianceType: musthave
+      objectDefinition:
+        apiVersion: v1
+        data:
+          htpasswd: aHVkaWU6JGFwcjEkWTUwMWpnekQkTnZhcG0yMHhPNzd5WDA3S2FZeGRyLwpyb2xhbmQ6JGFwcjEkWjNTaFFZVzIkVllmazZGS3pGNUFWRHV3MnhFYzlNMQpuZ286JGFwcjEkN0JQcm1TOUQkVWF5Y0p3Y1NXemVxS1BBak8wR3hLLwo=
+        kind: Secret
+        metadata:
+          name: htpass-secret
+          namespace: openshift-config
+        type: Opaque
+    - complianceType: musthave
+      objectDefinition:
+        kind: Identity
+        apiVersion: user.openshift.io/v1
+        metadata:
+          name: 'htpassidp:johndoe'
+        providerName: htpassidp
+        providerUserName: johndoe
+        user:
+          name: johndoe
+          uid: e4d768dd-a6b5-489c-8900-2c18a160d76f
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-auth-provider
+  namespace: open-cluster-management-policies
+placementRef:
+  name: placement-policy-oauth-provider
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-auth-provider
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-oauth-provider
+  namespace: open-cluster-management-policies
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchExpressions: []
+    matchLabels:
+      authProvider: htpasswd
