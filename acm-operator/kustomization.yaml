@@ -11,7 +11,7 @@ generatorOptions:
 images:
   - name: acm-custom-registry
     newName: quay.io/acm-d/acm-custom-registry
-    newTag: 1.0.0-RC1
+    newTag: 1.0.0-RC2
 
 # list of Resource Config to be Applied
 resources:
