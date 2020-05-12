@@ -191,4 +191,4 @@ spec:
   clusterSelector:
     matchExpressions: []
     matchLabels:
-      enforcedSecureImages: true
+      enforcedSecureImages: "true"
