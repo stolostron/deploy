@@ -1,0 +1,61 @@
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: policy-role
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.mcm.ibm.com/standards: NIST-CSF
+    policy.mcm.ibm.com/categories: PR.AC Identity Management Authentication and Access Control
+    policy.mcm.ibm.com/controls: PR.AC-4 Access Control
+spec:
+  complianceType: musthave
+  remediationAction: inform
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["default"]
+  role-templates:
+    - apiVersion: roletemplate.mcm.ibm.com/v1alpha1 # role must follow defined permissions
+      metadata:
+        namespace: "" # will be inferred
+        name: operator-role-policy
+      selector:
+        matchLabels:
+          dev: "true"
+      complianceType: musthave # at this level, it means the role must exist with the rules that it musthave below
+      rules:
+        - complianceType: musthave # at this level, it means if the role exists the rule is a musthave
+          policyRule:
+            apiGroups: ["extensions", "apps"]
+            resources: ["deployments"]
+            verbs: ["get", "list", "watch", "create", "delete","patch"]
+        - complianceType: "mustnothave" # at this level, it means if the role exists the rule is a mustnothave
+          policyRule:
+            apiGroups: ["core"]
+            resources: ["secrets"]
+            verbs: ["get", "list", "watch","delete", "create", "update", "patch"]
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-role
+  namespace: open-cluster-management-policies
+placementRef:
+  name: placement-policy-role
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-role
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-role
+  namespace: open-cluster-management-policies
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchExpressions: []

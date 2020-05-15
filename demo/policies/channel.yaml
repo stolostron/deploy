@@ -1,0 +1,8 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: deploy-demo-policies
+  namespace: open-cluster-management
+spec:
+  type: GitHub
+  pathname: https://github.com/open-cluster-management/deploy.git

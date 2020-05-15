@@ -1,0 +1,77 @@
+###### Application yaml definition
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-sub-1
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  labels:
+    app: nginx-app-details
+  name: nginx-app-3
+  namespace: ns-sub-1
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  selector:
+    matchLabels:
+      app: nginx-app-details
+status: {}
+
+###### Channel yaml definition
+---
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: ns-ch
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: predev-ch
+  namespace: ns-ch
+  labels:
+    app: nginx-app-details
+spec:
+  type: HelmRepo
+  pathname: https://kubernetes-charts.storage.googleapis.com/
+        
+###### Subscription yaml definition
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: nginx
+  namespace: ns-sub-1
+  labels:
+    app: nginx-app-details
+spec:
+  channel: ns-ch/predev-ch
+  name: nginx-ingress
+  packageFilter:
+    version: "1.36.x"
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: towhichcluster
+  overrides:
+  - clusterName: "/"
+    clusterOverrides:
+    - path: "metadata.namespace"
+      value: default
+  
+###### PlacementRule yaml definition
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: towhichcluster
+  namespace: ns-sub-1
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchLabels: {}

@@ -1,0 +1,12 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: dev-clusters
+  namespace: open-cluster-management
+spec:
+  clusterConditions:
+    - type: OK
+  clusterSelector:
+    matchExpressions: []
+    matchLabels:
+      environment: Dev

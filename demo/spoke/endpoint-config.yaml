@@ -1,0 +1,29 @@
+apiVersion: multicloud.ibm.com/v1alpha1
+kind: EndpointConfig
+metadata:
+  name: <CLUSTER_NAME>
+spec:
+  version: 1.0.0
+  bootstrapConfig:
+    hubSecret: multicluster-endpoint/klusterlet-bootstrap
+  clusterLabels:
+    cloud: auto-detect
+    vendor: auto-detect
+  clusterName: <CLUSTER_NAME>
+  clusterNamespace: <CLUSTER_NAME>
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  serviceRegistry:
+    enabled: true
+    dnsSuffix: "mcm.svc"
+    plugins: "kube-service"
+  certPolicyController:
+    enabled: true
+  cisController:
+    enabled: true
+  iamPolicyController:
+    enabled: true

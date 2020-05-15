@@ -1,0 +1,13 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# namespace to deploy all Resources to
+namespace: open-cluster-management
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+# list of Resource Config to be Applied
+resources:
+  - example-multiclusterhub-cr.yaml

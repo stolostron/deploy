@@ -1,0 +1,6 @@
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: anyuid
+users:
+- system:serviceaccount:open-cluster-management:runasanyuid
