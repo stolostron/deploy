@@ -169,6 +169,13 @@ ${SED} -i "s/<AWS_SECRET_ACCESS_KEY>/${AWS_SECRET_ACCESS_KEY}/g" ./kustomization
 printf "* Applying OCP_PULL_SECRET to ./kustomization.yaml\n"
 ${SED} -i "s/<OCP_PULL_SECRET>/${OCP_PULL_SECRET}/g" ./kustomization.yaml
 
+if [ ! -z "$DOWNSTREAM" ]; then
+    printf "* Applying an ImageContentSourcePolicy in install-config.yaml for Downstream deploys"
+    if [ -z $IMAGE_CONTENT_SOURCE_MIRROR ]; then IMAGE_CONTENT_SOURCE_MIRROR="quay.io:443/acm-d"; fi
+    if [ -z $IMAGE_CONTENT_SOURCE_SOURCE ]; then IMAGE_CONTENT_SOURCE_SOURCE="registry.redhat.io/rhacm1-tech-preview"; fi
+    printf "imageContentSources:\n- mirrors:\n\t- ${IMAGE_CONTENT_SOURCE_MIRROR}\n\tsource: ${IMAGE_CONTENT_SOURCE_SOURCE}" >> ./install-config.yaml
+fi
+
 
 echo "Ready to start applying yaml definitions to your OCP cluster."
 echo "Press ENTER to continue"
