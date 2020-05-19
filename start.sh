@@ -139,7 +139,7 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     exit 2
 fi
 
-if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* && -z "$DOWNSTREAM" ]]; then
+if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* && "$DOWNSTREAM" != "true" ]]; then
     echo "ERROR: invalid SNAPSHOT format... snapshot must begin with '1.0.0-' if DOWNSTREAM isn't set"
     exit 1
 fi
