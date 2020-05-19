@@ -157,6 +157,8 @@ echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
+cat ./acm-operator/kustomization.yaml
+
 if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
     exit 0
