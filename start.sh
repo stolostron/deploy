@@ -143,7 +143,7 @@ if [[ ! $DEFAULT_SNAPSHOT == 1.0.0-* && -z "$DOWNSTREAM" ]]; then
     exit 1
 fi
 
-if [ -z "$DOWNSTREAM" ]; then ACM_CUSTOM_REGISTRY_REPO="quay.io/open-cluster-management"; else ACM_CUSTOM_REGISTRY_REPO="quay.io/acm-d"; fi
+if [[ "$DOWNSTREAM" != "true" ]]; then ACM_CUSTOM_REGISTRY_REPO="quay.io/open-cluster-management"; else ACM_CUSTOM_REGISTRY_REPO="quay.io/acm-d"; fi
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
