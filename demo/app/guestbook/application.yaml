@@ -1,9 +1,14 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: deploy-git
+---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   name: guestbook-app-latest
-  namespace: open-cluster-management
+  namespace: deploy-git
 spec:
   type: GitHub
   pathname: https://github.com/open-cluster-management/deploy.git
@@ -32,25 +37,15 @@ metadata:
   namespace: open-cluster-management
   labels:
     app: guestbook-app
+  annotations:
+    apps.open-cluster-management.io/github-path: resources/guestbook
+    apps.open-cluster-management.io/github-branch: master
 spec:
-  channel: open-cluster-management/guestbook-app-latest
+  channel: deploy-git/guestbook-app-latest
   placement:
     placementRef:
       kind: PlacementRule
       name: dev-clusters
-  packageFilter:
-    filterRef:
-      name: resource-filter-configmap
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: resource-filter-configmap
-  namespace: open-cluster-management
-  labels:
-    app: guestbook-app
-data:
-    path: resources/guestbook
 ---
 apiVersion: policy.mcm.ibm.com/v1alpha1
 kind: Policy
