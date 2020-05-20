@@ -36,7 +36,3 @@ platform:
   aws:
     region: <CLOUD_REGION>
 pullSecret: "" # skip, hive will inject based on it's secrets
-imageContentSources:
-- mirrors:
-  - quay.io:443/acm-d
-  source: registry.redhat.io/rhacm1-tech-preview
