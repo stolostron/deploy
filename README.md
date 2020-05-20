@@ -92,6 +92,8 @@ We've added a very simple `start.sh` script to make your life easier.
 
 First, you need to export KUBECONFIG=/path/to/some/cluster/kubeconfig
 
+**If you're deploying a downstream build** export DOWNSTREAM="true".  Optionally export `ACM_CUSTOM_REGISTRY_REPO` if you want to deploy the downstream build from a repo other than `acm-d`.  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
+
 1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
 
 ```
@@ -144,6 +146,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
 
 2. Update the `kustomization.yaml` file in the `acm-operator` dir to set `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/acm-custom-registry) Use a tag that has the word `SNAPSHOT` in it.
+  For downstream deploys, make sure to set `newName` differently, usually to `acm-d`.  
     ```bash
     namespace: open-cluster-management
 
