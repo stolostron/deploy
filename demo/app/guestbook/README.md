@@ -1,6 +1,11 @@
 # Guest Book
 
-- from within this directory, in a terminal window run:
+- Create from within this directory, in a terminal window run:
     ```bash
     kubectl apply -k .
+    ```
+
+- Remove
+    ```bash
+    kubectl delete -k .
     ```

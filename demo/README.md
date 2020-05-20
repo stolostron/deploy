@@ -1,25 +1,25 @@
 # Open Cluster Managment Demo
 
-Welcome to your first tast of Open Cluster Management (OCM).  We have collected a number of assets in this dir of our repo to get your feet wet with OCM.  Here you will find some basic instructions for how to utilize the contained assets to do the following:
+Welcome to your first taste of Open Cluster Management (OCM).  We have collected a number of assets in this directory of our repo to get your feet wet with OCM.  Here you will find some basic instructions for how to utilize the contained assets to do the following:
 
-- Provision a "spoke" OCP cluster using OCM (also referred to as a managed cluster)
-- Load a number governance policies into your OCM instance
-- Load an application with channels, and subscriptions into OCM
-- Deploy an application onto your "spoke" cluster using placement rules
+- Provision a "managed cluster" OCP cluster using OCM (sometimes referred to as a "spoke cluster")
+- Load a number of governance policies into your OCM instance
+- Load an application via a subscription into your OCM
+- Deploy an application onto your managed cluster(s) using a subscription and placement rules
 
 
 We'll keep it brief and to the point in here... for our full documentation you should refer to our [doc site](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md).
 
-In here you'll find three sub directories:
+In here you'll find three sub-directories:
 
 - __spoke__ - contains yaml definitions to provision a "spoke" cluster on AWS using OCM
 - __policies__ - contains yaml definitions to create a channel in OCM that will load all the policy definitions from a github repo
 - __app__ - contains yaml definitions to create a bookinfo application
-  - includes multiple channel definitions for github and helm repos
-  - includes placement rule definitions to identify which "spoke" cluster should be targeted for application deployment
-  - includes subscription definitions to bind an application with channels and a placement rule to deploy the application onto your spoke cluster
+  - includes multiple channels which are repository definitions for GitHub and Helm repos
+  - includes placement rule definitions to identify which managed cluster(s) should be targeted for application deployments
+  - includes subscription definitions to facilitate an application's use of channels and a placement rules to deploy the application onto your managed cluster
 
-Each sub directory above contains a seperate README.md explaining the specific steps necessary for their contained assets.
+Each sub-directory above contains a seperate README.md explaining the specific steps necessary for their contained assets.
 
 ## Let's get started
 You're going to need to have an OCP cluster with OCM already deployed (see the [README.md](../README.md) in the root of this repo for details on how to deploy OCM).
