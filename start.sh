@@ -138,10 +138,10 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     echo "ERROR: Please specify a valid snapshot tag to continue."
     exit 2
 fi
-
-echo "if [[ (! $DEFAULT_SNAPSHOT == 1.0.0-*) && ("$DOWNSTREAM" != "true") ]];"
-if [[ (! $DEFAULT_SNAPSHOT == 1.0.0-*) && ("$DOWNSTREAM" != "true") ]]; then
-    echo "ERROR: invalid SNAPSHOT format... snapshot must begin with '1.0.0-' if DOWNSTREAM isn't set"
+SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
+echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
+if [[ (! $SNAPSHOT_PREFIX == *.0.0) && ("$DOWNSTREAM" != "true") ]]; then
+    echo "ERROR: invalid SNAPSHOT format... snapshot must begin with 'X.0.0-' not '$SNAPSHOT_PREFIX', if DOWNSTREAM isn't set"
     exit 1
 fi
 
@@ -154,7 +154,7 @@ ${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./acm-operator/kustomiza
 echo "* Applying ACM_CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
 ${SED} -i "s|newName: .*$|newName: ${ACM_CUSTOM_REGISTRY_REPO}/acm-custom-registry|g" ./acm-operator/kustomization.yaml
 echo "* Applying multicluster-hub-cr values"
-${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/1.0.0-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/${SNAPSHOT_PREFIX}-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
 if [[ " $@ " =~ " -t " ]]; then
