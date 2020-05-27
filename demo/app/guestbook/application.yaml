@@ -1,14 +1,9 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: deploy-git
----
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   name: guestbook-app-latest
-  namespace: deploy-git
+  namespace: open-cluster-management
 spec:
   type: GitHub
   pathname: https://github.com/open-cluster-management/deploy.git
@@ -38,50 +33,11 @@ metadata:
   labels:
     app: guestbook-app
   annotations:
-    apps.open-cluster-management.io/github-path: resources/guestbook
-    apps.open-cluster-management.io/github-branch: master
+      apps.open-cluster-management.io/github-path: resources/guestbook
 spec:
-  channel: deploy-git/guestbook-app-latest
+  channel: open-cluster-management/guestbook-app-latest
   placement:
     placementRef:
       kind: PlacementRule
       name: dev-clusters
----
-apiVersion: policy.mcm.ibm.com/v1alpha1
-kind: Policy
-metadata:
-  name: policy-subscription-configmap
-  namespace: open-cluster-management
-spec:
-  complianceType: musthave
-  remediationAction: enforce
-  disabled: false
-  namespaces:
-    exclude: ["kube-*"]
-    include: ["open-cluster-management"]
-  object-templates:
-    - complianceType: musthave
-      objectDefinition:
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: resource-filter-configmap
-          namespace: open-cluster-management
-          labels:
-            app: guestbook-app
-        data:
-            path: resources/guestbook
----
-apiVersion: mcm.ibm.com/v1alpha1
-kind: PlacementBinding
-metadata:
-  name: binding-policy-subscription-configmap
-  namespace: open-cluster-management
-placementRef:
-  name: dev-clusters
-  kind: PlacementRule
-  apiGroup: apps.open-cluster-management.io
-subjects:
-- name: policy-subscription-configmap
-  kind: Policy
-  apiGroup: policy.mcm.ibm.com
+
