@@ -145,16 +145,19 @@ if [[ (! $SNAPSHOT_PREFIX == *.0.0) && ("$DOWNSTREAM" != "true") ]]; then
     exit 1
 fi
 
-ACM_CUSTOM_REGISTRY_REPO=${ACM_CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
-if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicloud-hub-operator"; fi;
-if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then REGISTRY_IMAGE_NAME="acm-custom-registry"; else REGISTRY_IMAGE_NAME="multicloud-hub-custom-registry"; fi;
+# Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
+CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+
+# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
+if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
+if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
 ${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./$OPERATOR_DIRECTORY/kustomization.yaml
-echo "* Applying ACM_CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
-${SED} -i "s|newName: .*$|newName: ${ACM_CUSTOM_REGISTRY_REPO}/acm-custom-registry|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
+echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
+${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/${SNAPSHOT_PREFIX}-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
@@ -169,7 +172,7 @@ kubectl apply --openapi-patch=true -k prereqs/
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
 kubectl apply -k $OPERATOR_DIRECTORY/
-waitForPod "multiclusterhub-operator" "acm-custom-registry" "1/1"
+waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
 
