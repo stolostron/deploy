@@ -147,6 +147,7 @@ fi
 
 ACM_CUSTOM_REGISTRY_REPO=${ACM_CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicloud-hub-operator"; fi;
+if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then REGISTRY_IMAGE_NAME="acm-custom-registry"; else REGISTRY_IMAGE_NAME="multicloud-hub-custom-registry"; fi;
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
