@@ -3,7 +3,7 @@ kind: Subscription
 metadata:
   name: multicluster-hub-operator-subscription
 spec:
-  channel: integration-2.0
+  channel: snapshot-2.0
   installPlanApproval: Automatic
   name: multicluster-hub
   source: multicluster-hub-custom-registry
