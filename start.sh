@@ -162,6 +162,20 @@ if [[ " $@ " =~ " -t " ]]; then
     exit 0
 fi
 
+printf "\n##### Creating the $TARGET_NAMESPACE namespace\n"
+kubectl create ns $TARGET_NAMESPACE
+
+seconds=0
+while [ -z $(kubectl get sa -n $TARGET_NAMESPACE -o name default) ]; do
+    echo "--- waiting for namespace: $TARGET_NAMESPACE to create with default service account ---"
+    sleep 10
+    (( seconds=seconds+10 ))
+    if [ "$seconds" -gt 60 ]; then
+        echo "--- waited 60 seconds for namespace: $TARGET_NAMESPACE but it never came up with default service account, exiting ---"
+        exit 1;
+    fi
+done;
+
 printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/
 
