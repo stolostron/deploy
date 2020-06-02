@@ -140,7 +140,7 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
 fi
 SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
 echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
-if [[ (! $SNAPSHOT_PREFIX == *.0.0) && ("$DOWNSTREAM" != "true") ]]; then
+if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     echo "ERROR: invalid SNAPSHOT format... snapshot must begin with 'X.0.0-' not '$SNAPSHOT_PREFIX', if DOWNSTREAM isn't set"
     exit 1
 fi
