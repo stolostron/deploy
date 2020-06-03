@@ -145,14 +145,19 @@ if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     exit 1
 fi
 
-if [[ "$DOWNSTREAM" != "true" ]]; then ACM_CUSTOM_REGISTRY_REPO="quay.io/open-cluster-management"; else ACM_CUSTOM_REGISTRY_REPO="quay.io/acm-d"; fi
+# Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
+CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+
+# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
-${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./acm-operator/kustomization.yaml
-echo "* Applying ACM_CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
-${SED} -i "s|newName: .*$|newName: ${ACM_CUSTOM_REGISTRY_REPO}/acm-custom-registry|g" ./acm-operator/kustomization.yaml
+${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./$OPERATOR_DIRECTORY/kustomization.yaml
+echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
+${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/${SNAPSHOT_PREFIX}-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
@@ -179,9 +184,9 @@ done;
 printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/
 
-printf "\n##### Applying acm-operator subscription #####\n"
-kubectl apply -k acm-operator/
-waitForPod "multiclusterhub-operator" "acm-custom-registry" "1/1"
+printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
+kubectl apply -k $OPERATOR_DIRECTORY/
+waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
 

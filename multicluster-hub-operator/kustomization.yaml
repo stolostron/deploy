@@ -1,0 +1,22 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# namespace to deploy all Resources to
+namespace: open-cluster-management
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+images:
+  - name: multicluster-hub-custom-registry
+    newName: quay.io/open-cluster-management/multicluster-hub-custom-registry
+    newTag: 1.0.0-SNAPSHOT-2020-05-12-23-58-57
+
+# list of Resource Config to be Applied
+resources:
+  - deployment.yaml
+  - service.yaml
+  - catalog-source.yaml
+  - operator-group.yaml
+  - subscription.yaml
