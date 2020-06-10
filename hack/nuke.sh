@@ -131,7 +131,11 @@ oc delete clusterrolebinding readonly-clusterimagesets || true
 oc delete oauthclient multicloudingress || true
 
 # rcm
+# 1.x
 oc delete crd endpointconfigs.multicloud.ibm.com || true
+# 2.x
+oc delete crd klusterletconfigs.agent.open-cluster-management.io || true
+
 oc delete clusterrole rcm-controller || true
 oc delete clusterrolebinding rcm-controller || true
 

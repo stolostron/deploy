@@ -63,7 +63,11 @@ else
   oc delete oauthclient multicloudingress
 
   # rcm
+  # 1.x
+  oc delete crd endpointconfigs.multicloud.ibm.com
+  # 2.x
   oc delete crd klusterletconfigs.agent.open-cluster-management.io
+
   oc delete clusterrole rcm-controller
   oc delete clusterrolebinding rcm-controller
 fi
