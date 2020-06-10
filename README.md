@@ -92,7 +92,7 @@ We've added a very simple `start.sh` script to make your life easier.
 
 First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!  
 
-**If you're deploying a downstream build or a 1.X.X build of OCM/ACM** `export COMPOSITE_BUNDLE=true`.  Export `CUSTOM_REGISTRY_REPO=acm-d` if you want to deploy the downstream build from a repo other than `open-cluster-management` (which you probably do!).  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
+**If you're deploying a downstream build or a 1.X.X build of OCM/ACM** `export COMPOSITE_BUNDLE=true`.  Export `CUSTOM_REGISTRY_REPO="quay.io/acm-d"` if you want to deploy the downstream build from a repo other than `open-cluster-management` (which you probably do!).  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
 
 1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
 
