@@ -22,7 +22,7 @@ for i in {1..10}; do
   oc get helmreleases.apps.open-cluster-management.io > /dev/null
   if [ $? -ne 0 ]; then
     break
-  elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then 
+  elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then
     break
   else
     sleep 2
@@ -32,7 +32,7 @@ done
 oc get helmreleases.apps.open-cluster-management.io > /dev/null
 if [ $? -ne 0 ]; then
   echo
-elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then 
+elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then
   echo
 else
   echo "Uninstall stuck... Striping out finalizers from helm releases..."
@@ -63,7 +63,11 @@ else
   oc delete oauthclient multicloudingress
 
   # rcm
+  # 1.x
   oc delete crd endpointconfigs.multicloud.ibm.com
+  # 2.x
+  oc delete crd klusterletconfigs.agent.open-cluster-management.io
+
   oc delete clusterrole rcm-controller
   oc delete clusterrolebinding rcm-controller
 fi
