@@ -180,7 +180,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
 
 5. Once the `open-cluster-management` CatalogSource is healthy you can deploy the `example-multiclusterhub-cr.yaml`
     ```bash
-    apiVersion: operators.open-cluster-management.io/v1beta1
+    apiVersion: operator.open-cluster-management.io/v1
     kind: MultiClusterHub
     metadata:
       name: multiclusterhub
