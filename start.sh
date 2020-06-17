@@ -8,7 +8,8 @@
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
 # CONSTANTS
-TOTAL_POD_COUNT=35
+TOTAL_POD_COUNT_1X=35
+TOTAL_POD_COUNT_2X=41
 
 function waitForPod() {
     FOUND=1
@@ -143,6 +144,16 @@ echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
 if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     echo "ERROR: invalid SNAPSHOT format... snapshot must begin with 'X.0.0-' not '$SNAPSHOT_PREFIX', if DOWNSTREAM isn't set"
     exit 1
+fi
+
+# Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
+if [[ $DEFAULT_SNAPSHOT == *1.0* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+elif [[ $DEFAULT_SNAPSHOT == *2.0* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
+else
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+    echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
 fi
 
 # Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
