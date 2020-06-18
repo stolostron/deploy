@@ -15,7 +15,7 @@ oc delete subscriptions.operators.coreos.com $operator_subscription --ignore-not
 oc delete csv $operator_csv --ignore-not-found
 
 # Remove hub resources
-oc delete crd multiclusterhubs.operators.open-cluster-management.io --ignore-not-found
+oc delete crd multiclusterhubs.operator.open-cluster-management.io --ignore-not-found
 oc delete validatingwebhookconfiguration multiclusterhub-operator-validating-webhook --ignore-not-found
 oc delete mutatingwebhookconfiguration multiclusterhub-operator-mutating-webhook --ignore-not-found
 
