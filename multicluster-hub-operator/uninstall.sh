@@ -41,7 +41,6 @@ oc get service | grep "multicluster" | awk '{ print $1 }' | xargs oc delete serv
 
 oc get scc | grep "multicluster" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
 oc get scc | grep "multicloud" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
-oc get scc | grep "kui-proxy" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
 
 # Remove custom registry resources
 oc delete catalogsource $custom_catalog_source --ignore-not-found
