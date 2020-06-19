@@ -39,8 +39,9 @@ oc delete crd applications.app.k8s.io --ignore-not-found
 oc delete crd clusters.clusterregistry.k8s.io --ignore-not-found
 oc get service | grep "multicluster" | awk '{ print $1 }' | xargs oc delete service --wait=false --ignore-not-found
 
-oc get scc | grep "multicluster" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
-oc get scc | grep "multicloud" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
+# delete these objects via nuke script only
+# oc get scc | grep "multicluster" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
+# oc get scc | grep "multicloud" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found
 
 # Remove custom registry resources
 oc delete catalogsource $custom_catalog_source --ignore-not-found
