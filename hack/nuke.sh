@@ -98,6 +98,7 @@ oc get csv | grep "etcd" | awk '{ print $1 }' | xargs oc delete csv --wait=false
 oc get crd | grep "etcd" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get scc | grep "multicluster" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
 oc get scc | grep "multicloud" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
+oc get scc | grep "kui-proxy" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
 oc get crd | grep "certmanager" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get crd | grep "mcm" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get crd | grep "ibm" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
