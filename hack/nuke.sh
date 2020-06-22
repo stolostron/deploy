@@ -140,6 +140,15 @@ oc delete crd klusterletconfigs.agent.open-cluster-management.io || true
 oc delete clusterrole rcm-controller || true
 oc delete clusterrolebinding rcm-controller || true
 
+# workaround for https://github.com/open-cluster-management/backlog/issues/2915 
+oc delete apiservice v1.admission.cluster.open-cluster-management.io v1beta1.proxy.open-cluster-management.io
+oc delete ValidatingWebhookConfiguration managedclustervalidators.admission.cluster.open-cluster-management.io
+
+# clean up the `-hub` namespace for 2.x
+oc delete ns open-cluster-management-hub
+
+
+
 
 # if we are on a managed-cluster let's remove it's stuff too
 if [ -z "${OPERATOR_NAMESPACE}" ]; then
