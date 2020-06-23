@@ -18,7 +18,7 @@ oc project open-cluster-management
 # for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 
 # Consider delete complete when all helmreleases are gone or CRD doesn't exist
-for i in {1..10}; do
+for i in {1..30}; do
   oc get helmreleases.apps.open-cluster-management.io > /dev/null
   if [ $? -ne 0 ]; then
     break
