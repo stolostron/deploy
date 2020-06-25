@@ -158,6 +158,10 @@ fi
 
 # Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+# Set the subscription channel, defaulted to snapshot-2.0
+SUBSCRIPTION_CHANNEL=${SUBSCRIPTION_CHANNEL:-"snapshot-2.0"}
+# Default COMPOSITE_BUNDLE to true
+COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
@@ -169,6 +173,8 @@ echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
 ${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
 ${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
+echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
+${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
