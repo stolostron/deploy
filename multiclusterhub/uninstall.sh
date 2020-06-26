@@ -119,3 +119,6 @@ oc delete namespace hive --wait=false --ignore-not-found
 #oc delete crd userpreferences.console.open-cluster-management.io --ignore-not-found || true
 #oc delete ConsoleLink acm-console-link --ignore-not-found || true
 #oc delete OAuthClient multicloudingress --ignore-not-found || true
+
+# Sleep for 2 minutes to ensure that the deletions complete before any more cleanup occurs.  
+sleep 120
