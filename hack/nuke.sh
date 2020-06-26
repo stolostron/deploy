@@ -150,7 +150,7 @@ oc delete apiservice v1.admission.cluster.open-cluster-management.io v1beta1.pro
 oc delete ValidatingWebhookConfiguration managedclustervalidators.admission.cluster.open-cluster-management.io
 
 # clean up the `-hub` namespace for 2.x
-oc delete ns open-cluster-management-hub
+oc delete ns open-cluster-management-hub --wait=false
 
 # clean up leftover cert-manager resources
 oc delete rolebinding -n kube-system cert-manager-webhook-webhook-authentication-reader
