@@ -1,4 +1,7 @@
 #!/bin/bash
+
+source ./hack/utils.sh
+
 remove-apiservices () {
   echo "Remove Orphaned Apiservices"
   for apiservice in `kubectl get apiservices 2>/dev/null | grep "False" | awk '{ print $1; }'`; do
@@ -44,10 +47,12 @@ for role in $(oc get clusterrole | grep multicluster-mongo | cut -f 1 -d ' '); d
 for role in $(oc get clusterrole | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrole | grep mcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrole | grep rcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep klusterlet | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep multicluster-mongo | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep mcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep rcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep klusterlet | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for secret in $(oc get Secret | grep search | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found || true; done
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found || true; done
 for secret in $(oc get Secret | grep multicloud | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found || true; done
@@ -147,6 +152,9 @@ oc delete ValidatingWebhookConfiguration managedclustervalidators.admission.clus
 # clean up the `-hub` namespace for 2.x
 oc delete ns open-cluster-management-hub
 
+# clean up leftover cert-manager resources
+oc delete rolebinding -n kube-system cert-manager-webhook-webhook-authentication-reader
+
 
 
 
@@ -188,3 +196,5 @@ for crd in "${component_crds[@]}"; do
 done
 
 kubectl delete namespace ${OPERATOR_NAMESPACE} || true
+
+nuke_leaked_namespaces
