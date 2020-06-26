@@ -197,4 +197,4 @@ done
 
 kubectl delete namespace ${OPERATOR_NAMESPACE} || true
 
-nuke_leaked_namespaces()
+nuke_leaked_namespaces
