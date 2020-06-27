@@ -72,7 +72,7 @@ evict_wedged_crd() {
         done
     else
         for namespace in $(oc get ${crd} --all-namespaces -o jsonpath='{.items[*].metadata.namespace}'); do
-            for cr in $(oc get ${crd} -n ${namespace}); do
+            for cr in $(oc get ${crd} -n ${namespace} -o name); do
                 oc delete ${cr} -n ${namespace} --wait=false
                 remove_finalizer ${cr} ${namespace}
             done
