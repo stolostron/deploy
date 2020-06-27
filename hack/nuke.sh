@@ -195,7 +195,7 @@ for crd in "${component_crds[@]}"; do
 	kubectl delete crd ${crd} || true
 done
 
-kubectl delete namespace ${OPERATOR_NAMESPACE} || true
+kubectl delete namespace ${OPERATOR_NAMESPACE} --wait=false || true
 
 nuke_leaked_namespaces
 evict_all_wedged_crd
