@@ -4,7 +4,7 @@ get_leaked_namespaces() {
 
 delete_leaked_namespaces() {
     for ns in $(get_leaked_namespaces); do
-        oc delete $ns --wait=false;
+        oc delete $ns --wait=false
     done 
 }
 
@@ -32,7 +32,7 @@ get_namespaced_resources() {
     fi
 
     for resource in $(oc api-resources -o name --namespaced=true | grep -v operators.coreos.com ); do 
-        oc get ${resource} -o name -n ${namespace} 2> /dev/null; 
+        oc get ${resource} -o name -n ${namespace} 2> /dev/null
     done
 }
 
@@ -49,18 +49,39 @@ evict_namespaced_resources() {
 }
 
 remove_finalizer() {
-    if [ -z "$1" ]; then
-        namespace=$(oc project -q)
+    if [ -z "$2" ]; then
+        oc patch ${1} -p '{"metadata":{"finalizers":[]}}' --type=merge 2> /dev/null
     else
-        namespace=${2#"namespace/"}
-    fi
-
-    oc patch ${1} -n ${namespace} -p '{"metadata":{"finalizers":[]}}' --type=merge 2> /dev/null
+        oc patch ${1} -n ${2#"namespace/"} -p '{"metadata":{"finalizers":[]}}' --type=merge 2> /dev/null
+    fi    
 }
 
+get_all_wedged_crd() {
+    for crd in $(oc get crd -o name | grep -v openshift | grep -v coreos); do 
+        [ -z "`oc get $crd -o jsonpath={.metadata.deletionTimestamp}`" ] || echo $crd;
+    done
+}
 
+evict_wedged_crd() {
+    crd=${1#"customresourcedefinition.apiextensions.k8s.io/"}
 
+    if [[ $(oc get customresourcedefinition.apiextensions.k8s.io ${crd} -o jsonpath={.spec.scope}) == "Cluster" ]]; then
+        for cr in $(oc get ${crd} -o name); do
+            oc delete ${cr} --wait=false
+            remove_finalizer ${cr}
+        done
+    else
+        for namespace in $(oc get ${crd} --all-namespaces -o jsonpath='{.items[*].metadata.namespace}'); do
+            for cr in $(oc get ${crd} -n ${namespace}); do
+                oc delete ${cr} -n ${namespace} --wait=false
+                remove_finalizer ${cr} ${namespace}
+            done
+        done
+    fi
+}
 
-
-    
-
+evict_all_wedged_crd() {
+    for crd in $(get_all_wedged_crd); do
+        evict_wedged_crd ${crd}
+    done
+}
