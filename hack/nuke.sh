@@ -48,11 +48,16 @@ for role in $(oc get clusterrole | grep cert-manager | cut -f 1 -d ' '); do oc d
 for role in $(oc get clusterrole | grep mcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrole | grep rcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrole | grep klusterlet | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep managedcluster | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep search | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep multicluster-mongo | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep mcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep rcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep klusterlet | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep managedcluster | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep search | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get serviceaccount | grep search | cut -f 1 -d ' '); do oc delete serviceaccount $role --ignore-not-found || true; done
 for secret in $(oc get Secret | grep search | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found || true; done
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found || true; done
 for secret in $(oc get Secret | grep multicloud | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found || true; done
