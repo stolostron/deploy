@@ -89,17 +89,6 @@ if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
     exit 1
 fi
 
-# ensure default storage class defined on ocp cluster
-SC_RESOLVE=$(oc get sc 2>&1)
-if [[ $SC_RESOLVE =~ '(default)' ]];
-then
-  echo "OK: Default Storage Class defined"
-else
-  echo "ERROR: No default Storage Class defined."
-  echo "    Please add annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
-  exit 1
-fi
-
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
     echo "Enter the encrypted .dockerconfigjson"
