@@ -207,5 +207,6 @@ done
 
 kubectl delete namespace ${OPERATOR_NAMESPACE} --wait=false || true
 
-nuke_leaked_namespaces
 evict_all_wedged_crd
+nuke_leaked_namespaces
+
