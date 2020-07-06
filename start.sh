@@ -15,11 +15,11 @@ function waitForPod() {
     FOUND=1
     MINUTE=0
     CURRENT_TIME=`date +%s`
-    EXPIRE_TIME=$(($CURRENT_TIME+600))
+    EXPIRE_TIME=$(($CURRENT_TIME+300))
     podName=$1
     ignore=$2
     running="$3"
-    printf "\n#####\nWait for ${podName} to reach running state (10 min).\n"
+    printf "\n#####\nWait for ${podName} to reach running state (5 min).\n"
     while [ ${FOUND} -eq 1 ]; do
         CURRENT_TIME=`date +%s`
         # Wait up to 10 min, should only take about 20-30s
@@ -43,7 +43,7 @@ function waitForPod() {
             operatorPod="Waiting"
         fi
         echo "* STATUS: $operatorPod"
-        sleep 10
+        sleep 5
     done
 }
 
