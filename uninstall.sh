@@ -24,7 +24,8 @@ printf "\n"
 ./clean-clusters.sh
 
 kubectl delete -k multiclusterhub/
-./multiclusterhub/uninstall.sh
+echo "Sleeping for 200 seconds to allow resources to finalize ..."
+sleep 200
 
 kubectl delete -k multicluster-hub-operator/
 ./multicluster-hub-operator/uninstall.sh
