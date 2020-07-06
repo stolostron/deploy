@@ -16,10 +16,10 @@ function waitForPod() {
     podName=$1
     ignore=$2
     running="$3"
-    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
+    printf "\n#####\nWait for ${podName} to reach running state (20 min).\n"
     while [ ${FOUND} -eq 1 ]; do
-        # Wait up to 4min, should only take about 20-30s
-        if [ $MINUTE -gt 240 ]; then
+        # Wait up to 20 min, should only take about 20-30s
+        if [ $MINUTE -gt 1200 ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
             oc -n ${TARGET_NAMESPACE} get pods
@@ -39,8 +39,8 @@ function waitForPod() {
             operatorPod="Waiting"
         fi
         echo "* STATUS: $operatorPod"
-        sleep 3
-        (( MINUTE = MINUTE + 3 ))
+        sleep 5
+        (( MINUTE = MINUTE + 5 ))
     done
 }
 
