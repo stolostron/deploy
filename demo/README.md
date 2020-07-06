@@ -8,7 +8,7 @@ Welcome to your first taste of Open Cluster Management (OCM).  We have collected
 - Deploy an application onto your managed cluster(s) using a subscription and placement rules
 
 
-We'll keep it brief and to the point in here... for our full documentation you should refer to our [doc site](https://github.com/open-cluster-management/rhacm-docs/blob/doc_stage/README.md).
+We'll keep it brief and to the point in here... for our full documentation you should refer to our [doc site](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/1.0/).
 
 In here you'll find three sub-directories:
 
