@@ -8,7 +8,8 @@
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
 # CONSTANTS
-TOTAL_POD_COUNT=35
+TOTAL_POD_COUNT_1X=35
+TOTAL_POD_COUNT_2X=55
 
 function waitForPod() {
     FOUND=1
@@ -90,17 +91,6 @@ if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
     exit 1
 fi
 
-# ensure default storage class defined on ocp cluster
-SC_RESOLVE=$(oc get sc 2>&1)
-if [[ $SC_RESOLVE =~ '(default)' ]];
-then
-  echo "OK: Default Storage Class defined"
-else
-  echo "ERROR: No default Storage Class defined."
-  echo "    Please add annotation 'storageclass.kubernetes.io/is-default-class=true' to one of your cluster's storageClass types."
-  exit 1
-fi
-
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
     echo "Enter the encrypted .dockerconfigjson"
@@ -147,12 +137,27 @@ if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     exit 1
 fi
 
+# Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
+if [[ $DEFAULT_SNAPSHOT == *1.0* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+elif [[ $DEFAULT_SNAPSHOT == *2.0* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
+else
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+    echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
+fi
+
 # Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+# Default COMPOSITE_BUNDLE to true
+COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
+
+# Set the subscription channel, defaulted to snapshot-2.0
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then SUBSCRIPTION_CHANNEL="release-2.0"; else SUBSCRIPTION_CHANNEL="snapshot-2.0"; fi;
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
@@ -160,8 +165,9 @@ echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
 ${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
 ${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
+echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
+${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 echo "* Applying multicluster-hub-cr values"
-${SED} -i "s/imageTagSuffix: .*$/imageTagSuffix: ${DEFAULT_SNAPSHOT/${SNAPSHOT_PREFIX}-/}/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
 if [[ " $@ " =~ " -t " ]]; then
@@ -205,7 +211,7 @@ if [[ " $@ " =~ " --watch " ]]; then
         whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
         RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
         if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
-            if [ $RUNNING_PODS -ge 35 ]; then
+            if [ $RUNNING_PODS -ge ${TOTAL_POD_COUNT} ]; then
                 COMPLETE=0
                 break
             fi
@@ -236,5 +242,5 @@ if [ "${OS}" == "darwin" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
 else
-  echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 35 pods"
+  echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods"
 fi

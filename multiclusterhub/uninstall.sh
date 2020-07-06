@@ -18,11 +18,11 @@ oc project open-cluster-management
 # for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found; done
 
 # Consider delete complete when all helmreleases are gone or CRD doesn't exist
-for i in {1..10}; do
+for i in {1..30}; do
   oc get helmreleases.apps.open-cluster-management.io > /dev/null
   if [ $? -ne 0 ]; then
     break
-  elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then 
+  elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then
     break
   else
     sleep 2
@@ -32,7 +32,7 @@ done
 oc get helmreleases.apps.open-cluster-management.io > /dev/null
 if [ $? -ne 0 ]; then
   echo
-elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then 
+elif [ $(kubectl get helmreleases.apps.open-cluster-management.io --output json | jq -j '.items | length') == "0" ]; then
   echo
 else
   echo "Uninstall stuck... Striping out finalizers from helm releases..."
@@ -63,7 +63,11 @@ else
   oc delete oauthclient multicloudingress
 
   # rcm
+  # 1.x
   oc delete crd endpointconfigs.multicloud.ibm.com
+  # 2.x
+  oc delete crd klusterletconfigs.agent.open-cluster-management.io
+
   oc delete clusterrole rcm-controller
   oc delete clusterrolebinding rcm-controller
 fi
@@ -115,3 +119,6 @@ oc delete namespace hive --wait=false --ignore-not-found
 #oc delete crd userpreferences.console.open-cluster-management.io --ignore-not-found || true
 #oc delete ConsoleLink acm-console-link --ignore-not-found || true
 #oc delete OAuthClient multicloudingress --ignore-not-found || true
+
+# Sleep for 2 minutes to ensure that the deletions complete before any more cleanup occurs.  
+sleep 120

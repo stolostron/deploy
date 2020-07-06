@@ -1,4 +1,7 @@
 #!/bin/bash
+
+source ./hack/utils.sh
+
 remove-apiservices () {
   echo "Remove Orphaned Apiservices"
   for apiservice in `kubectl get apiservices 2>/dev/null | grep "False" | awk '{ print $1; }'`; do
@@ -44,10 +47,19 @@ for role in $(oc get clusterrole | grep multicluster-mongo | cut -f 1 -d ' '); d
 for role in $(oc get clusterrole | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrole | grep mcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrole | grep rcm | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep klusterlet | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep managedcluster | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep search | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
+for role in $(oc get clusterrole | grep configmap-watcher | cut -f 1 -d ' '); do oc delete clusterrole $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep multicluster-mongo | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep cert-manager | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep mcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
 for role in $(oc get clusterrolebinding | grep rcm | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep klusterlet | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep managedcluster | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep search | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get clusterrolebinding | grep configmap-watcher | cut -f 1 -d ' '); do oc delete clusterrolebinding $role --ignore-not-found || true; done
+for role in $(oc get serviceaccount | grep search | cut -f 1 -d ' '); do oc delete serviceaccount $role --ignore-not-found || true; done
 for secret in $(oc get Secret | grep search | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found || true; done
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret -n hive --ignore-not-found || true; done
 for secret in $(oc get Secret | grep multicloud | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found || true; done
@@ -98,6 +110,7 @@ oc get csv | grep "etcd" | awk '{ print $1 }' | xargs oc delete csv --wait=false
 oc get crd | grep "etcd" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get scc | grep "multicluster" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
 oc get scc | grep "multicloud" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
+oc get scc | grep "kui-proxy" | awk '{ print $1 }' | xargs oc delete scc --wait=false --ignore-not-found || true
 oc get crd | grep "certmanager" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get crd | grep "mcm" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get crd | grep "ibm" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
@@ -131,9 +144,25 @@ oc delete clusterrolebinding readonly-clusterimagesets || true
 oc delete oauthclient multicloudingress || true
 
 # rcm
+# 1.x
 oc delete crd endpointconfigs.multicloud.ibm.com || true
+# 2.x
+oc delete crd klusterletconfigs.agent.open-cluster-management.io || true
+
 oc delete clusterrole rcm-controller || true
 oc delete clusterrolebinding rcm-controller || true
+
+# workaround for https://github.com/open-cluster-management/backlog/issues/2915
+oc delete apiservice v1.admission.cluster.open-cluster-management.io v1beta1.proxy.open-cluster-management.io
+oc delete ValidatingWebhookConfiguration managedclustervalidators.admission.cluster.open-cluster-management.io
+
+# clean up the `-hub` namespace for 2.x
+oc delete ns open-cluster-management-hub --wait=false
+
+# clean up leftover cert-manager resources
+oc delete rolebinding -n kube-system cert-manager-webhook-webhook-authentication-reader
+
+
 
 
 # if we are on a managed-cluster let's remove it's stuff too
@@ -159,6 +188,9 @@ component_crds=(
 	serviceregistries.multicloud.ibm.com
 	workmanagers.multicloud.ibm.com
 	endpoints.multicloud.ibm.com
+	clustermanagers.operator.open-cluster-management.io
+	multiclusterhubs.operator.open-cluster-management.io
+	klusterlets.operator.open-cluster-management.io
 )
 
 for crd in "${component_crds[@]}"; do
@@ -173,4 +205,8 @@ for crd in "${component_crds[@]}"; do
 	kubectl delete crd ${crd} || true
 done
 
-kubectl delete namespace ${OPERATOR_NAMESPACE} || true
+kubectl delete namespace ${OPERATOR_NAMESPACE} --wait=false || true
+
+evict_all_wedged_crd
+nuke_leaked_namespaces
+
