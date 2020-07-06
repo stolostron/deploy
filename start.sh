@@ -23,7 +23,7 @@ function waitForPod() {
     while [ ${FOUND} -eq 1 ]; do
         CURRENT_TIME=`date +%s`
         # Wait up to 10 min, should only take about 20-30s
-        if [ $CURRENT_TIME -lt $EXPIRE_TIME ]; then
+        if [ $CURRENT_TIME -gt $EXPIRE_TIME ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
             oc -n ${TARGET_NAMESPACE} get pods
