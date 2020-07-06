@@ -71,6 +71,10 @@ for secret in $(oc get Secret | grep topology| cut -f 1 -d ' '); do oc delete Se
 for secret in $(oc get Secret | grep console-chart | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found || true; done
 for secret in $(oc get Secret | grep aws | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found || true; done
 
+for crb in $(oc get clusterrolebinding | grep "open-cluster-management:" | cut -f 1 -d ' '); do oc delete clusterrolebinding $crb --ignore-not-found || true; done
+for cr in $(oc get clusterrole | grep "open-cluster-management:" | cut -f 1 -d ' '); do oc delete clusterrole $cr --ignore-not-found || true; done
+
+
 remove-apiservices
 oc get crd | grep "hive" | awk '{ print $1 }' | xargs oc delete crd --wait=false --ignore-not-found || true
 oc get csv | grep "hive" | awk '{ print $1 }' | xargs oc delete csv --wait=false --ignore-not-found || true
