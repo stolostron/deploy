@@ -11,7 +11,7 @@ generatorOptions:
 images:
   - name: multicluster-hub-custom-registry
     newName: quay.io/open-cluster-management/multicluster-hub-custom-registry
-    newTag: 1.0.0-SNAPSHOT-2020-05-12-23-58-57
+    newTag: 2.0.0-SNAPSHOT-2020-07-02-20-07-15
 
 # list of Resource Config to be Applied
 resources:
@@ -19,4 +19,3 @@ resources:
   - service.yaml
   - catalog-source.yaml
   - operator-group.yaml
-  - subscription.yaml

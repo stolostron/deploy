@@ -10,6 +10,7 @@
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
 TOTAL_POD_COUNT_2X=55
+PULL_SECRET_NAME=multiclusterhub-operator-pull-secret
 
 function waitForPod() {
     FOUND=1
@@ -192,13 +193,21 @@ kubectl apply --openapi-patch=true -k prereqs/
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
 kubectl apply -k $OPERATOR_DIRECTORY/
-waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
+INSTALL_IMAGE_ORG=rhibmcollab
 
-echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-kubectl apply -k multiclusterhub
-waitForPod "multicluster-operators-application" "" "4/4"
+echo "* Running multiclusterhub-operator-tests to install Red Hat Advanced Cluster Management for Kubernetes"
+docker run --network host \
+    --env pullSecret=${PULL_SECRET_NAME} \
+    --env source="acm-custom-registry" \
+    --env channel="release-2.0" \
+    --env sourceNamespace=${TARGET_NAMESPACE} \
+    --env name="advanced-cluster-management" \
+    --env TEST_MODE="install" \
+    --env full_test_suite="false" \
+    --volume ~/.kube/config:/opt/.kube/config \
+    quay.io/$INSTALL_IMAGE_ORG/multiclusterhub-operator-tests:2.0.0
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
