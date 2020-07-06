@@ -13,13 +13,16 @@ TOTAL_POD_COUNT=35
 function waitForPod() {
     FOUND=1
     MINUTE=0
+    CURRENT_TIME=`date +%s`
+    EXPIRE_TIME=$(($CURRENT_TIME+600))
     podName=$1
     ignore=$2
     running="$3"
-    printf "\n#####\nWait for ${podName} to reach running state (20 min).\n"
+    printf "\n#####\nWait for ${podName} to reach running state (10 min).\n"
     while [ ${FOUND} -eq 1 ]; do
-        # Wait up to 20 min, should only take about 20-30s
-        if [ $MINUTE -gt 1200 ]; then
+        CURRENT_TIME=`date +%s`
+        # Wait up to 10 min, should only take about 20-30s
+        if [ $CURRENT_TIME -lt $EXPIRE_TIME ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
             oc -n ${TARGET_NAMESPACE} get pods
@@ -39,8 +42,7 @@ function waitForPod() {
             operatorPod="Waiting"
         fi
         echo "* STATUS: $operatorPod"
-        sleep 5
-        (( MINUTE = MINUTE + 5 ))
+        sleep 10
     done
 }
 
@@ -148,7 +150,7 @@ fi
 # Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 
-# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
+# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
@@ -236,5 +238,3 @@ if [ "${OS}" == "darwin" ]; then
 else
   echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around 35 pods"
 fi
-
-
