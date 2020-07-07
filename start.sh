@@ -131,7 +131,21 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     exit 2
 fi
 SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
+
+# Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
+CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+# Default COMPOSITE_BUNDLE to true
+COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
+
+# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
+
+# Set the subscription channel, defaulted to snapshot-2.0
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then SUBSCRIPTION_CHANNEL="release-2.0"; else SUBSCRIPTION_CHANNEL="snapshot-2.0"; fi;
+
 echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
+echo "* Composite Bundle: $COMPOSITE_BUNDLE   Image Registry (CUSTOM_REGISTRY_REPO): $CUSTOM_REGISTRY_REPO"
 if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     echo "ERROR: invalid SNAPSHOT format... snapshot must begin with 'X.0.0-' not '$SNAPSHOT_PREFIX', if DOWNSTREAM isn't set"
     exit 1
@@ -169,6 +183,7 @@ echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
 ${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
 if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
