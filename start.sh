@@ -167,6 +167,7 @@ echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
 ${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+${SED} -i f"s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": {CUSTOM_REGISTRY_REPO}|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
 
 if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
