@@ -22,7 +22,7 @@ function waitForPod() {
     printf "\n#####\nWait for ${podName} to reach running state (5 min).\n"
     while [ ${FOUND} -eq 1 ]; do
         CURRENT_TIME=`date +%s`
-        # Wait up to 10 min, should only take about 20-30s
+        # Wait up to 5 min, should only take about 20-30s
         if [ $CURRENT_TIME -gt $EXPIRE_TIME ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
