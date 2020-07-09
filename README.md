@@ -92,7 +92,9 @@ We've added a very simple `start.sh` script to make your life easier.
 
 First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!  
 
-**If you're deploying a downstream build or a 1.X.X build of OCM/ACM** `export COMPOSITE_BUNDLE=true`.  Export `CUSTOM_REGISTRY_REPO="quay.io/acm-d"` if you want to deploy the downstream build from a repo other than `open-cluster-management` (which you probably do!).  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
+**If you're deploying a downstream build of 1.X.X**  Export `CUSTOM_REGISTRY_REPO="quay.io/acm-d"` if you want to deploy the downstream build from a repo other than `open-cluster-management` (which you probably do!).  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
+
+**If you're deploying a downstream build of 2.X.X** `export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"`.  Also `export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>`.  In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.  Now, `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)`.  More detail/step-by-step on what's happening in the previous command: On a Linux or Mac cli, `echo <DOCKER_CONFIG> | base64 -d`.  Edit the output from that command, replacing `quay.io` with `quay.io:443`.  Finally re-encode that text as base64 by running `echo <UPDATED_DOCKER_CONFIG> | base64`.  `export QUAY_TOKEN=` the output of the previous steps.  This maps the pull secret for use on th `quay.io:443` registry.  
 
 1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
 
