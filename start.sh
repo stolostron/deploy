@@ -139,8 +139,10 @@ COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
-# Set the subscription channel, defaulted to snapshot-2.0
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then SUBSCRIPTION_CHANNEL="release-2.0"; else SUBSCRIPTION_CHANNEL="snapshot-2.0"; fi;
+# Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-2.0
+if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
+    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then SUBSCRIPTION_CHANNEL="release-2.0"; else SUBSCRIPTION_CHANNEL="snapshot-2.0"; fi;
+fi
 
 echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
 echo "* Composite Bundle: $COMPOSITE_BUNDLE   Image Registry (CUSTOM_REGISTRY_REPO): $CUSTOM_REGISTRY_REPO"
