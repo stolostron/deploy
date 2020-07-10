@@ -95,9 +95,9 @@ First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do a
 ### Downstream
 
 To deploy a downstream build from `quay.io/acm-d`, you need to ensure that your OCP cluster meets two conditions:
-1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes):
+1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).  To apply the ImageContentSourcePolicy, run `oc apply -f icsp.yaml` with `icsp.yaml` containing the following:
 
-**1.X**
+**For 1.X**
 ```
 apiVersion: operator.openshift.io/v1alpha1
 kind: ImageContentSourcePolicy
@@ -113,7 +113,7 @@ spec:
     source: registry.access.redhat.com/openshfit4/ose-oauth-proxy
 ```
 
-**2.X**
+**For 2.X**
 ```
 apiVersion: operator.openshift.io/v1alpha1
 kind: ImageContentSourcePolicy
@@ -129,7 +129,7 @@ spec:
     source: registry.access.redhat.com/openshfit4/ose-oauth-proxy
 ```
 
-2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes):
+2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).  You have to edit the pull secret via the `oc` cli, OpenShift console (recommended) or [bootstrap repo](https://github.com/open-cluster-management/bootstrap#how-to-use) at cluster create time:
     <pre>
     {
       "auths": {
