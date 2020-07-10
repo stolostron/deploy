@@ -95,7 +95,7 @@ First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do a
 ### Downstream
 
 To deploy a downstream build from `quay.io/acm-d`, you need to ensure that your OCP cluster meets two conditions:
-1. The cluster must have an ImageContentSourcePolicy as follows:
+1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes):
 
 **1.X**
 ```
@@ -129,7 +129,7 @@ spec:
     source: registry.access.redhat.com/openshfit4/ose-oauth-proxy
 ```
 
-2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this:
+2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes):
     <pre>
     {
       "auths": {
