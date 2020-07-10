@@ -92,9 +92,91 @@ We've added a very simple `start.sh` script to make your life easier.
 
 First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!  
 
+### Downstream
+
+To deploy a downstream build from `quay.io/acm-d`, you need to ensure that your OCP cluster meets two conditions:
+1. The cluster must have an ImageContentSourcePolicy as follows:
+
+**1.X**
+```
+apiVersion: operator.openshift.io/v1alpha1
+kind: ImageContentSourcePolicy
+metadata:
+  name: rhacm-repo
+spec:
+  repositoryDigestMirrors:
+  - mirrors:
+    - quay.io:443/acm-d
+    source: registry.redhat.io/rhacm1-tech-preview
+  - mirrors:
+    - registry.redhat.io/openshift4/ose-oauth-proxy
+    source: registry.access.redhat.com/openshfit4/ose-oauth-proxy
+```
+
+**2.X**
+```
+apiVersion: operator.openshift.io/v1alpha1
+kind: ImageContentSourcePolicy
+metadata:
+  name: rhacm-repo
+spec:
+  repositoryDigestMirrors:
+  - mirrors:
+    - quay.io:443/acm-d
+    source: registry.redhat.io/rhacm2
+  - mirrors:
+    - registry.redhat.io/openshift4/ose-oauth-proxy
+    source: registry.access.redhat.com/openshfit4/ose-oauth-proxy
+```
+
+2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this:
+    <pre>
+    {
+      "auths": {
+        <b>"quay.io": {
+          "auth": "ENCODED SECRET",
+          "email": ""
+        }</b>
+      }
+    }
+    </pre>
+    Your final `OPENSHIFT_INSTALL_PULL_SECRET` should look like (bolded part is what you should add, also pretty printed):
+    <pre>
+    {
+      "auths": {
+        "cloud.openshift.com": {
+          "auth": "ENCODED SECRET",
+          "email": "gbuchana@redhat.com"
+        },
+        "quay.io": {
+          "auth": "ENCODED SECRET",
+          "email": "gbuchana@redhat.com"
+        },
+        "registry.connect.redhat.com": {
+          "auth": "ENCODED SECRET",
+          "email": "gbuchana@redhat.com"
+        },
+        "registry.redhat.io": {
+          "auth": "ENCODED SECRET",
+          "email": ""
+        },
+        <b>"quay.io:443": {
+          "auth": "ENCODED SECRET",
+          "email": ""
+        }</b>
+      }
+    }
+    </pre>
+
+#### 1.X.X
+
 **If you're deploying a downstream build of 1.X.X**  Export `CUSTOM_REGISTRY_REPO="quay.io/acm-d"` if you want to deploy the downstream build from a repo other than `open-cluster-management` (which you probably do!).  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
 
+#### 2.X.X
+
 **If you're deploying a downstream build of 2.X.X** `export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"`.  Also `export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>`.  In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.  Now, `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)`.  
+
+### Running start.sh
 
 1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
 
