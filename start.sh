@@ -132,8 +132,6 @@ SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
 
 # Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
-# Default COMPOSITE_BUNDLE to true
-COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
@@ -191,6 +189,11 @@ while [ -z $(kubectl get sa -n $TARGET_NAMESPACE -o name default) ]; do
         exit 1;
     fi
 done;
+
+if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
+    printf "* Applying community operator subscriptions\n\n"
+    oc apply -k community-subscriptions -n ${TARGET_NAMESPACE} 
+fi
 
 printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/

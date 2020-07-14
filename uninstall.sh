@@ -33,4 +33,6 @@ kubectl delete -k multicluster-hub-operator/
 kubectl delete -k acm-operator/
 ./acm-operator/uninstall.sh
 
+kubectl delete -k community-subscriptions/
+
 exit 0
