@@ -191,7 +191,7 @@ while [ -z $(kubectl get sa -n $TARGET_NAMESPACE -o name default) ]; do
 done;
 
 if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
-    printf "* Applying community operator subscriptions\n\n"
+    printf "\n##### Applying community operator subscriptions\n\n"
     oc apply -k community-subscriptions -n ${TARGET_NAMESPACE} 
 fi
 
