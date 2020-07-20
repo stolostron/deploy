@@ -137,14 +137,21 @@ CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
-# Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-2.0
+# Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
-    SUBSCRIPTION_CHANNEL_VERSION=$(echo SNAPSHOT_PREFIX | sed -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+    SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_PREFIX} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
     if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
-        SUBSCRIPTION_CHANNEL="release-${SUBSCRIPTION_CHANNEL_VERSION}"; 
+        SUBSCRIPTION_CHANNEL_PREFIX="release"; 
     else 
-        SUBSCRIPTION_CHANNEL="snapshot-${SUBSCRIPTION_CHANNEL_VERSION}";
+        SUBSCRIPTION_CHANNEL_PREFIX="snapshot";
     fi;
+
+    SUBSCRIPTION_CHANNEL="${SUBSCRIPTION_CHANNEL_PREFIX}-${SUBSCRIPTION_CHANNEL_VERSION}"
+
+    if [[ ! ( $SUBSCRIPTION_CHANNEL_VERSION =~ [0-9]+\.[0-9]+ ) ]]; then
+        echo "Failed to detect SUBSCRIPTION_CHANNEL, we detected ${SUBSCRIPTION_CHANNEL} which doesn't seem correct.  Try exporting SUBSCRIPTION_CHANNEL and rerunning."
+        exit 1
+    fi
 fi
 
 echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
