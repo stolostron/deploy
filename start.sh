@@ -137,9 +137,21 @@ CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
-# Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-2.0
+# Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
-    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then SUBSCRIPTION_CHANNEL="release-2.0"; else SUBSCRIPTION_CHANNEL="snapshot-2.0"; fi;
+    SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_PREFIX} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
+        SUBSCRIPTION_CHANNEL_PREFIX="release"; 
+    else 
+        SUBSCRIPTION_CHANNEL_PREFIX="snapshot";
+    fi;
+
+    SUBSCRIPTION_CHANNEL="${SUBSCRIPTION_CHANNEL_PREFIX}-${SUBSCRIPTION_CHANNEL_VERSION}"
+
+    if [[ ! ( $SUBSCRIPTION_CHANNEL_VERSION =~ [0-9]+\.[0-9]+ ) ]]; then
+        echo "Failed to detect SUBSCRIPTION_CHANNEL, we detected ${SUBSCRIPTION_CHANNEL} which doesn't seem correct.  Try exporting SUBSCRIPTION_CHANNEL and rerunning."
+        exit 1
+    fi
 fi
 
 echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
@@ -191,7 +203,7 @@ while [ -z $(kubectl get sa -n $TARGET_NAMESPACE -o name default) ]; do
 done;
 
 if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
-    printf "\n##### Applying community operator subscriptions\n\n"
+    printf "\n##### Applying community operator subscriptions\n"
     oc apply -k community-subscriptions -n ${TARGET_NAMESPACE} 
 fi
 

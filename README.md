@@ -94,7 +94,7 @@ First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do a
 
 ### Downstream
 
-To deploy a downstream build from `quay.io/acm-d`, you need to ensure that your OCP cluster meets two conditions:
+To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE_BUNDLE=true` and ensure that your OCP cluster meets two conditions:
 1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).  To apply the ImageContentSourcePolicy, run `oc apply -f icsp.yaml` with `icsp.yaml` containing the following:
 
 **For 1.X**
