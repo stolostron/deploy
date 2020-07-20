@@ -139,7 +139,12 @@ if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-r
 
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-2.0
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
-    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then SUBSCRIPTION_CHANNEL="release-2.0"; else SUBSCRIPTION_CHANNEL="snapshot-2.0"; fi;
+    SUBSCRIPTION_CHANNEL_VERSION=$(echo SNAPSHOT_PREFIX | sed -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
+        SUBSCRIPTION_CHANNEL="release-${SUBSCRIPTION_CHANNEL_VERSION}"; 
+    else 
+        SUBSCRIPTION_CHANNEL="snapshot-${SUBSCRIPTION_CHANNEL_VERSION}";
+    fi;
 fi
 
 echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
