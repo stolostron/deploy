@@ -32,7 +32,7 @@ for clusterName in `oc get clusterDeployments --all-namespaces --ignore-not-foun
     fi
 done
 
-echo "Detaching imported clusters"
+echo "Detaching imported clusters (rhacm 1.0)"
 for clusterName in `oc get clusters --all-namespaces --ignore-not-found | grep -v "NAMESPACE" | awk '{ print $1 }'`; do
     printf " Detaching cluster ${clusterName}\n  "
     if [ $CLEAN_RESOURCES ]; then
@@ -50,6 +50,24 @@ for clusterName in `oc get endpointconfig --all-namespaces --ignore-not-found | 
         oc -n ${clusterName} delete cluster ${clusterName}
         printf "  "  #Spacing
         oc delete namespace ${clusterName} --wait=false
+    fi
+done
+
+echo "Detaching imported clusters (rhacm 2.0+)"
+for clusterName in `oc get managedcluster --ignore-not-found | grep -v "NAME" | awk '{ print $1 }'`; do
+    printf " Detaching cluster ${clusterName}\n  "
+    if [ $CLEAN_RESOURCES ]; then
+        oc delete managedcluster ${clusterName} --wait=false
+        printf "  "  #Spacing
+    fi
+done
+
+echo "Second pass cleaning, by klusterletaddonconfig"
+for clusterName in `oc get klusterletaddonconfig --all-namespaces --ignore-not-found | grep -v "NAMESPACE" | awk '{ print $1 }'`; do
+    printf " Removing addons on cluster ${clusterName}\n  "
+    if [ $CLEAN_RESOURCES ]; then
+        oc -n ${clusterName} delete klusterletaddonconfig ${clusterName} --wait=false
+        printf "  "  #Spacing
     fi
 done
 
