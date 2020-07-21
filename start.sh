@@ -14,13 +14,16 @@ TOTAL_POD_COUNT_2X=55
 function waitForPod() {
     FOUND=1
     MINUTE=0
+    CURRENT_TIME=`date +%s`
+    EXPIRE_TIME=$(($CURRENT_TIME+300))
     podName=$1
     ignore=$2
     running="$3"
-    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
+    printf "\n#####\nWait for ${podName} to reach running state (5 min).\n"
     while [ ${FOUND} -eq 1 ]; do
-        # Wait up to 4min, should only take about 20-30s
-        if [ $MINUTE -gt 240 ]; then
+        CURRENT_TIME=`date +%s`
+        # Wait up to 5 min, should only take about 20-30s
+        if [ $CURRENT_TIME -gt $EXPIRE_TIME ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
             oc -n ${TARGET_NAMESPACE} get pods
@@ -40,8 +43,7 @@ function waitForPod() {
             operatorPod="Waiting"
         fi
         echo "* STATUS: $operatorPod"
-        sleep 3
-        (( MINUTE = MINUTE + 3 ))
+        sleep 5
     done
 }
 
@@ -133,7 +135,7 @@ SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
 # Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 
-# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
+# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
@@ -262,5 +264,3 @@ if [ "${OS}" == "darwin" ]; then
 else
   echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods"
 fi
-
-
