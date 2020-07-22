@@ -59,8 +59,8 @@ for clusterName in `oc get managedcluster --ignore-not-found | grep -v "NAME" | 
     if [ $CLEAN_RESOURCES ]; then
         DELETE_MANAGEDCLUSTER=1
         oc delete managedcluster ${clusterName} --wait=false
-        oc -n ${clusterName} delete klusterletaddonconfig ${clusterName} --wait=false
         printf "  "  #Spacing
+        oc -n ${clusterName} delete klusterletaddonconfig ${clusterName} --wait=false
     fi
 done
 
