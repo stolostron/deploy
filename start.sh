@@ -164,7 +164,7 @@ fi
 # Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
 if [[ $DEFAULT_SNAPSHOT == 1.0* ]]; then
     TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
-elif [[ $DEFAULT_SNAPSHOT == 2.* ]]; then
+elif [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[0-9]+\.[0-9]+.* ]]; then
     TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
 else
     TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
