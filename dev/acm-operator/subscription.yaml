@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: acm-operator-subscription
+spec:
+  channel: release-2.0
+  installPlanApproval: Automatic
+  name: advanced-cluster-management
+  source: acm-custom-registry
+  sourceNamespace: open-cluster-management

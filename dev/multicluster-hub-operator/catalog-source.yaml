@@ -1,0 +1,7 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: multicluster-hub-custom-registry
+spec:
+  sourceType: grpc
+  address: multicluster-hub-custom-registry.open-cluster-management.svc:50051

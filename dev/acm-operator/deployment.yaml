@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acm-custom-registry
+  labels:
+    app: acm-custom-registry
+spec:
+  selector:
+    matchLabels:
+      app: acm-custom-registry
+  template:
+    metadata:
+      labels:
+        app: acm-custom-registry
+    spec:
+      containers:
+      - name: acm-custom-registry
+        image: acm-custom-registry:1.0.0
+        ports:
+        - containerPort: 50051
+      imagePullSecrets:
+      - name: multiclusterhub-operator-pull-secret
