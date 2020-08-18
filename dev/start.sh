@@ -229,7 +229,7 @@ docker run --network host \
 	--env name=${SUBSCRIPTION_NAME} \
 	--env TEST_MODE=${TEST_MODE} \
 	--volume ~/.kube/config:/opt/.kube/config \
-	quay.io/open-cluster-management/multiclusterhub-operator-tests:$(DEFAULT_SNAPSHOT)
+	quay.io/open-cluster-management/multiclusterhub-operator-tests:${DEFAULT_SNAPSHOT}
 
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
