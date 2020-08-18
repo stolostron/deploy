@@ -218,8 +218,8 @@ printf "\n* Beginning deploy...\n"
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 
-export SUBSCRIPTION_NAME = "advanced-cluster-management"
-export PULL_SECRET_NAME = "multiclusterhub-operator-pull-secret"
+SUBSCRIPTION_NAME="advanced-cluster-management"
+PULL_SECRET_NAME="multiclusterhub-operator-pull-secret"
 
 docker run --network host \
 	--env pullSecret=$(PULL_SECRET_NAME) \
