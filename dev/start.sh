@@ -227,7 +227,7 @@ docker run --network host \
 	--env channel=$(SUBSCRIPTION_CHANNEL) \
 	--env sourceNamespace=$(TARGET_NAMESPACE) \
 	--env name=$(SUBSCRIPTION_NAME) \
-	--env TEST_MODE="install" \
+	--env TEST_MODE=$(TEST_MODE) \
 	--volume ~/.kube/config:/opt/.kube/config \
 	quay.io/open-cluster-management/multiclusterhub-operator-tests:$(DEFAULT_SNAPSHOT)
 
