@@ -222,12 +222,12 @@ SUBSCRIPTION_NAME="advanced-cluster-management"
 PULL_SECRET_NAME="multiclusterhub-operator-pull-secret"
 
 docker run --network host \
-	--env pullSecret=$(PULL_SECRET_NAME) \
-	--env source=$(CUSTOM_REGISTRY_IMAGE) \
-	--env channel=$(SUBSCRIPTION_CHANNEL) \
-	--env sourceNamespace=$(TARGET_NAMESPACE) \
-	--env name=$(SUBSCRIPTION_NAME) \
-	--env TEST_MODE=$(TEST_MODE) \
+	--env pullSecret=${PULL_SECRET_NAME} \
+	--env source=${CUSTOM_REGISTRY_IMAGE} \
+	--env channel=${SUBSCRIPTION_CHANNEL} \
+	--env sourceNamespace=${TARGET_NAMESPACE} \
+	--env name=${SUBSCRIPTION_NAME} \
+	--env TEST_MODE=${TEST_MODE} \
 	--volume ~/.kube/config:/opt/.kube/config \
 	quay.io/open-cluster-management/multiclusterhub-operator-tests:$(DEFAULT_SNAPSHOT)
 
