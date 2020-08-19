@@ -134,7 +134,7 @@ SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="dev/acm-operator"; else OPERATOR_DIRECTORY="dev/multicluster-hub-operator"; fi;
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
 
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
@@ -211,7 +211,7 @@ printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
-kubectl apply -k $PWD/dev/$OPERATOR_DIRECTORY/
+kubectl apply -k $OPERATOR_DIRECTORY/
 #waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
