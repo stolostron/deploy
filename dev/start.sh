@@ -211,7 +211,7 @@ printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
-kubectl apply -k $OPERATOR_DIRECTORY/
+kubectl apply -k $PWD/dev/$OPERATOR_DIRECTORY/
 waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
