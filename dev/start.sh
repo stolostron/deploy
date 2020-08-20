@@ -216,7 +216,7 @@ kubectl apply -k $OPERATOR_DIRECTORY/
 printf "\n* Beginning deploy...\n"
 
 
-echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
+echo "* Deploy Installer Test Image for the install/uninstall of Red Hat Advanced Cluster Management for Kubernetes"
 
 SUBSCRIPTION_NAME="advanced-cluster-management"
 PULL_SECRET_NAME="multiclusterhub-operator-pull-secret"
@@ -228,7 +228,9 @@ docker run --network host \
 	--env sourceNamespace=${TARGET_NAMESPACE} \
 	--env name=${SUBSCRIPTION_NAME} \
 	--env TEST_MODE=${TEST_MODE} \
+	--env full_test_suite="true" \
 	--volume ${KUBECONFIG}:/opt/.kube/config \
+	--volume ${RESULT_DIR}:/usr/src/app/test \
 	quay.io/open-cluster-management/multiclusterhub-operator-tests:${DEFAULT_SNAPSHOT}
 
 echo "#####"
