@@ -188,12 +188,14 @@ spec:
 $>: ./start.sh --watch
 ```
 
-2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag. **Note**: Find snapshot tags here: https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
+2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag. 
+    - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
+    - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-custom-registry?tab=tags 
 
-For example, your SNAPSHOT tag might resemble the following information:
-```bash
-1.0.0-SNAPSHOT-2020-03-13-23-07-54
-```
+  For example, your SNAPSHOT tag might resemble the following information:
+  ```bash
+  1.0.0-SNAPSHOT-2020-03-13-23-07-54
+  ```
   NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
 2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
 
