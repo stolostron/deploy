@@ -217,6 +217,8 @@ kubectl apply -k $OPERATOR_DIRECTORY/
 #waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
+printf "\n##### Give registry two minutes to come up ######\n"
+sleep 120
 
 echo "* Deploy Installer Test Image for the install/uninstall of Red Hat Advanced Cluster Management for Kubernetes"
 
