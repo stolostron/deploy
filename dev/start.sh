@@ -7,6 +7,8 @@
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
+set -e
+
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
 TOTAL_POD_COUNT_2X=55
@@ -177,8 +179,8 @@ echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
 ${SED} -i "s/newTag: .*$/newTag: ${DEFAULT_SNAPSHOT}/g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
 ${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
-echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
-${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+#echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
+#${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
@@ -220,8 +222,6 @@ echo "* Deploy Installer Test Image for the install/uninstall of Red Hat Advance
 
 SUBSCRIPTION_NAME="advanced-cluster-management"
 PULL_SECRET_NAME="multiclusterhub-operator-pull-secret"
-
-set -e
 
 docker run --network host \
 	--env pullSecret=${PULL_SECRET_NAME} \
