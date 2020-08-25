@@ -7,8 +7,6 @@
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
-set -e
-
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
 TOTAL_POD_COUNT_2X=55
@@ -221,6 +219,8 @@ printf "\n##### Give registry two minutes to come up ######\n"
 sleep 120
 
 echo "* Deploy Installer Test Image for the install/uninstall of Red Hat Advanced Cluster Management for Kubernetes"
+
+set -e
 
 SUBSCRIPTION_NAME="advanced-cluster-management"
 PULL_SECRET_NAME="multiclusterhub-operator-pull-secret"
