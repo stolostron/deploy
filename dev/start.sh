@@ -225,6 +225,12 @@ set -e
 SUBSCRIPTION_NAME="advanced-cluster-management"
 PULL_SECRET_NAME="multiclusterhub-operator-pull-secret"
 
+if [ ! -z "$INSTALLER_IMAGE_TAG_OVERRIDE" ]; then
+  INSTALLER_IMAGE_TAG="$INSTALLER_IMAGE_TAG_OVERRIDE"
+else
+  INSTALLER_IMAGE_TAG="$DEFAULT_SNAPSHOT"
+fi
+
 docker run --network host \
 	--env pullSecret=${PULL_SECRET_NAME} \
 	--env source=${CUSTOM_REGISTRY_IMAGE} \
@@ -235,7 +241,7 @@ docker run --network host \
 	--env full_test_suite="true" \
 	--volume ${KUBECONFIG}:/opt/.kube/config \
 	--volume ${RESULTS_DIR}:/usr/src/app/test/results \
-	quay.io/open-cluster-management/multiclusterhub-operator-tests:${DEFAULT_SNAPSHOT}
+	quay.io/open-cluster-management/multiclusterhub-operator-tests:${INSTALLER_IMAGE_TAG}
 
 ls -la ${RESULTS_DIR}
 
