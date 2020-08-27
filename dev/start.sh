@@ -238,7 +238,7 @@ docker run --network host \
 	--env sourceNamespace=${TARGET_NAMESPACE} \
 	--env name=${SUBSCRIPTION_NAME} \
 	--env TEST_MODE=${TEST_MODE} \
-	--env full_test_suite="true" \
+	--env full_test_suite="false" \
 	--env waitInMinutes=10 \
 	--volume ${KUBECONFIG}:/opt/.kube/config \
 	--volume ${RESULTS_DIR}:/usr/src/app/test/results \
