@@ -125,6 +125,9 @@ oc get mutatingwebhookconfiguration | grep "cert-manager" | awk '{ print $1 }' |
 cd ../
 echo DESTROY | ./uninstall.sh || true
 
+# klusterlet-addon-controller webhook
+for webhook in $(oc get validatingwebhookconfiguration | grep klusterlet-addon-controller | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found || true; done
+
 # cert-manager cert-manager-webhook
 for webhook in $(oc get validatingwebhookconfiguration | grep cert-manager | cut -f 1 -d ' '); do oc delete validatingwebhookconfiguration $webhook --ignore-not-found || true; done
 for webhook in $(oc get mutatingwebhookconfiguration | grep "cert-manager" | cut -f 1 -d ' '); do oc delete mutatingwebhookconfiguration $webhook --ignore-not-found || true; done
