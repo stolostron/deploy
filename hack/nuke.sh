@@ -23,6 +23,21 @@ kubectl delete -k ../acm-operator/ || true
 
 oc project open-cluster-management
 remove-apiservices
+
+#remove all open-cluster-management apiservices
+for apiservice in $(oc get apiservices -o name | grep open-cluster-management.io); do
+  oc delete $apiservice
+done
+
+#remove all open-cluster-management webhooks
+for validatingwebhook in $(oc get validatingwebhookconfigurations -o name | grep open-cluster-management.io); do
+  oc delete $validatingwebhook
+done
+
+for mutatingwebhook in $(oc get mutatingwebhookconfigurations -o name | grep open-cluster-management.io); do
+  oc delete $mutatingwebhook
+done
+
 # cluster deployment cleanup now being done by clean-clusters.sh
 # for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
 for cluster in $(oc get Cluster --all-namespaces --ignore-not-found | tail -n +2 | cut -f 1 -d ' '); do oc delete Cluster $cluster && oc delete namespace $cluster --wait=false --ignore-not-found || true; done
