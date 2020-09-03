@@ -81,6 +81,9 @@ for clusterName in `oc get managedcluster --ignore-not-found | grep -v "NAME" | 
     fi
 done
 
+echo "Deleting provider connections"
+oc delete secrets -l cluster.open-cluster-management.io/provider --ignore-not-found -A
+
 if [ $DELETE_MANAGEDCLUSTER ] ; then
     echo "Wait 20 seconds"
     sleep 20
@@ -102,4 +105,3 @@ sleep 5
 
 
 echo "Done!"
-
