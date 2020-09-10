@@ -240,8 +240,9 @@ docker run --network host \
 	--env TEST_MODE=${TEST_MODE} \
 	--env full_test_suite="true" \
 	--env waitInMinutes=10 \
+	--env mchImageRepository=${CUSTOM_REGISTRY_REPO} \
 	--volume ${KUBECONFIG}:/opt/.kube/config \
-	--volume ${RESULTS_DIR}:/usr/src/app/test/results \
+	--volume ${RESULTS_DIR}:/go/src/github.com/open-cluster-management/multicloudhub-operator/test/results/ \
 	quay.io/open-cluster-management/multiclusterhub-operator-tests:${INSTALLER_IMAGE_TAG}
 
 ls -la ${RESULTS_DIR}
