@@ -6,7 +6,7 @@ metadata:
     cloud: 'AWS'
     region: '<CLOUD_REGION>'
     environment: 'dev'
-    vendor: 'OCP'
+    vendor: 'OpenShift'
 spec:
   baseDomain: <BASE_DOMAIN>
   clusterName: <CLUSTER_NAME>
@@ -16,14 +16,14 @@ spec:
   platform:
     aws:
       credentialsSecretRef:
-        name: aws-creds
+        name: <CLUSTER_NAME>-aws-creds
       region: <CLOUD_REGION>
   provisioning:
     installConfigSecretRef:
-      name: install-config
+      name: <CLUSTER_NAME>-install-config
     sshPrivateKeySecretRef:
-      name: ssh-privatekey
+      name: <CLUSTER_NAME>-ssh-private-key
     imageSetRef:
-      name: imageset
+      name: img4.4.11-x86-64
   pullSecretRef:
-    name: openshift-installer-pull-secret
+    name: <CLUSTER_NAME>-pull-secret

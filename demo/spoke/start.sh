@@ -149,8 +149,8 @@ ${SED} -i "s/<BASE_DOMAIN>/${BASE_DOMAIN}/g" ./install-config.yaml
 
 printf "* Applying CLUSTER_NAME (${CLUSTER_NAME}) to ./*.yaml\n"
 ${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./cluster-deployment.yaml
-${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./cluster.yaml
-${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./endpoint-config.yaml
+${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./managed-cluster.yaml
+${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./klusterlet-addon-config.yaml
 ${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./install-config.yaml
 ${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./kustomization.yaml
 ${SED} -i "s/<CLUSTER_NAME>/${CLUSTER_NAME}/g" ./machine-pool.yaml
