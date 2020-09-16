@@ -11,6 +11,9 @@
 TOTAL_POD_COUNT_1X=35
 TOTAL_POD_COUNT_2X=55
 
+# Global Variables with Defaults
+COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
+
 function waitForPod() {
     FOUND=1
     MINUTE=0
