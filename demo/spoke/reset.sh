@@ -5,8 +5,8 @@ printf "To continue press ENTER:"
 read -r CONTINUE
 if [ "${CONTINUE}" == "" ]; then
     git checkout -- cluster-deployment.yaml
-    git checkout -- cluster.yaml
-    git checkout -- endpoint-config.yaml
+    git checkout -- managed-cluster.yaml
+    git checkout -- klusterlet-addon-config.yaml
     git checkout -- imageset.yaml
     git checkout -- install-config.yaml
     git checkout -- kustomization.yaml

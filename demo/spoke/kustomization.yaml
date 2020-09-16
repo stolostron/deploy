@@ -7,20 +7,20 @@ generatorOptions:
   disableNameSuffixHash: true
 
 secretGenerator:
-- name: install-config
+- name: <CLUSTER_NAME>-install-config
   type: "Opaque"
   files:
     - "install-config.yaml"
-- name: ssh-privatekey
+- name: <CLUSTER_NAME>-ssh-private-key
   type: "Opaque"
   files:
     - "ssh-privatekey"
-- name: aws-creds
+- name: <CLUSTER_NAME>-aws-creds
   type: "Opaque"
   literals:
     - aws_access_key_id=<AWS_ACCESS_KEY>
     - aws_secret_access_key=<AWS_SECRET_ACCESS_KEY>
-- name: openshift-installer-pull-secret
+- name: <CLUSTER_NAME>-pull-secret
   type: "kubernetes.io/dockerconfigjson"
   literals:
     - .dockerconfigjson='<OCP_PULL_SECRET>'
@@ -29,6 +29,6 @@ resources:
   - namespace.yaml
   - machine-pool.yaml
   - imageset.yaml
-  - endpoint-config.yaml
+  - klusterlet-addon-config.yaml
   - cluster-deployment.yaml
-  - cluster.yaml
+  - managed-cluster.yaml

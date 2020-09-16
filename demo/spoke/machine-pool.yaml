@@ -10,7 +10,7 @@ spec:
     aws:
       rootVolume:
         iops: 100
-        size: 500
+        size: 100
         type: gp2
-      type: m4.xlarge
+      type: m5.xlarge
   replicas: 3

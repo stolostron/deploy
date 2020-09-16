@@ -10,9 +10,9 @@ controlPlane:
     aws:
       rootVolume:
         iops: 4000
-        size: 500
+        size: 100
         type: io1
-      type: m4.xlarge
+      type: m5.xlarge
 compute:
 - hyperthreading: Enabled
   name: worker
@@ -21,15 +21,15 @@ compute:
     aws:
       rootVolume:
         iops: 2000
-        size: 500
+        size: 100
         type: io1
-      type: m4.xlarge
+      type: m5.xlarge
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
   machineCIDR: 10.0.0.0/16
-  networkType: OpenShiftSDN
+  networkType: OVNKubernetes
   serviceNetwork:
   - 172.30.0.0/16
 platform:
