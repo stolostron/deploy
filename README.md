@@ -174,7 +174,11 @@ spec:
 
 #### 2.X.X
 
-**If you're deploying a downstream build of 2.X.X** `export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"`.  Also `export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>`.  In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.  Now, `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)`.  
+**If you're deploying a downstream build of 2.X.X** `export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"`.  Also `export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>`.  In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.  
+
+Now, `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)`.  
+
+(On Linux, use `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64 -w 0)` to ensure that there are no line breaks in the base64 encoded token)
 
 ### Running start.sh
 
