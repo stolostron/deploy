@@ -1,0 +1,12 @@
+apiVersion: observability.open-cluster-management.io/v1beta1
+kind: MultiClusterObservability
+metadata:
+  name: observability
+  annotations:
+    mco-imageRepository: <IMAGE_REPOSITORY>
+    mco-imageTagSuffix: <SNAPSHOT>
+spec:
+  storageConfigObject:
+    metricObjectStorage:
+      name: thanos-object-storage
+      key: thanos.yaml
