@@ -92,6 +92,8 @@ We've added a very simple `start.sh` script to make your life easier.
 
 First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!  
 
+_Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releases.  
+
 ### Downstream
 
 To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE_BUNDLE=true` and ensure that your OCP cluster meets two conditions:
@@ -201,7 +203,7 @@ $>: ./start.sh --watch
   1.0.0-SNAPSHOT-2020-03-13-23-07-54
   ```
   NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
-2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. Use 'watch oc -n open-cluster-management get pods' to view the progress.
+2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. For 2.0 releases of open-cluster-management and below, use 'watch oc -n open-cluster-management get pods' to view the progress.  For 2.1+ releases of open-cluster-management, you can monitor the status fields of the multiclusterhub object created in the `open-cluster-management` namespace (namespace will differ if TARGET_NAMESPACE is set).  
 
 3. The script provides you with the `Open Cluster Management` URL.
 

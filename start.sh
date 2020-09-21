@@ -10,9 +10,7 @@
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
 TOTAL_POD_COUNT_2X=55
-
-# Global Variables with Defaults
-COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
+POLL_DURATION_21X=1200
 
 function waitForPod() {
     FOUND=1
@@ -225,34 +223,94 @@ waitForPod "multicluster-operators-application" "" "4/4"
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
-    for i in {1..90}; do
-        clear
-        oc -n ${TARGET_NAMESPACE} get pods
-        CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
-        whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
-        RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
-        if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
-            if [ $RUNNING_PODS -ge ${TOTAL_POD_COUNT} ]; then
-                COMPLETE=0
-                break
+    if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
+        echo ""
+        echo "#####"
+        mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
+        acc=0
+        while [[ "$mch_status" != "Running" && $acc -le $POLL_DURATION_21X ]]; do
+            echo "Waited $acc/$POLL_DURATION_21X seconds for MCH to reach Ready Status.  Current Status: $mch_status"
+            CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
+            if [[ "$CONSOLE_URL" != "" ]]; then
+                echo "Detected ACM Console URL: https://${CONSOLE_URL}"
+            fi;
+            if [[ "$DEBUG" == "true" ]]; then
+                echo "#####"
+                component_list=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.components')
+                printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
+                for status_item in $(echo $component_list | jq -r 'keys | .[]'); do
+                    component=$(echo $component_list | jq -r --arg ITEM_NAME "$status_item" '.[$ITEM_NAME]')
+                    component_status="$(echo $component | jq -r '.status')";
+                    type="$(echo $component | jq -r '.type')";
+                    reason="$(echo $component | jq -r '.reason')";
+                    message="$(echo $component | jq -r '.message')";
+                    printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
+                done
             fi
+            echo ""
+            acc=$((acc+30))
+            sleep 30
+            mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
+        done;
+        if [[ "$mch_status" != "Running" ]]; then
+            COMPLETE=1
+        else
+            COMPLETE=0
+            echo "MCH reached Running status after $acc seconds."
+            CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
+            if [[ "$CONSOLE_URL" != "" ]]; then
+                echo "Detected ACM Console URL: https://${CONSOLE_URL}"
+            fi;
+            echo ""
         fi
-        echo
-        echo "Number of expected Pods : $RUNNING_PODS/$TOTAL_POD_COUNT"
-        echo "Pods still NOT running  : ${whatsLeft}"
-        echo "Detected ACM Console URL: https://${CONSOLE_URL}"
-        sleep 10
-    done
-    if [ $COMPLETE -eq 1 ]; then
-        echo "At least one pod failed to start..."
-        oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running"
-        exit 1
+    else
+        for i in {1..90}; do
+            clear
+            oc -n ${TARGET_NAMESPACE} get pods
+            CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
+            whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
+            RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
+            if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
+                if [ $RUNNING_PODS -ge ${TOTAL_POD_COUNT} ]; then
+                    COMPLETE=0
+                    break
+                fi
+            fi
+            echo
+            echo "Number of expected Pods : $RUNNING_PODS/$TOTAL_POD_COUNT"
+            echo "Pods still NOT running  : ${whatsLeft}"
+            echo "Detected ACM Console URL: https://${CONSOLE_URL}"
+            sleep 10
+        done
     fi
-    echo "#####"
-    echo "* Red Hat ACM URL: https://$CONSOLE_URL"
-    echo "#####"
+    if [ $COMPLETE -eq 1 ]; then
+        if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
+            mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase')
+            echo "MCH is in a $mch_status state."
+            echo "The full MCH status is as follows:"
+            component_list=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.components')
+            printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
+            for status_item in $(echo $component_list | jq -r 'keys | .[]'); do
+                component=$(echo $component_list | jq -r --arg ITEM_NAME "$status_item" '.[$ITEM_NAME]')
+                component_status="$(echo $component | jq -r '.status')";
+                type="$(echo $component | jq -r '.type')";
+                reason="$(echo $component | jq -r '.reason')";
+                message="$(echo $component | jq -r '.message')";
+                printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
+            done
+            echo ""
+        else
+            echo "At least one pod failed to start..."
+            oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running"
+        fi
+        exit 1
+    else
+        echo "#####"
+        echo "* Red Hat ACM URL: https://$CONSOLE_URL"
+        echo "#####"
+    fi
     echo "Done!"
-    exit 0
+    exit $COMPLETE
 fi
 
 echo "#####"
@@ -263,7 +321,7 @@ if [ "${OS}" == "darwin" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
 else
-  echo "Deploying, use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods"
+  echo "Deploying, for 2.1+ releases monitor monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods"
 fi
 
 
