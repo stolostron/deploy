@@ -2,6 +2,6 @@ type: s3
 config:
   bucket: <BUCKET_NAME>
   endpoint: s3.<CLOUD_REGION>.amazonaws.com
-  insecure: true
+  insecure: false
   access_key: <AWS_ACCESS_KEY> 
   secret_key: <AWS_SECRET_ACCESS_KEY>
