@@ -136,7 +136,7 @@ printf "* Applying AWS_ACCESS_KEY (****) to ./kustomization.yaml\n"
 ${SED} -i "s/<AWS_ACCESS_KEY>/${AWS_ACCESS_KEY}/g" ./thanos.yaml
 
 printf "* Applying AWS_SECRET_ACCESS_KEY (****) to ./kustomization.yaml\n"
-${SED} -i "s/<AWS_SECRET_ACCESS_KEY>/${AWS_SECRET_ACCESS_KEY}/g" ./thanos.yaml
+${SED} -i "s|<AWS_SECRET_ACCESS_KEY>|${AWS_SECRET_ACCESS_KEY}|g" ./thanos.yaml
 
 echo "Ready to start deploying observability to your OCP cluster..."
 echo "Press ENTER to continue"
