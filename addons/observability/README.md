@@ -4,7 +4,7 @@
 - Create an S3 Bucket
   - non-encrypted
   - no access points needed
-- Run [start.sh](./start.sh) 
+- Run [start.sh](./start.sh) from the `addons/observability` folder.
   - provide s3 bucket name
   - provide cloud region where s3 bucket exists
   - provide snapshot to deploy (will use [snapshot.ver](../../snapshot.ver) from deploy repo by default)
