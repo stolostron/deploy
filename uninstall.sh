@@ -1,5 +1,30 @@
 #!/bin/bash
 
+# Parameters
+# -k, --keep-providers Keeping all provider connections that are not in Advanced Cluster Management namespaces.
+
+
+KEEP_PROVIDERS=0
+
+# save args to pass to called scripts
+args=("$@")
+
+# Parse command line arguments
+for arg in "$@"
+do
+    case $arg in
+        -k|--keep-providers)
+        KEEP_PROVIDERS=1
+        shift
+        ;;
+        *)
+        echo "Unrecognized argument: $1"
+        shift
+        ;;
+    esac
+done
+
+
 # Make sure `oc login` has been done and `oc` command is working
 echo "Testing connection"
 oc version >/dev/null 2>&1
@@ -21,7 +46,7 @@ printf "\n"
 oc cluster-info | head -n 1 | awk '{print $NF}'
 printf "\n"
 
-./clean-clusters.sh
+./clean-clusters.sh "$args"
 
 kubectl delete -k multiclusterhub/
 echo "Sleeping for 200 seconds to allow resources to finalize ..."

@@ -3,15 +3,29 @@
 # Copyright 2020 Red Hat Inc.
 
 # Parameters
-# -t Runs a test, but does not perform andy actions
-
+# -k, --keep-providers Keeping all provider connections that are not in Advanced Cluster Management namespaces.
+# -t Runs a test, but does not perform any actions
 
 CLEAN_RESOURCES=0
-if [ "$?" == "-t" ]; then
-    echo "Test run ONLY."
-    CLEAN_RESOURCES=1
-fi
+KEEP_PROVIDERS=0
 
+for arg in "$@"
+do
+    case $arg in
+        -k|--keep-providers)
+        KEEP_PROVIDERS=1
+        shift
+        ;;
+        -t)
+        CLEAN_RESOURCES=1
+        shift
+        ;;
+        *)
+        echo "Unrecognized argument: $1"
+        shift
+        ;;
+    esac
+done
 
 echo "Continuing to execute this script will destroy the following \"managed\" Openshift clusters:"
 oc get clusterDeployments --all-namespaces
@@ -81,9 +95,6 @@ for clusterName in `oc get managedcluster --ignore-not-found | grep -v "NAME" | 
     fi
 done
 
-echo "Deleting provider connections"
-oc delete secrets -l cluster.open-cluster-management.io/provider --ignore-not-found -A
-
 if [ $DELETE_MANAGEDCLUSTER ] ; then
     echo "Wait 20 seconds"
     sleep 20
@@ -102,6 +113,13 @@ for clusterName in  `oc get managedcluster --ignore-not-found | grep -v "NAME" |
 done
 sleep 5
 
+if [ "$KEEP_PROVIDERS" -eq 1 ]; then
+   echo "Keeping the following provider connections"
+   oc get secrets -l cluster.open-cluster-management.io/provider --ignore-not-found -A
+else
+   echo "Deleting provider connections"
+   oc delete secrets -l cluster.open-cluster-management.io/provider --ignore-not-found -A
+fi
 
 
 echo "Done!"
