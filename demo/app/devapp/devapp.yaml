@@ -72,6 +72,7 @@ metadata:
   namespace: ns-sub-1
 spec:
   clusterConditions:
-  - type: OK
+  - type: ManagedClusterConditionAvailable
+    status: "True"
   clusterSelector:
     matchLabels: {}
