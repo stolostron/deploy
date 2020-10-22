@@ -5,6 +5,7 @@
 
 
 KEEP_PROVIDERS=0
+OCM_NAMESPACE=open-cluster-management
 
 # save args to pass to called scripts
 args=("$@")
