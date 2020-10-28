@@ -321,21 +321,5 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
 </p>
 </details>
 
-# Enabling Bare metal consoles
-To work with bare metal, two flags need to be flipped activated
-## console-header
-Run the following command to enable the bare metal assets on the navigation menu
-```bash
-oc -n open-cluster-management patch deploy console-header -p '{"spec":{"template":{"spec":{"containers":[{"name":"console-header","env":
-[{"name": "featureFlags_baremetal","value":"true"}]}]}}}}'
-```
-## console-ui
-Run the following commands to enable the bare metal button on the create cluster page
-```bash
-DEPLOY_NAME=`oc -n open-cluster-management get deploy -o name | grep consoleui`
-oc -n open-cluster-management patch ${DEPLOY_NAME} -p '{"spec":{"template":{"spec":{"containers":[{"name":"hcm-ui","env":
-[{"name": "featureFlags_baremetal","value":"true"}]}]}}}}'
-
-```
-## Disable Baremetal consoles
-Repeat the commands above, but change `"value":"true"` to `"value":"false"`
+# Enabling Bare metal and VMware consoles
+These consoles are enabled by default
