@@ -1,5 +1,5 @@
 
-# Deploy the _open-cluster-management_ project 
+# Deploy the _open-cluster-management_ project
 
 ### Welcome!
 
@@ -9,7 +9,7 @@ You might be asking yourself, "What is Open Cluster Management?", well it is the
 
 >The GitHub org and project are currently distinct from the SaaS offering named "Red Hat OpenShift Cluster Manager" but will ultimately co-exist/share technology as needed. Core technology, such as [Hive](https://github.com/openshift/hive) is already shared between the two offerings.
 
-Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit-for-purpose Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. The _open-cluster-management_ project provides the tools and capabilities to address these common challenges. 
+Kubernetes provides a platform to deploy and manage containers in a standard, consistent control plane. However, as application workloads move from development to production, they often require multiple fit-for-purpose Kubernetes clusters to support DevOps pipelines. Users such as administrators and site reliability engineers (SREs), face challenges as they work across a range of environments, including multiple data centers, private clouds, and public clouds that run Kubernetes clusters. The _open-cluster-management_ project provides the tools and capabilities to address these common challenges.
 
 _open-cluster-management_ provides end-to-end visibility and control to manage your Kubernetes environment. Take control of your application modernization program with management capabilities for cluster creation, application lifecycle, and provide security and compliance for all of them across data centers and hybrid cloud environments. Clusters and applications are all visible and managed from a single console with built-in security policies. Run your operations where Red Hat OpenShift runs, and manage any Kubernetes cluster in your fleet.
 
@@ -88,34 +88,46 @@ Either way you choose to go, you are going to need a `pull-secret`. We are still
 
 ## Deploy using the ./start.sh script (the easy way)
 
-We've added a very simple `start.sh` script to make your life easier. 
+We've added a very simple `start.sh` script to make your life easier.
 
-First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!  
+First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!
 
-_Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releases.  
+_Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releases.
 
-### Downstream
+### Running start.sh
+
+1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command:
+
+```
+-t modify the YAML but exit before apply the resources
+--silent, skip all prompting, uses the previous configuration
+--watch, will monitor the main Red Hat ACM pod deployments for up to 10min
+
+$ ./start.sh --watch
+```
+
+2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
+    - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
+    - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-custom-registry?tab=tags
+
+  For example, your SNAPSHOT tag might resemble the following information:
+  ```bash
+2.0.5-SNAPSHOT-2020-10-26-21-38-29
+  ```
+  NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
+2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. For 2.0 releases of open-cluster-management and below, use 'watch oc -n open-cluster-management get pods' to view the progress.  For 2.1+ releases of open-cluster-management, you can monitor the status fields of the multiclusterhub object created in the `open-cluster-management` namespace (namespace will differ if TARGET_NAMESPACE is set).
+
+3. The script provides you with the `Open Cluster Management` URL.
+
+Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
+
+
+## Deploying Downstream Builds SNAPSHOTS for Product Quality Engineering
 
 To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE_BUNDLE=true` and ensure that your OCP cluster meets two conditions:
 1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).  To apply the ImageContentSourcePolicy, run `oc apply -f icsp.yaml` with `icsp.yaml` containing the following:
 
-**For 1.X**
-```
-apiVersion: operator.openshift.io/v1alpha1
-kind: ImageContentSourcePolicy
-metadata:
-  name: rhacm-repo
-spec:
-  repositoryDigestMirrors:
-  - mirrors:
-    - quay.io:443/acm-d
-    source: registry.redhat.io/rhacm1-tech-preview
-  - mirrors:
-    - registry.redhat.io/openshift4/ose-oauth-proxy
-    source: registry.access.redhat.com/openshift4/ose-oauth-proxy
-```
-
-**For 2.X**
+**2.0+**
 ```
 apiVersion: operator.openshift.io/v1alpha1
 kind: ImageContentSourcePolicy
@@ -170,44 +182,28 @@ spec:
     }
     </pre>
 
-#### 1.X.X
 
-**If you're deploying a downstream build of 1.X.X**  Export `CUSTOM_REGISTRY_REPO="quay.io/acm-d"` if you want to deploy the downstream build from a repo other than `open-cluster-management` (which you probably do!).  Make sure you have `snapshot.ver` set to a downstream build, or pass it into the start.sh script!
+**If you're deploying a downstream build,** then set the following:
 
-#### 2.X.X
+**NOTE: You should only use a downstream build if you're doing QE on the final product builds.**
 
-**If you're deploying a downstream build of 2.X.X** `export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"`.  Also `export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>`.  In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.  
+```bash
+export COMPOSITE_BUNDLE=true
+export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"
+export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>
+./start.sh --watch
+```
 
-Now, `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)`.  
+In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.
+
+If you copy the value of `.dockerconfigjson`, you can simplify setting the `QUAY_TOKEN` as follows:
+
+```bash
+export DOCKER_CONFIG=<The value after .dockerconfigjson from the quay.io>
+export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)
+```
 
 (On Linux, use `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64 -w 0)` to ensure that there are no line breaks in the base64 encoded token)
-
-### Running start.sh
-
-1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command: 
-
-```
--t modify the YAML but exit before apply the resources
---silent, skip all prompting, uses the previous configuration
---watch, will monitor the main Red Hat ACM pod deployments for up to 10min
-
-$>: ./start.sh --watch
-```
-
-2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag. 
-    - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
-    - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-custom-registry?tab=tags 
-
-  For example, your SNAPSHOT tag might resemble the following information:
-  ```bash
-  1.0.0-SNAPSHOT-2020-03-13-23-07-54
-  ```
-  NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
-2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. For 2.0 releases of open-cluster-management and below, use 'watch oc -n open-cluster-management get pods' to view the progress.  For 2.1+ releases of open-cluster-management, you can monitor the status fields of the multiclusterhub object created in the `open-cluster-management` namespace (namespace will differ if TARGET_NAMESPACE is set).  
-
-3. The script provides you with the `Open Cluster Management` URL.
-
-Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
 
 ## To Delete a MultiClusterHub Instance (the easy way)
 
@@ -238,7 +234,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
 
 2. Update the `kustomization.yaml` file in the `acm-operator` dir to set `newTag`
   You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/acm-custom-registry) Use a tag that has the word `SNAPSHOT` in it.
-  For downstream deploys, make sure to set `newName` differently, usually to `acm-d`.  
+  For downstream deploys, make sure to set `newName` differently, usually to `acm-d`.
     ```bash
     namespace: open-cluster-management
 
@@ -247,7 +243,7 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
         newName: quay.io/open-cluster-management/acm-custom-registry
         newTag: 1.0.0-SNAPSHOT-2020-05-04-17-43-49
     ```
-    
+
 3. Create the `multiclusterhub-operator` objects by applying the yaml definitions contained in the `acm-operator` dir:
     ```bash
     kubectl apply -k acm-operator/
@@ -301,7 +297,7 @@ After completing the steps above you can redeploy the `multiclusterhub` instance
     ```bash
     kubectl apply -k multiclusterhub/
     ```
-    
+
 ## To Delete the multiclusterhub-operator
 
 1. Delete the `multiclusterhub-operator` objects by deleting the yaml definitions contained in the `acm-operator` dir:
