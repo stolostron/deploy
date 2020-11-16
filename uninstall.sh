@@ -117,7 +117,7 @@ if [[ " $@ " =~ " --watch " ]]; then
             COMPLETE=1
         else
             COMPLETE=0
-            echo "MCH was not deleted after $acc seconds."
+            echo "MCH was deleted after $acc seconds."
             echo ""
         fi
     fi
