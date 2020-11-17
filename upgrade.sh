@@ -21,7 +21,8 @@ fi
 # this only changes the channel *IF* we are upgrading a Y version
 CHANNEL_VERSION=$(echo ${NEXT_VERSION} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
 echo "* Applying channel 'release-${CHANNEL_VERSION}' to acm-operator-subscription subscription"
-oc patch subscription.operators.coreos.com acm-operator-subscription -n $TARGET_NAMESPACE --type "json" -p "[{\"op\": \"replace\",\"path\": \"/spec/channel\",\"value\":\"release-$CHANNEL_VERSION\"}]"
+echo "* Applying startingCSV \'${STARTING_CSV}\' to acm-operator-subscription subscription"
+oc patch subscription.operators.coreos.com acm-operator-subscription -n $TARGET_NAMESPACE --type "json" -p "[{\"op\":\"replace\",\"path\": \"/spec/channel\",\"value\":\"release-$CHANNEL_VERSION\"},{\"op\": \"replace\",\"path\":\"/spec/startingCSV\",\"value\":\"$STARTING_CSV\"}]"
 
 # wait for install plan to be generated
 sleep 20
