@@ -19,7 +19,10 @@ DOWNSTREAM=${DOWNSTREAM:-"false"}
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
 INSTALL_MODE=${INSTALL_MODE:-"Automatic"}
-STARTING_CSV=${STARTING_CSV:-"advanced-cluster-management.v2.0.0"}
+STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
+
+# build starting csv variable from $STARTING_VERSION
+STARTING_CSV="advanced-cluster-management.v${STARTING_VERSION}"
 
 function waitForPod() {
     FOUND=1
@@ -194,6 +197,9 @@ if [[ "$INSTALL_MODE" == "Automatic" ]]; then
 elif [[ "$INSTALL_MODE" == "Manual" ]]; then
     echo "* Applying STARTING_CSV to multiclusterhub-operator subscription ($STARTING_CSV)"
     ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+    CHANNEL_VERSION=$(echo ${STARTING_VERSION} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+    echo "* Applying channel 'release-${CHANNEL_VERSION}' to multiclusterhub-operator subscription"
+    ${SED} -i "s|channel: .*$|channel: release-${CHANNEL_VERSION}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 else
     echo "* Invalid INSTALL_MODE... Must be one of Automatic|Manual but found ${INSTALL_MODE}."
     exit -1
