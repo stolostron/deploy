@@ -8,3 +8,4 @@ spec:
   name: advanced-cluster-management
   source: acm-custom-registry
   sourceNamespace: open-cluster-management
+  startingCSV: advanced-cluster-management.v2.0.0

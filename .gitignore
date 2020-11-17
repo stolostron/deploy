@@ -8,4 +8,5 @@ id_rsa.pub
 
 local.rc
 kubeconfig
+pull-secret
 *.bak
