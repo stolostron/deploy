@@ -319,3 +319,54 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
 
 # Enabling Bare metal and VMware consoles
 These consoles are enabled by default
+# Enabling Bare metal consoles
+To work with bare metal, two flags need to be flipped activated
+## console-header
+Run the following command to enable the bare metal assets on the navigation menu
+```bash
+oc -n open-cluster-management patch deploy console-header -p '{"spec":{"template":{"spec":{"containers":[{"name":"console-header","env":
+[{"name": "featureFlags_baremetal","value":"true"}]}]}}}}'
+```
+## console-ui
+Run the following commands to enable the bare metal button on the create cluster page
+```bash
+DEPLOY_NAME=`oc -n open-cluster-management get deploy -o name | grep consoleui`
+oc -n open-cluster-management patch ${DEPLOY_NAME} -p '{"spec":{"template":{"spec":{"containers":[{"name":"hcm-ui","env":
+[{"name": "featureFlags_baremetal","value":"true"}]}]}}}}'
+
+```
+## Disable Baremetal consoles
+Repeat the commands above, but change `"value":"true"` to `"value":"false"`
+
+
+# Upgrade
+You can test the upgrade process with `downstream` builds only, using this repo. To test upgrade follow the instructions below:
+
+1. Export environment variables needed for `downstream` deployment:
+```
+   export CUSTOM_REGISTRY_REPO=quay.io/acm-d
+   export DOWNSTREAM=true
+```
+2. Apply ImageContentSourcePolicy to redirect `registry.redhat.io/rhacm2` to `quay.io:443/acm-d`
+```
+   oc apply -k addons/downstream
+```
+3. In order to perform an `upgrade` you need to install a previously GA'd version of ACM. To do that you will need to set the following variables:
+```
+   export INSTALL_MODE=Manual     # INSTALL_MODE is set to Manual so that we can specify a previous version to install
+   export STARTING_VERSION=2.x.x  # Where 2.x.x is a previously GA'd version of ACM i.e. `STARTING_VERSION=2.0.4`
+```
+4. Run the `start.sh` script
+```
+   ./start.sh --watch
+```
+
+Once the installation is complete you can then attempt to upgrade the ACM instance by running the `upgrade.sh` script. You will need to set additional variables in your environment to tell the upgrade script what you want it to do:
+1. Export environment variables needed by the `upgrade.sh` script
+```
+   export NEXT_VERSION=2.x.x      # Where 2.x.x is some value greater than the version you previously defined in the STARTING_VERSION=2.x.x
+```
+2. Now run the upgrade process:
+```
+   ./upgrade.sh
+```
