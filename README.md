@@ -342,21 +342,21 @@ Repeat the commands above, but change `"value":"true"` to `"value":"false"`
 # Upgrade
 You can test the upgrade process with `downstream` builds only, using this repo. To test upgrade follow the instructions below:
 
-1. Export environment variables needed for `downstream` deployment:
+1. Export environment variables needed for `downstream` deployment:  
 ```
    export CUSTOM_REGISTRY_REPO=quay.io/acm-d
    export DOWNSTREAM=true
-```
+```  
 2. Apply ImageContentSourcePolicy to redirect `registry.redhat.io/rhacm2` to `quay.io:443/acm-d`
 ```
    oc apply -k addons/downstream
-```
+```  
 3. In order to perform an `upgrade` you need to install a previously GA'd version of ACM. To do that you will need to set the following variables:
 ```
    export INSTALL_MODE=Manual     # INSTALL_MODE is set to Manual so that we can specify a previous version to install
    export STARTING_VERSION=2.x.x  # Where 2.x.x is a previously GA'd version of ACM i.e. `STARTING_VERSION=2.0.4`
 ```
-4. Run the `start.sh` script
+4. Run the `start.sh` script  
 ```
    ./start.sh --watch
 ```
