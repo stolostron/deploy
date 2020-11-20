@@ -89,11 +89,11 @@ if [[ " $@ " =~ " --watch " ]]; then
             acc=$((acc+30))
             sleep 30
         done;
-	if [[ $(oc get multiclusterhub --all-namespaces) ]]; then
+	if [[ $(oc get multiclusterobservability --all-namespaces) ]]; then
             COMPLETE=1
         else
             COMPLETE=0
-            echo "MCH was deleted after $acc seconds."
+            echo "MCO was deleted after $acc seconds."
             echo ""
         fi
     fi
