@@ -59,6 +59,46 @@ then
 else 
     echo "Cleaning up resources in namespace: $OCM_NAMESPACE"
 fi
+
+oc delete mco --all -n $OCM_NAMESPACE
+
+COMPLETE=1
+if [[ " $@ " =~ " --watch " ]]; then
+    if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
+        echo ""
+        echo "#####"
+        #mch_status=`oc get multiclusterhub --all-namespaces`
+        acc=0
+	while [[ $(oc get multiclusterobservability --all-namespaces) && $acc -le $POLL_DURATION_21X ]]; do
+	    curr_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
+            echo "Waited $acc/$POLL_DURATION_21X seconds for MCH to be deleted.  Current Status: $curr_status"
+            if [[ "$DEBUG" == "true" ]]; then
+                echo "#####"
+                component_list=$(oc get multiclusterobservability --all-namespaces -o json | jq -r '.items[].status.components')
+                printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
+                for status_item in $(echo $component_list | jq -r 'keys | .[]'); do
+                    component=$(echo $component_list | jq -r --arg ITEM_NAME "$status_item" '.[$ITEM_NAME]')
+                    component_status="$(echo $component | jq -r '.status')";
+                    type="$(echo $component | jq -r '.type')";
+                    reason="$(echo $component | jq -r '.reason')";
+                    message="$(echo $component | jq -r '.message')";
+                    printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
+                done
+            fi
+            echo ""
+            acc=$((acc+30))
+            sleep 30
+        done;
+	if [[ $(oc get multiclusterhub --all-namespaces) ]]; then
+            COMPLETE=1
+        else
+            COMPLETE=0
+            echo "MCH was deleted after $acc seconds."
+            echo ""
+        fi
+    fi
+fi
+
 oc delete mch --all -n $OCM_NAMESPACE
 ## Delete all helm charts in given namespace
 #helm ls --namespace $OCM_NAMESPACE | cut -f 1 | tail -n +2 | xargs -n 1 helm delete --namespace $OCM_NAMESPACE
