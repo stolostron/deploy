@@ -70,8 +70,8 @@ if [[ " $@ " =~ " --watch " ]]; then
         #mch_status=`oc get multiclusterhub --all-namespaces`
         acc=0
 	while [[ $(oc get multiclusterobservability --all-namespaces) && $acc -le $POLL_DURATION_21X ]]; do
-	    curr_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
-            echo "Waited $acc/$POLL_DURATION_21X seconds for MCH to be deleted.  Current Status: $curr_status"
+	    curr_status=$(oc get multiclusterobservability --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
+            echo "Waited $acc/$POLL_DURATION_21X seconds for MCO to be deleted.  Current Status: $curr_status"
             if [[ "$DEBUG" == "true" ]]; then
                 echo "#####"
                 component_list=$(oc get multiclusterobservability --all-namespaces -o json | jq -r '.items[].status.components')
