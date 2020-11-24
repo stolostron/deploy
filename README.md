@@ -353,7 +353,7 @@ You can test the upgrade process with `downstream` builds only, using this repo.
 ```  
 3. In order to perform an `upgrade` you need to install a previously GA'd version of ACM. To do that you will need to set the following variables:
 ```
-   export INSTALL_MODE=Manual     # INSTALL_MODE is set to Manual so that we can specify a previous version to install
+   export MODE=Manual     # MODE is set to Manual so that we can specify a previous version to install
    export STARTING_VERSION=2.x.x  # Where 2.x.x is a previously GA'd version of ACM i.e. `STARTING_VERSION=2.0.4`
 ```
 4. Run the `start.sh` script  

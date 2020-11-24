@@ -18,7 +18,7 @@ COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
 DOWNSTREAM=${DOWNSTREAM:-"false"}
 CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
-INSTALL_MODE=${INSTALL_MODE:-"Automatic"}
+MODE=${MODE:-"Automatic"}
 STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
 
 # build starting csv variable from $STARTING_VERSION
@@ -188,20 +188,20 @@ echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
 ${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
 ${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
-echo "* Applying INSTALL_MODE to multiclusterhub-operator subscription"
-${SED} -i "s|installPlanApproval: .*$|installPlanApproval: ${INSTALL_MODE}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
-if [[ "$INSTALL_MODE" == "Automatic" ]]; then
+echo "* Applying MODE to multiclusterhub-operator subscription"
+${SED} -i "s|installPlanApproval: .*$|installPlanApproval: ${MODE}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+if [[ "$MODE" == "Automatic" ]]; then
     STARTING_CSV="advanced-cluster-management.v${SNAPSHOT_PREFIX}"
     echo "* Applying STARTING_CSV to multiclusterhub-operator-subscription ($STARTING_CSV)"
     ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
-elif [[ "$INSTALL_MODE" == "Manual" ]]; then
+elif [[ "$MODE" == "Manual" ]]; then
     echo "* Applying STARTING_CSV to multiclusterhub-operator subscription ($STARTING_CSV)"
     ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
     CHANNEL_VERSION=$(echo ${STARTING_VERSION} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
     echo "* Applying channel 'release-${CHANNEL_VERSION}' to multiclusterhub-operator subscription"
     ${SED} -i "s|channel: .*$|channel: release-${CHANNEL_VERSION}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 else
-    echo "* Invalid INSTALL_MODE... Must be one of Automatic|Manual but found ${INSTALL_MODE}."
+    echo "* Invalid MODE... Must be one of Automatic|Manual but found ${MODE}."
     exit -1
 fi
 echo "* Applying multicluster-hub-cr values"
@@ -238,7 +238,7 @@ kubectl apply --openapi-patch=true -k prereqs/
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
 kubectl apply -k $OPERATOR_DIRECTORY/
 
-if [[ "$INSTALL_MODE" == "Manual" ]]; then
+if [[ "$MODE" == "Manual" ]]; then
     # wait for install plan to be available
     sleep 20
 
