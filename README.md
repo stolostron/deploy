@@ -70,7 +70,7 @@ Either way you choose to go, you are going to need a `pull-secret`. We are still
 
 2. Generate your pull-secret:
    - ensure you have access to the quay org ([open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags))
-     - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please ensure your rover profile contains a professional social media link to your quay profile and then contact us on our Slack Channel [#forum-acm](https://coreos.slack.com/archives/CTDEY6EEA)).
+     - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please contact the ACM CICD team via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com) or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel [#forum-acm](https://coreos.slack.com/archives/CTDEY6EEA)).
    - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
    - click on `Generate Encrypted Password`
    - enter your quay.io password
