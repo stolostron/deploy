@@ -13,7 +13,16 @@ TOTAL_POD_COUNT_2X=55
 POLL_DURATION_21X=1500
 
 # Global Variables with Defaults
+TARGET_NAMESPACE=${TARGET_NAMESPACE:-"open-cluster-management"}
 COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
+DOWNSTREAM=${DOWNSTREAM:-"false"}
+CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
+MODE=${MODE:-"Automatic"}
+STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
+
+# build starting csv variable from $STARTING_VERSION
+STARTING_CSV="advanced-cluster-management.v${STARTING_VERSION}"
 
 function waitForPod() {
     FOUND=1
@@ -72,9 +81,6 @@ if [[ " $@ " =~ " --watch " ]]; then
     fi
 fi
 
-#TARGET_NAMESPACE should be adjustable in the future
-TARGET_NAMESPACE=open-cluster-management
-
 #This is needed for the deploy
 echo "* Testing connection"
 HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
@@ -95,8 +101,10 @@ fi
 
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
-    echo "Enter the encrypted .dockerconfigjson"
-    read -r QUAY_TOKEN
+    if [[ "$QUAY_TOKEN" == "UNSET" ]]; then
+        echo "Enter the encrypted .dockerconfigjson"
+        read -r QUAY_TOKEN
+    fi
     echo "Writing .prereqs/pull-secret.yaml"
 cat <<EOF > ./prereqs/pull-secret.yaml
 apiVersion: v1
@@ -133,9 +141,6 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     exit 2
 fi
 SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
-
-# Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
-CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
@@ -183,6 +188,22 @@ echo "* Applying CUSTOM_REGISTRY_REPO to multiclusterhub-operator subscription"
 ${SED} -i "s|newName: .*$|newName: ${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}|g" ./$OPERATOR_DIRECTORY/kustomization.yaml
 echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterhub-operator subscription"
 ${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+echo "* Applying MODE to multiclusterhub-operator subscription"
+${SED} -i "s|installPlanApproval: .*$|installPlanApproval: ${MODE}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+if [[ "$MODE" == "Automatic" ]]; then
+    STARTING_CSV="advanced-cluster-management.v${SNAPSHOT_PREFIX}"
+    echo "* Applying STARTING_CSV to multiclusterhub-operator-subscription ($STARTING_CSV)"
+    ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+elif [[ "$MODE" == "Manual" ]]; then
+    echo "* Applying STARTING_CSV to multiclusterhub-operator subscription ($STARTING_CSV)"
+    ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+    CHANNEL_VERSION=$(echo ${STARTING_VERSION} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+    echo "* Applying channel 'release-${CHANNEL_VERSION}' to multiclusterhub-operator subscription"
+    ${SED} -i "s|channel: .*$|channel: release-${CHANNEL_VERSION}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+else
+    echo "* Invalid MODE... Must be one of Automatic|Manual but found ${MODE}."
+    exit -1
+fi
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
 ${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
@@ -216,6 +237,16 @@ kubectl apply --openapi-patch=true -k prereqs/
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
 kubectl apply -k $OPERATOR_DIRECTORY/
+
+if [[ "$MODE" == "Manual" ]]; then
+    # wait for install plan to be available
+    sleep 20
+
+    # identify plan and approve it
+    INSTALL_PLAN=$(oc get InstallPlan -n ${TARGET_NAMESPACE} | grep ${STARTING_CSV} | awk '{print $1;}')
+    oc patch InstallPlan $INSTALL_PLAN -n ${TARGET_NAMESPACE} --type "json" -p '[{"op":"replace","path":"/spec/approved","value":true}]'
+fi
+
 waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
 printf "\n* Beginning deploy...\n"
 
