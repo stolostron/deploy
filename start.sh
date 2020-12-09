@@ -23,6 +23,17 @@ STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
 
 # build starting csv variable from $STARTING_VERSION
 STARTING_CSV="advanced-cluster-management.v${STARTING_VERSION}"
+function waitForInstallPlan() {
+    version=$1
+    for i in `seq 1 50`; do
+        oc get installplan | grep "$version"
+        if [ $? -eq 0 ]; then
+          break
+        fi
+        echo 'waiting for installplan to show'
+        sleep 10
+    done
+}
 
 function waitForPod() {
     FOUND=1
@@ -240,7 +251,7 @@ kubectl apply -k $OPERATOR_DIRECTORY/
 
 if [[ "$MODE" == "Manual" ]]; then
     # wait for install plan to be available
-    sleep 20
+    waitForInstallPlan ${STARTING_CSV}
 
     # identify plan and approve it
     INSTALL_PLAN=$(oc get InstallPlan -n ${TARGET_NAMESPACE} | grep ${STARTING_CSV} | awk '{print $1;}')
