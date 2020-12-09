@@ -25,8 +25,8 @@ STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
 STARTING_CSV="advanced-cluster-management.v${STARTING_VERSION}"
 function waitForInstallPlan() {
     version=$1
-    for i in `seq 1 50`; do
-        oc get installplan | grep "$version"
+    for i in `seq 1 10`; do
+        oc get installplan -n ${TARGET_NAMESPACE} | grep "$version"
         if [ $? -eq 0 ]; then
           break
         fi

@@ -1,8 +1,12 @@
 #!/bin/bash
+
+TARGET_NAMESPACE=${TARGET_NAMESPACE:-"open-cluster-management"}
+NEXT_VERSION=${NEXT_VERSION:-"2.1.0"}
+
 function waitForInstallPlan() {
     version=$1
-    for i in `seq 1 50`; do
-        oc get installplan | grep "$version"
+    for i in `seq 1 10`; do
+        oc get installplan -n ${TARGET_NAMESPACE} | grep "$version"
         if [ $? -eq 0 ]; then
           break
         fi
@@ -10,9 +14,6 @@ function waitForInstallPlan() {
         sleep 10
     done
 }
-
-TARGET_NAMESPACE=${TARGET_NAMESPACE:-"open-cluster-management"}
-NEXT_VERSION=${NEXT_VERSION:-"2.1.0"}
 
 # setup starting csv variable using the $NEXT_VERSION parameter
 STARTING_CSV="advanced-cluster-management.v${NEXT_VERSION}"
