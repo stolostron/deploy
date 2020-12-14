@@ -29,7 +29,7 @@ function waitForPod() {
     MINUTE=0
     podName=$1
     ignore=$2
-    running="$3"
+    running="\([0-9]\+\)\/\1"
     printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
@@ -46,7 +46,7 @@ function waitForPod() {
         else
             operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
         fi
-        if [[ "$operatorPod" =~ "${running}     Running" ]]; then
+        if [[ $(echo $operatorPod | grep "${running}") ]]; then
             echo "* ${podName} is running"
             break
         elif [ "$operatorPod" == "" ]; then
@@ -247,13 +247,13 @@ if [[ "$MODE" == "Manual" ]]; then
     oc patch InstallPlan $INSTALL_PLAN -n ${TARGET_NAMESPACE} --type "json" -p '[{"op":"replace","path":"/spec/approved","value":true}]'
 fi
 
-waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
+waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}"
 printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k multiclusterhub
-waitForPod "multicluster-operators-application" "" "4/4"
+waitForPod "multicluster-operators-application" ""
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
