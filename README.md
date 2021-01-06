@@ -160,15 +160,15 @@ spec:
       "auths": {
         "cloud.openshift.com": {
           "auth": "ENCODED SECRET",
-          "email": "gbuchana@redhat.com"
+          "email": "email@address.com"
         },
         "quay.io": {
           "auth": "ENCODED SECRET",
-          "email": "gbuchana@redhat.com"
+          "email": "email@address.com"
         },
         "registry.connect.redhat.com": {
           "auth": "ENCODED SECRET",
-          "email": "gbuchana@redhat.com"
+          "email": "email@address.com"
         },
         "registry.redhat.io": {
           "auth": "ENCODED SECRET",
