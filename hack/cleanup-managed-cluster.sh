@@ -28,6 +28,7 @@ component_crds=(
 	policycontrollers.agent.open-cluster-management.io
 	searchcollectors.agent.open-cluster-management.io
 	workmanagers.agent.open-cluster-management.io
+	appliedmanifestworks.work.open-cluster-management.io
 )
 
 for crd in "${component_crds[@]}"; do
