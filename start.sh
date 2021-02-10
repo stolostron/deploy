@@ -191,7 +191,9 @@ ${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECT
 echo "* Applying MODE to multiclusterhub-operator subscription"
 ${SED} -i "s|installPlanApproval: .*$|installPlanApproval: ${MODE}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 if [[ "$MODE" == "Automatic" ]]; then
-    STARTING_CSV="advanced-cluster-management.v${SNAPSHOT_PREFIX}"
+    # Issue 7436 - If Downstream RC snapshot, remove leading 'v' from prefix name
+    CLEAN_RC_PREFIX=$(echo ${SNAPSHOT_PREFIX} | ${SED} 's/v//')
+    STARTING_CSV="advanced-cluster-management.v${CLEAN_RC_PREFIX}"
     echo "* Applying STARTING_CSV to multiclusterhub-operator-subscription ($STARTING_CSV)"
     ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 elif [[ "$MODE" == "Manual" ]]; then
