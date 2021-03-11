@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Red Hat Inc.
+# Copyright 2020, 2021 Red Hat Inc.
 
 #Command Line param's
 # ./start.sh -t, this exits after modifying the files but not apply any of the yaml
@@ -322,7 +322,7 @@ if [[ " $@ " =~ " --watch " ]]; then
     if [ $COMPLETE -eq 1 ]; then
         if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
             mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase')
-            echo "MCH is in a $mch_status state."
+            echo "MCH is in the following state: $mch_status"
             echo "The full MCH status is as follows:"
             component_list=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.components')
             printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
@@ -357,7 +357,6 @@ if [ "${OS}" == "darwin" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
 else
-  echo "Deploying, for 2.1+ releases monitor monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods"
+  echo "Deploying, for 2.1+ releases monitor monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods."
 fi
-
 
