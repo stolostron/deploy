@@ -231,14 +231,26 @@ done;
 
 if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
     printf "\n##### Applying community operator subscriptions\n"
-    oc apply -k community-subscriptions -n ${TARGET_NAMESPACE} 
+    oc apply -k community-subscriptions/ -n ${TARGET_NAMESPACE}
 fi
 
 printf "\n##### Applying prerequisites\n"
-kubectl apply --openapi-patch=true -k prereqs/
+kubectl apply --openapi-patch=true -k prereqs/ -n ${TARGET_NAMESPACE}
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
-kubectl apply -k $OPERATOR_DIRECTORY/
+if [[ "${TARGET_NAMESPACE}" != "open-cluster-management" ]]; then
+    TMP_OP_DIR="operator_tmp"
+    printf "\n* Creating temporary directory ${TMP_OP_DIR}/ to customize namespace\n"
+    mkdir ${TMP_OP_DIR}/
+    cp ${OPERATOR_DIRECTORY}/*.yaml ${TMP_OP_DIR}/
+    ${SED} -i "s/^  - open-cluster-management$/  - ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/operator-group.yaml
+    ${SED} -i "s/^  sourceNamespace: open-cluster-management$/  sourceNamespace: ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/subscription.yaml
+    kubectl apply -k $TMP_OP_DIR/ -n ${TARGET_NAMESPACE}
+    printf "\n* Removing temporary directory ${TMP_OP_DIR}/\n"
+    rm -rf ${TMP_OP_DIR}/
+else
+    kubectl apply -k $OPERATOR_DIRECTORY/ -n ${TARGET_NAMESPACE}
+fi
 
 if [[ "$MODE" == "Manual" ]]; then
     # wait for install plan to be available
@@ -254,7 +266,7 @@ printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-kubectl apply -k multiclusterhub
+kubectl apply -k multiclusterhub/ -n ${TARGET_NAMESPACE}
 waitForPod "multicluster-operators-application" ""
 
 COMPLETE=1

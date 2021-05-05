@@ -1,5 +1,7 @@
 #!/bin/bash
 
+TARGET_NAMESPACE=${TARGET_NAMESPACE:-"open-cluster-management"}
+
 # fix sed issue on mac
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 SED="sed"
@@ -120,7 +122,7 @@ printf "using aws secret access key: ****\n"
 if [ -f ../../prereqs/pull-secret.yaml ]; then
     cp ../../prereqs/pull-secret.yaml ./pull-secret.yaml
 else
-    kubectl get secret multiclusterhub-operator-pull-secret -n open-cluster-management --export -o yaml > pull-secret.yaml
+    kubectl get secret multiclusterhub-operator-pull-secret -n ${TARGET_NAMESPACE} --export -o yaml > pull-secret.yaml
 fi
 
 printf "* Applying SNAPSHOT (${SNAPSHOT}) to ./*.yaml\n"

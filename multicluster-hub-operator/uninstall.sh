@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ocm_namespace="open-cluster-management"
+ocm_namespace=${TARGET_NAMESPACE:-"open-cluster-management"}
 
 oc project $ocm_namespace
 

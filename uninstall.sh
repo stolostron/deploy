@@ -3,6 +3,7 @@
 # Parameters
 # -k, --keep-providers Keeping all provider connections that are not in Advanced Cluster Management namespaces.
 
+TARGET_NAMESPACE=${TARGET_NAMESPACE:-open-cluster-management}
 
 KEEP_PROVIDERS=0
 
@@ -41,26 +42,26 @@ if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
 fi
 
 printf "\n"
-echo "This script will uninstall Open Cluster Management from the current OpenShift target cluster:"
+echo "This script will uninstall Open Cluster Management from the current OpenShift target cluster in namespace ${TARGET_NAMESPACE}:"
 printf "\n"
 oc cluster-info | head -n 1 | awk '{print $NF}'
 printf "\n"
 
 ./clean-clusters.sh "$args"
 
-kubectl delete -k multiclusterhub/
+kubectl delete -k multiclusterhub/ -n ${TARGET_NAMESPACE}
 echo "Sleeping for 200 seconds to allow resources to finalize ..."
 sleep 200
 
-kubectl delete -k multicluster-hub-operator/
+kubectl delete -k multicluster-hub-operator/ -n ${TARGET_NAMESPACE}
 ./multicluster-hub-operator/uninstall.sh
 
-kubectl delete -k acm-operator/
+kubectl delete -k acm-operator/ -n ${TARGET_NAMESPACE}
 ./acm-operator/uninstall.sh
 
-kubectl delete -k community-subscriptions/
+kubectl delete -k community-subscriptions/ -n ${TARGET_NAMESPACE}
 
-echo "Cleaning up the open-cluster-management namespace.."
-oc delete namespace open-cluster-management
+echo "Cleaning up the ${TARGET_NAMESPACE} namespace.."
+oc delete namespace ${TARGET_NAMESPACE}
 
 exit 0
