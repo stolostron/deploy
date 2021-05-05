@@ -240,13 +240,14 @@ kubectl apply --openapi-patch=true -k prereqs/ -n ${TARGET_NAMESPACE}
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
 if [[ "${TARGET_NAMESPACE}" != "open-cluster-management" ]]; then
     TMP_OP_DIR="operator_tmp"
-    printf "\n* Creating temporary directory ${TMP_OP_DIR}/ to customize namespace\n"
+    printf "* Creating temporary directory ${TMP_OP_DIR}/ to customize namespace\n"
     mkdir ${TMP_OP_DIR}/
     cp ${OPERATOR_DIRECTORY}/*.yaml ${TMP_OP_DIR}/
+    ${SED} -i "s/\.open-cluster-management\./.${TARGET_NAMESPACE}./" ${TMP_OP_DIR}/catalog-source.yaml
     ${SED} -i "s/^  - open-cluster-management$/  - ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/operator-group.yaml
     ${SED} -i "s/^  sourceNamespace: open-cluster-management$/  sourceNamespace: ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/subscription.yaml
     kubectl apply -k $TMP_OP_DIR/ -n ${TARGET_NAMESPACE}
-    printf "\n* Removing temporary directory ${TMP_OP_DIR}/\n"
+    printf "* Removing temporary directory ${TMP_OP_DIR}/\n"
     rm -rf ${TMP_OP_DIR}/
 else
     kubectl apply -k $OPERATOR_DIRECTORY/ -n ${TARGET_NAMESPACE}
