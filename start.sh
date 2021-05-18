@@ -208,12 +208,19 @@ else
 fi
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
+# ${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
+if [[ "$DOWNSTREAM" != "true" ]]; then
+    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
+else
+    ${SED} -i "s|__ANNOTATION__|{}|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
+fi
 
 if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
     exit 0
 fi
+
+exit 0
 
 printf "\n##### Creating the $TARGET_NAMESPACE namespace\n"
 kubectl create ns $TARGET_NAMESPACE
