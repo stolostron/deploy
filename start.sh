@@ -349,6 +349,11 @@ if [[ " $@ " =~ " --watch " ]]; then
     exit $COMPLETE
 fi
 
+# if using --search option make sure we install redis graph
+if [[ " $@ " =~ " --search " ]]; then
+    oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
+fi
+
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
