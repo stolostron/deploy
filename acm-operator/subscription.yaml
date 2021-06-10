@@ -3,9 +3,9 @@ kind: Subscription
 metadata:
   name: acm-operator-subscription
 spec:
-  channel: release-2.0
+  channel: release-2.3
   installPlanApproval: Automatic
   name: advanced-cluster-management
   source: acm-custom-registry
   sourceNamespace: open-cluster-management
-  startingCSV: advanced-cluster-management.v2.0.0
+  startingCSV: advanced-cluster-management.v2.3.0

@@ -115,10 +115,16 @@ sleep 5
 
 if [ "$KEEP_PROVIDERS" -eq 1 ]; then
    echo "Keeping the following provider connections"
+   # 2.2 and older
    oc get secrets -l cluster.open-cluster-management.io/provider --ignore-not-found -A
+   # 2.3 and newer
+   oc get secrets -l cluster.open-cluster-management.io/credentials --ignore-not-found -A
 else
    echo "Deleting provider connections"
+   # 2.2 and older
    oc delete secrets -l cluster.open-cluster-management.io/provider --ignore-not-found -A
+   # 2.3 and newer
+   oc delete secrets -l cluster.open-cluster-management.io/credentials --ignore-not-found -A
 fi
 
 

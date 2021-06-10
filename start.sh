@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2020 Red Hat Inc.
+# Copyright 2020, 2021 Red Hat Inc.
 
 #Command Line param's
 # ./start.sh -t, this exits after modifying the files but not apply any of the yaml
@@ -40,7 +40,7 @@ function waitForPod() {
     MINUTE=0
     podName=$1
     ignore=$2
-    running="$3"
+    running="\([0-9]\+\)\/\1"
     printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
@@ -57,7 +57,7 @@ function waitForPod() {
         else
             operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
         fi
-        if [[ "$operatorPod" =~ "${running}     Running" ]]; then
+        if [[ $(echo $operatorPod | grep "${running}") ]]; then
             echo "* ${podName} is running"
             break
         elif [ "$operatorPod" == "" ]; then
@@ -202,7 +202,9 @@ ${SED} -i "s|channel: .*$|channel: ${SUBSCRIPTION_CHANNEL}|g" ./$OPERATOR_DIRECT
 echo "* Applying MODE to multiclusterhub-operator subscription"
 ${SED} -i "s|installPlanApproval: .*$|installPlanApproval: ${MODE}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 if [[ "$MODE" == "Automatic" ]]; then
-    STARTING_CSV="advanced-cluster-management.v${SNAPSHOT_PREFIX}"
+    # Issue 7436 - If Downstream RC snapshot, remove leading 'v' from prefix name
+    CLEAN_RC_PREFIX=$(echo ${SNAPSHOT_PREFIX} | ${SED} 's/v//')
+    STARTING_CSV="advanced-cluster-management.v${CLEAN_RC_PREFIX}"
     echo "* Applying STARTING_CSV to multiclusterhub-operator-subscription ($STARTING_CSV)"
     ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 elif [[ "$MODE" == "Manual" ]]; then
@@ -217,7 +219,13 @@ else
 fi
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
+if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
+cp -r multiclusterhub applied-mch
+if [[ "$DOWNSTREAM" != "true" ]]; then
+    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
+else
+    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
+fi
 
 if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
@@ -258,13 +266,13 @@ if [[ "$MODE" == "Manual" ]]; then
     oc patch InstallPlan $INSTALL_PLAN -n ${TARGET_NAMESPACE} --type "json" -p '[{"op":"replace","path":"/spec/approved","value":true}]'
 fi
 
-waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "1/1"
+waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}"
 printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-kubectl apply -k multiclusterhub
-waitForPod "multicluster-operators-application" "" "4/4"
+kubectl apply -k applied-mch
+waitForPod "multicluster-operators-application" ""
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
@@ -331,7 +339,7 @@ if [[ " $@ " =~ " --watch " ]]; then
     if [ $COMPLETE -eq 1 ]; then
         if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
             mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase')
-            echo "MCH is in a $mch_status state."
+            echo "MCH is in the following state: $mch_status"
             echo "The full MCH status is as follows:"
             component_list=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.components')
             printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
@@ -358,6 +366,11 @@ if [[ " $@ " =~ " --watch " ]]; then
     exit $COMPLETE
 fi
 
+# if using --search option make sure we install redis graph
+if [[ " $@ " =~ " --search " ]]; then
+    oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
+fi
+
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
@@ -366,7 +379,6 @@ if [ "${OS}" == "darwin" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
 else
-  echo "Deploying, for 2.1+ releases monitor monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods"
+  echo "Deploying, for 2.1+ releases monitor monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods."
 fi
-
 

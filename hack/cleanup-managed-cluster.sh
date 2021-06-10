@@ -19,6 +19,8 @@ ${KUBECTL} delete klusterlet klusterlet --timeout=60s
 ${KUBECTL} delete namespace ${KLUSTERLET_NAMESPACE} --wait=false
 echo "force removing klusterlet"
 ${KUBECTL} patch klusterlet klusterlet --type="json" -p '[{"op": "remove", "path":"/metadata/finalizers"}]'
+echo "removing klusterlet crd"
+${KUBECTL} delete crd klusterlets.operator.open-cluster-management.io --timeout=30s
 
 # Force delete all component CRDs if they still exist
 component_crds=(
@@ -28,6 +30,7 @@ component_crds=(
 	policycontrollers.agent.open-cluster-management.io
 	searchcollectors.agent.open-cluster-management.io
 	workmanagers.agent.open-cluster-management.io
+	appliedmanifestworks.work.open-cluster-management.io
 )
 
 for crd in "${component_crds[@]}"; do

@@ -60,4 +60,7 @@ kubectl delete -k acm-operator/
 
 kubectl delete -k community-subscriptions/
 
+echo "Cleaning up the open-cluster-management namespace.."
+oc delete namespace open-cluster-management
+
 exit 0
