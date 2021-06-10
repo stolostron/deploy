@@ -254,7 +254,7 @@ fi
 printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/
 
-printf "\n#####Allow secrets time to propagate #####\n"
+printf "\n##### Allow secrets time to propagate #####\n"
 sleep 60
 
 printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
