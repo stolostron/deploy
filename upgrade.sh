@@ -82,6 +82,20 @@ else
     echo "Snapshot doesn't contain a version number we recognize, looking for the 2.2.X+ release pod count of ${TOTAL_POD_COUNT} if wait is selected."
 fi
 
+#This is needed for the deploy
+echo "* Testing connection"
+HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
+if [ $? -ne 0 ]; then
+    echo "ERROR: Make sure you are logged into an OpenShift Container Platform before running this script"
+    exit 2
+fi
+#Shorten to the basedomain
+HOST_URL=${HOST_URL/apps./}
+echo "* Using baseDomain: ${HOST_URL}"
+VER=`oc version | grep "Client Version:"`
+echo "* oc CLI ${VER}"
+F
+
 COMPLETE=1
 if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
     echo ""
