@@ -94,7 +94,6 @@ HOST_URL=${HOST_URL/apps./}
 echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
-F
 
 COMPLETE=1
 if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
