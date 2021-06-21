@@ -96,7 +96,7 @@ VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
 COMPLETE=1
-if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
+if [[ $NEXT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
     echo ""
     echo "#####"
     mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
@@ -157,7 +157,7 @@ else
     done
 fi
 if [ $COMPLETE -eq 1 ]; then
-    if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
+    if [[ $NEXT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
         mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase')
         echo "MCH is in the following state: $mch_status"
         echo "The full MCH status is as follows:"
