@@ -185,4 +185,10 @@ else
     echo "#####"
 fi
 echo "Done!"
+MCH_FINAL_VERSION_CHECK=`oc get mch -oyaml | grep "currentVersion: $NEXT_VERSION" | wc -l`
+if [[ $MCH_FINAL_VERSION_CHECK == 0 ]]; then
+    MCH_FINAL_VERSION=`oc get mch -oyaml -n $TARGET_NAMESPACE | grep "currentVersion: [0-9"] | sed 's/[a-zA-Z:]*//g'
+    echo "Upgrade Failed to Complete: $MCH_FINAL_VERSION was found instead of $NEXT_VERSION"
+    COMPLETE=1
+fi
 exit $COMPLETE
