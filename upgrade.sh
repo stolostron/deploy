@@ -73,6 +73,8 @@ echo "* Found install plan ${INSTALL_PLAN}."
 # Patch install plan to set approved to 'true'
 echo "* Patching install plan ${INSTALL_PLAN} to set '/spec/approved' to 'true'"
 oc patch InstallPlan $INSTALL_PLAN -n $TARGET_NAMESPACE --type "json" -p '[{"op": "replace","path": "/spec/approved","value":true}]'
+echo 'wait 180 before checking pods'
+sleep 180
 
 # Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
 if [[ $NEXT_SNAPSHOT =~ v{0,1}2\.0\.[0-9]+.* ]]; then
@@ -187,7 +189,7 @@ fi
 echo "Done!"
 MCH_FINAL_VERSION_CHECK=`oc get mch -oyaml | grep "currentVersion: $NEXT_VERSION" | wc -l`
 if [[ $MCH_FINAL_VERSION_CHECK == 0 ]]; then
-    MCH_FINAL_VERSION=`oc get mch -oyaml -n $TARGET_NAMESPACE | grep "currentVersion: [0-9"] | sed 's/[a-zA-Z:]*//g'
+    MCH_FINAL_VERSION=`oc get mch -oyaml -n $TARGET_NAMESPACE | grep "currentVersion: [0-9"] | sed 's/[a-zA-Z:]*//g'`
     echo "Upgrade Failed to Complete: $MCH_FINAL_VERSION was found instead of $NEXT_VERSION"
     COMPLETE=1
 fi
