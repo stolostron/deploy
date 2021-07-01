@@ -52,7 +52,7 @@ if [ "${OS}" == "darwin" ]; then
     fi
 fi
 
-oc patch deployment acm-custom-registry -n open-cluster-management --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
+oc patch deployment acm-custom-registry -n ${TARGET_NAMESPACE} --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
 waitForACMRegistryPod
 echo "Sleeping for 5 minutes to allow deployment to sync"
 sleep 300
