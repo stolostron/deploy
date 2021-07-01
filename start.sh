@@ -208,7 +208,13 @@ else
 fi
 echo "* Applying multicluster-hub-cr values"
 ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-${SED} -i "s|\"mch-imageRepository\": .*$|\"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./multiclusterhub/example-multiclusterhub-cr.yaml
+if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
+cp -r multiclusterhub applied-mch
+if [[ "$DOWNSTREAM" != "true" ]]; then
+    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
+else
+    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
+fi
 
 if [[ " $@ " =~ " -t " ]]; then
     echo "* Test mode, see yaml files for updates"
@@ -267,7 +273,7 @@ printf "\n* Beginning deploy...\n"
 
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
-kubectl apply -k multiclusterhub/ -n ${TARGET_NAMESPACE}
+kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
 waitForPod "multicluster-operators-application" ""
 
 COMPLETE=1
@@ -360,6 +366,11 @@ if [[ " $@ " =~ " --watch " ]]; then
     fi
     echo "Done!"
     exit $COMPLETE
+fi
+
+# if using --search option make sure we install redis graph
+if [[ " $@ " =~ " --search " ]]; then
+    oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
 fi
 
 echo "#####"

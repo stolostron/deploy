@@ -2,8 +2,7 @@ apiVersion: operator.open-cluster-management.io/v1
 kind: MultiClusterHub
 metadata:
   name: multiclusterhub
-  annotations:
-    "mch-imageRepository": "quay.io/open-cluster-management"
+  annotations: __ANNOTATION__
 spec:
   imagePullSecret: multiclusterhub-operator-pull-secret
   
