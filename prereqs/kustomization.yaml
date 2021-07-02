@@ -5,15 +5,10 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-# namespace to deploy all Resources to
-namespace: open-cluster-management
-
 patchesStrategicMerge:
 - default-sa-pull-secret-patch.yaml
 
-
 # list of Resource Config to be Applied
 resources:
-  - namespace.yaml
   - pull-secret.yaml
   - serviceaccount.yaml

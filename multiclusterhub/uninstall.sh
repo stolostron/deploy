@@ -11,7 +11,9 @@ if [ ! -x "$(command -v jq)" ]; then
   exit 1
 fi
 
-oc project open-cluster-management
+ocm_namespace=${TARGET_NAMESPACE:-"open-cluster-management"}
+
+oc project ${ocm_namespace}
 
 # cluster deployment cleanup now being done by clean-clusters.sh
 # for deployment in $(oc get ClusterDeployment --all-namespaces | tail -n +2 | cut -f 1 -d ' '); do echo "Deleting managed cluster $deployment... this may take a few minutes."; oc delete ClusterDeployment $deployment -n $deployment; echo "done."; done
