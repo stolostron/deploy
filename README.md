@@ -353,6 +353,7 @@ You can test the upgrade process with `downstream` builds only, using this repo.
 ```
    export CUSTOM_REGISTRY_REPO=quay.io/acm-d
    export DOWNSTREAM=true
+   export COMPOSITE_BUNDLE=true
 ```  
 2. Apply ImageContentSourcePolicy to redirect `registry.redhat.io/rhacm2` to `quay.io:443/acm-d`
 ```
@@ -372,6 +373,7 @@ Once the installation is complete you can then attempt to upgrade the ACM instan
 1. Export environment variables needed by the `upgrade.sh` script
 ```
    export NEXT_VERSION=2.x.x      # Where 2.x.x is some value greater than the version you previously defined in the STARTING_VERSION=2.x.x
+   export NEXT_SNAPSHOT=2.X.X-DOWNSTREAM-YYYY-MM-DD-HH-MM-SS      #This variable will specify the registry pod and wait for completion
 ```
 2. Now run the upgrade process:
 ```
