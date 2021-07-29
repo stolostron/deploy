@@ -59,7 +59,7 @@ You have two choices of installation:
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will assist you through the process.
   - [the hard way](#the-hard-way) - instructions to deploy _open-cluster-management_ with only `oc` commands.
 
-Either way you choose to go, you are going to need a `pull-secret`. We are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time, you must gain access to our built images residing in our private [ environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
+Either way you choose to go, you are going to need a `pull-secret`. We are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time, you must gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
 
 ## Prepare to deploy Open Cluster Management Instance (only do once)
 
