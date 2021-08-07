@@ -1,0 +1,11 @@
+quay.io/acm-d/acm-custom-registry@sha256:25309c487214b86e0f097a48e20b73117948927e62172d18748617c3464e3838=__DESTINATION_ORG__/acm-custom-registry:2.3.1-DOWNSTREAM-2021-08-06-14-49-53
+quay.io/acm-d/acm-operator-bundle@sha256:326910bb8b5343b5f29ca9b219ecb3ec8e90b6215548a39382d03f1492d615b0=__DESTINATION_ORG__/acm-operator-bundle:v2.3.1-2
+quay.io/acm-d/klusterlet-operator-bundle@sha256:0cfef24a0c3c01a058777a32e4d2e9bdb43ea6bf094654f8b9f096d18e0389fe=__DESTINATION_ORG__/klusterlet-operator-bundle:v2.3.1-2
+quay.io/acm-d/multicluster-observability-rhel8-operator@sha256:070b81edb4da82c6604487343e23ef4f029a9b1fa70ac471961b49389e962a81=__DESTINATION_ORG__/multicluster-observability-rhel8-operator:v2.3.0-108
+quay.io/acm-d/multicluster-operators-placementrule-rhel8@sha256:138b931e5862c512ab1d4c7ae257146b5c9fe0df5205f9e1859dca34d11bafcc=__DESTINATION_ORG__/multicluster-operators-placementrule-rhel8:v2.3.0-55
+quay.io/acm-d/ose-configmap-reloader@sha256:ca6df8d39998275a1b42c761df0379911025386ca4130c1801d83f4141ee3576=__DESTINATION_ORG__/ose-configmap-reloader:v4.5.0-202106111650.p0.git.8b987c8
+quay.io/acm-d/ose-oauth-proxy@sha256:2fe11e0fabd878f53a2627ebbed273400e063cffd80d8817565163dcbdaabcf7=__DESTINATION_ORG__/ose-oauth-proxy:v4.5.0-202106111650.p0.git.afb73cd
+quay.io/acm-d/ose-prometheus-alertmanager@sha256:88e34930a9e7c766b5b280388e960a14f2803eab4604e8c9ec785ee14493d2c9=__DESTINATION_ORG__/ose-prometheus-alertmanager:v4.5.0-202106111650.p0.git.26fa6b4
+quay.io/acm-d/placement-rhel8@sha256:2174bad894bc28bc8e41548d650271fef8bc30f8e894bdc71562f418e4927b32=__DESTINATION_ORG__/placement-rhel8:v2.3.0-19
+quay.io/acm-d/registration-rhel8-operator@sha256:02f508856579143c312cbbf4580d1bd385e77a7fc31130417c2ebdea2268e7bc=__DESTINATION_ORG__/registration-rhel8-operator:v2.3.0-47
+registry.redhat.io/rhel8/postgresql-12@sha256:952ac9a625c7600449f0ab1970fae0a86c8a547f785e0f33bfae4365ece06336=__DESTINATION_ORG__/postgresql-12:2.3.1-DOWNSTREAM-2021-08-06-14-49-53
