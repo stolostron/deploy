@@ -20,6 +20,13 @@ With the _open-cluster-management_ project, you can complete the following funct
   - Enforce policies at the target clusters using Kubernetes-supported custom resource definitions.
   - Deploy and maintain day-two operations of business applications distributed across your cluster landscape.
 
+Our code is open! To reach us in the open source community please head to https://open-cluster-management.io, and you can also find us on Kubernetes Slack workspace: https://kubernetes.slack.com/archives/C01GE7YSUUF
+ 
+If you're looking for RHACM, the Red Hat multicluster management product that runs on OpenShift, your Red Hat account team rep should be able to help you get an evaluation of ACM so that you can use the actual product bits in a supported way. There is also a self-supported evaluation if you prefer that, and you can get started right away at: https://www.redhat.com/en/technologies/management/advanced-cluster-management
+-> click the “Try It” button. 
+
+If you're a Red Hat associate or partner needing access to open-cluster-management in quay.io, please contact the ACM CICD team via email at acm-contact@redhat.com or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel #forum-acm-devops. Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
+
 ## Let's get started...
 
 You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use the _open-cluster-management_ project. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
@@ -59,7 +66,7 @@ You have two choices of installation:
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will assist you through the process.
   - [the hard way](#the-hard-way) - instructions to deploy _open-cluster-management_ with only `oc` commands.
 
-Either way you choose to go, you are going to need a `pull-secret`. We are still in early development stage, and yes we do plan to open source all of our code but... lawyers, gotta do some more due diligence before we can open up to the world. <!--do we want to share info about the lawyer responsibility or was this a personal quick note?--> In the mean time, you must gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
+Either way you choose to go, you are going to need a `pull-secret` in order to gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
 
 ## Prepare to deploy Open Cluster Management Instance (only do once)
 
@@ -70,7 +77,6 @@ Either way you choose to go, you are going to need a `pull-secret`. We are still
 
 2. Generate your pull-secret:
    - ensure you have access to the quay org ([open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags))
-     - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please contact the ACM CICD team via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com) or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel [#forum-acm-devops](https://coreos.slack.com/archives/CSZLMKPS5)). Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
    - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
    - click on `Generate Encrypted Password`
    - enter your quay.io password
