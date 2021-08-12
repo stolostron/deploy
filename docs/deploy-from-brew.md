@@ -53,7 +53,7 @@ oc get secret/pull-secret -n openshift-config -o json | jq -r '.data.".dockercon
 oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=authfile
 ```
 
-### Step 2: Deploy and ImageContentSourcePolicy (ICSP)
+### Step 2: Deploy an ImageContentSourcePolicy (ICSP)
 
 You need to deploy an ImageContentSourcePolicy (ICSP) to add a Brew as a mirror for requests to other Red Hat registry variants.  The definitive source for this ICSP is, of course, the [official brew deploy documentation](https://docs.engineering.redhat.com/display/CFC/Test), but at the time of writing you can apply the ICSP as follows:
 
