@@ -81,7 +81,7 @@ EOF
 
 ### The Easy Way (RECOMMNDED)
 
-Run `./start-brew.sh` for a simple deploy experience.  
+Run `./brew-start.sh` for a simple deploy experience.  
 
 This does the same thing as the manual steps documented below, only documented and with additional error checking!
 
