@@ -1,0 +1,15 @@
+# Copyright Contributors to the Open Cluster Management project
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: backplane-operator-catalog
+  namespace: default
+spec:
+  displayName: Backplane Operator
+  publisher: Red Hat
+  sourceType: grpc
+  image: "quay.io/open-cluster-management/cmb-custom-registry:1.0.0-BACKPLANE-2021-08-23-18-07-46"
+  updateStrategy:
+    registryPoll:
+      interval: 10m
