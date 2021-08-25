@@ -30,15 +30,15 @@ else
     echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
-IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' backplane/catalogsource.yaml
+IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' backplane/operator/catalogsource.yaml
 oc create ns backplane-operator-system --dry-run=client -o yaml | oc apply -f -
-oc apply -k backplane/
-
+oc apply -k backplane/operator/
 
 CSVName=""
 for run in {1..10}; do
   output=$(oc get sub backplane-operator -o jsonpath='{.status.currentCSV}' >> /dev/null && echo "exists" || echo "not found")
   if [ "$output" != "exists" ]; then
+    sleep 2
     continue
   fi
   CSVName=$(oc get sub backplane-operator -o jsonpath='{.status.currentCSV}')
