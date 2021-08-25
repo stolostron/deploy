@@ -1,0 +1,5 @@
+apiVersion: backplane.open-cluster-management.io/v1alpha1
+kind: BackplaneConfig
+metadata:
+  name: backplaneconfig-sample
+spec: {}

@@ -1,0 +1,15 @@
+# Copyright Contributors to the Open Cluster Management project
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: backplane-operator-catalog
+  namespace: default
+spec:
+  displayName: Backplane Operator
+  publisher: Red Hat
+  sourceType: grpc
+  image: ""
+  updateStrategy:
+    registryPoll:
+      interval: 10m

@@ -385,3 +385,7 @@ Once the installation is complete you can then attempt to upgrade the ACM instan
 ```
    ./upgrade.sh
 ```
+
+# Backplane
+
+For instructions to install and manage the Backplane Operator, see the following [README](backplane/README.md).
