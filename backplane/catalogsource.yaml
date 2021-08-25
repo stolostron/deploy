@@ -9,7 +9,7 @@ spec:
   displayName: Backplane Operator
   publisher: Red Hat
   sourceType: grpc
-  image: "quay.io/open-cluster-management/cmb-custom-registry:1.0.0-BACKPLANE-2021-08-23-18-07-46"
+  image: ""
   updateStrategy:
     registryPoll:
       interval: 10m
