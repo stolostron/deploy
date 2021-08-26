@@ -36,12 +36,12 @@ oc apply -k backplane/operator/
 
 CSVName=""
 for run in {1..10}; do
-  output=$(oc get sub backplane-operator -o jsonpath='{.status.currentCSV}' >> /dev/null && echo "exists" || echo "not found")
+  output=$(oc get sub backplane-operator -n backplane-operator-system -o jsonpath='{.status.currentCSV}' >> /dev/null && echo "exists" || echo "not found")
   if [ "$output" != "exists" ]; then
     sleep 2
     continue
   fi
-  CSVName=$(oc get sub backplane-operator -o jsonpath='{.status.currentCSV}')
+  CSVName=$(oc get sub -n backplane-operator-system backplane-operator -o jsonpath='{.status.currentCSV}')
   if [ "$CSVName" != "" ]; then
     break
   fi
@@ -53,11 +53,11 @@ _apiReady=0
 echo "* Using CSV: ${CSVName}"
 for run in {1..10}; do
   sleep 10
-  output=$(oc get csv $CSVName -o jsonpath='{.status.phase}' >> /dev/null && echo "exists" || echo "not found")
+  output=$(oc get csv -n backplane-operator-system $CSVName -o jsonpath='{.status.phase}' >> /dev/null && echo "exists" || echo "not found")
   if [ "$output" != "exists" ]; then
     continue
   fi
-  phase=$(oc get csv $CSVName -o jsonpath='{.status.phase}')
+  phase=$(oc get csv -n backplane-operator-system $CSVName -o jsonpath='{.status.phase}')
   if [ "$phase" == "Succeeded" ]; then
     _apiReady=1
     break
