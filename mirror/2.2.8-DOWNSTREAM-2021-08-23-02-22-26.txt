@@ -1,4 +1,4 @@
-quay.io/acm-d/acm-custom-registry@sha256:9ee3fbd3e8971e52d14476113420dd2fc00c1390bf3f3a6ba3c97ffc02b3b809=__DESTINATION_ORG__/acm-custom-registry:2.2.8-DOWNSTREAM-2021-08-23-02-22-26
+quay.io/acm-d/acm-custom-registry@sha256:dee84820b99222a44b0b3d719ed13ebf90d1a2195b15529cca4f14ad3083acfe=__DESTINATION_ORG__/acm-custom-registry:2.2.8-DOWNSTREAM-2021-08-23-02-22-26
 quay.io/acm-d/acmesolver-rhel8@sha256:b05678461cd9bfc6c6ce94e77ce3fa900374b97b798f9f6555caca8c50b78502=__DESTINATION_ORG__/acmesolver-rhel8:v2.2.8-1
 quay.io/acm-d/acm-must-gather-rhel8@sha256:da7fb46884250e9f6131f7d5fd1609e00fd91d92e9c0254dfab65b2225f22a2f=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.2.8-1
 quay.io/acm-d/acm-operator-bundle@sha256:83e034ffb7f7fb3fbedfd00edb05df6ee21aed9fa3704bc5182b8b68107e64b9=__DESTINATION_ORG__/acm-operator-bundle:v2.2.8-10
