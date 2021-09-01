@@ -30,9 +30,9 @@ else
     echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
-IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' backplane/operator/catalogsource.yaml
+IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' multiclusterengine/operator/catalogsource.yaml
 oc create ns backplane-operator-system --dry-run=client -o yaml | oc apply -f -
-oc apply -k backplane/operator/
+oc apply -k multiclusterengine/operator/
 
 CSVName=""
 for run in {1..10}; do
@@ -66,9 +66,9 @@ for run in {1..10}; do
 done
 
 if [ $_apiReady -eq 1 ]; then
-  oc apply -f backplane/backplane_v1alpha1_backplaneconfig.yaml
-  echo "backplaneconfig installed successfully"
+  oc apply -f multiclusterengine/multicluster_v1alpha1_multiclusterengine.yaml
+  echo "multiclusterengine installed successfully"
 else
-  echo "backplaneconfig subscription could not install in the allotted time."
+  echo "multiclusterengine subscription could not install in the allotted time."
   exit 1
 fi

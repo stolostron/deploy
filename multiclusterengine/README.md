@@ -1,10 +1,10 @@
-# Backplane Operator
+# MultiCluster Engine Operator
 
-Backplane operator installs and manages backplane components, such as cluster-manager, hive, and other core foundation resources.
+Multicluster engine operator installs and manages multicluster components, such as cluster-manager, hive, and other core foundation resources.
 
 ## Prereqs
 
-You must meet the following requirements to install the _backplane operator_:
+You must meet the following requirements to install the _MultiCluster Engine_:
 
 - An OpenShift Container Platform (OCP) 4.3+ cluster available
   - You must have a default storage class defined
@@ -14,11 +14,11 @@ You must meet the following requirements to install the _backplane operator_:
 
 ## Getting Started
 
-To install the Backplane-Operator, call the helper script which will supervise the installation of backplane components. This script requires a SNAPSHOT tag as input.
+To install the MultiCluster Engine, call the helper script which will supervise the installation of multicluster components. This script requires a SNAPSHOT tag as input.
 
-1. Run the `./backplane/start.sh` script in the root directory of this repository
+1. Run the `./multiclusterengine/start.sh` script in the root directory of this repository
 ```
-$ ./backplane/start.sh
+$ ./multiclusterengine/start.sh
 ```
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
@@ -28,11 +28,11 @@ After the tag has been provided, the installation will continue. Currently the i
 
 ## Uninstallation
 
-To uninstall the Backplane-Operator, follow these steps:
+To uninstall the MultiCluster Engine, follow these steps:
 
-1. Delete the backplaneconfig custom resource - 
+1. Delete the multiclusterengine custom resource - 
 ```
-$ oc delete backplaneconfig --all
+$ oc delete multiclusterengine --all
 ```
 2. Delete the Backplane-Operator CSV, Subscription, and namespace.
 
