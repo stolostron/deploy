@@ -24,7 +24,7 @@ $ ./multiclusterengine/start.sh
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
     - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/cmb-custom-registry?tab=tags
 
-After the tag has been provided, the installation will continue. Currently the installation deploys and manages its components in the `backplane-operator-system` namespace which it creates.
+After the tag has been provided, the installation will continue. Currently the installation deploys and manages its components in the `multicluster-engine` namespace which it creates.
 
 ## Uninstallation
 
@@ -34,10 +34,10 @@ To uninstall the MultiCluster Engine, follow these steps:
 ```
 $ oc delete multiclusterengine --all
 ```
-2. Delete the Backplane-Operator CSV, Subscription, and namespace.
+2. Delete the MultiCluster Engine CSV, Subscription, and namespace.
 
 ```
-$ oc delete csv $(oc get sub backplane-operator -o jsonpath='{.status.currentCSV}')
-$ oc delete sub backplane-operator
-$ oc delete namespace backplane-operator-system
+$ oc delete csv $(oc get sub multicluster-engine -o jsonpath='{.status.currentCSV}')
+$ oc delete sub multicluster-engine
+$ oc delete namespace multicluster-engine
 ```

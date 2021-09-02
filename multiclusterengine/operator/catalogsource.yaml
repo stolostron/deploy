@@ -3,10 +3,10 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
-  name: backplane-operator-catalog
+  name: multiclusterengine-catalog
   namespace: default
 spec:
-  displayName: Backplane Operator
+  displayName: MultiCluster Engine
   publisher: Red Hat
   sourceType: grpc
   image: ""
