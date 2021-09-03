@@ -3,10 +3,10 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: backplane-operator
+  name: multicluster-engine
 spec:
   channel: stable-1.0
   installPlanApproval: Automatic
-  name: cluster-management-backplane
-  source: backplane-operator-catalog
-  sourceNamespace: backplane-operator-system
+  name: multicluster-engine
+  source: multiclusterengine-catalog
+  sourceNamespace: multicluster-engine

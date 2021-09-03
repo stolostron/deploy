@@ -1,4 +1,4 @@
-namespace: backplane-operator-system
+namespace: multicluster-engine
 
 resources:
 - catalogsource.yaml
