@@ -16,6 +16,13 @@ You must meet the following requirements to install the _MultiCluster Engine_:
 
 To install the MultiCluster Engine, call the helper script which will supervise the installation of multicluster components. This script requires a SNAPSHOT tag as input.
 
+0. Follow these presteps if deploying MultiCluster Engine downstream builds:
+    1. Follow steps [here](../README.md#deploying-downstream-builds-snapshots-for-product-quality-engineering) to set up ImageContentSourcePolicy and configure the global pull secret.
+    2. Set the following environment variable -
+    ```bash
+    export DOWNSTREAM=true
+    ```
+
 1. Run the `./multiclusterengine/start.sh` script in the root directory of this repository
 ```
 $ ./multiclusterengine/start.sh
@@ -23,6 +30,7 @@ $ ./multiclusterengine/start.sh
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
     - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/cmb-custom-registry?tab=tags
+    - DOWNSTREAM snapshot tags - https://quay.io/repository/acm-d/backplane-custom-registry?tag=latest&tab=tags
 
 After the tag has been provided, the installation will continue. Currently the installation deploys and manages its components in the `multicluster-engine` namespace which it creates.
 
