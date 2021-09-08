@@ -3,9 +3,18 @@
 
 set -e
 
+DOWNSTREAM=${DOWNSTREAM:-"false"}
+_REGISTRY="quay.io/open-cluster-management"
 _IMAGE_NAME="cmb-custom-registry"
-_WEB_REPO="https://quay.io/repository/open-cluster-management/${_IMAGE_NAME}?tab=tags"
-_REPO="quay.io/open-cluster-management/${_IMAGE_NAME}"
+
+if [ $DOWNSTREAM == "true" ]; then
+    _REGISTRY="quay.io/acm-d"
+    _IMAGE_NAME="backplane-custom-registry"
+fi
+
+_REPO="${_REGISTRY}/${_IMAGE_NAME}"
+_WEB_REPO="https://${_REPO}?tab=tags"
+
 
 # This is needed for the deploy
 echo "* Testing connection"
