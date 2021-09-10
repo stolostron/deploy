@@ -9,7 +9,7 @@ _IMAGE_NAME="cmb-custom-registry"
 
 if [ $DOWNSTREAM == "true" ]; then
     _REGISTRY="quay.io/acm-d"
-    _IMAGE_NAME="backplane-custom-registry"
+    _IMAGE_NAME="mce-custom-registry"
 fi
 
 _REPO="${_REGISTRY}/${_IMAGE_NAME}"
