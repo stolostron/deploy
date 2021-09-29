@@ -129,6 +129,8 @@ EOF
 
 fi
 
+if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
+
 DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
     DEFAULT_SNAPSHOT=`cat ./snapshot.ver`
@@ -283,8 +285,13 @@ if [[ "$MODE" == "Manual" ]]; then
 fi
 
 waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}"
-printf "\n* Beginning deploy...\n"
 
+
+fi
+
+if [[ -z $SKIP_MCH_INSTALL ]]; then
+
+printf "\n* Beginning deploy...\n"
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
@@ -398,3 +405,4 @@ else
   echo "Deploying, for 2.1+ releases monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods."
 fi
 
+fi
