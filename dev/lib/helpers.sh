@@ -31,31 +31,35 @@ function waitForPod() {
     MINUTE=0
     podName=$1
     ignore=$2
-    running="\([0-9]\+\)\/\1"
-    printf "${BLUE}Waiting for ${podName} to reach running state (4min).\n${CLEAR}"
+    running="$3"
+    printf "\n#####\nWait for ${TARGET_NAMESPACE}/${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
-            printf "${YELLOW}Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again.${CLEAR}\n"
-            printf "${YELLOW}List of current pods:${CLEAR}\n"
-            printf "${YELLOW}"
+            echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
+            echo "List of current pods:"
             oc -n ${TARGET_NAMESPACE} get pods
-            printf "${CLEAR}"
-            printf "${BLUE}You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods.${CLEAR}\n"
+            echo
+            echo "You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods"
             exit 1
         fi
-        if [ "$ignore" == "" ]; then
+
+        if [[ "$ignore" == "" ]]; then
             operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName}`
         else
             operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
         fi
-        if [[ $(echo $operatorPod | grep "${running}") ]]; then
-            printf "${BLUE}* ${podName} is running${CLEAR}\n"
+
+        if [[ "$operatorPod" =~ "${running}     Running" ]]; then
+            echo "* ${podName} is running"
             break
-        elif [ "$operatorPod" == "" ]; then
+        elif [[ "$operatorPod" =~ "ImagePullBackOff" ]]; then
+            echo "ERROR: ${TARGET_NAMESPACE}/${podName} has ImagePullBackOff"
+            exit 1
+        elif [[ "$operatorPod" == "" ]]; then
             operatorPod="Waiting"
         fi
-        printf "${BLUE}* STATUS: $operatorPod${CLEAR}\n"
+        echo "* STATUS: $operatorPod"
         sleep 3
         (( MINUTE = MINUTE + 3 ))
     done
