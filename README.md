@@ -96,35 +96,40 @@ Either way you choose to go, you are going to need a `pull-secret` in order to g
 
 We've added a very simple `start.sh` script to make your life easier.
 
-First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you), `deploy` will install to the cluster pointed to by the current KUBECONFIG!
+First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you).
+`deploy` installs ACM to the cluster configured in your `KUBECONFIG` env variable.
 
 _Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releases.
 
 ### Running start.sh
 
-1. Run the `start.sh` script. You have the following options (use one at a time) when you run the command:
-
-```
--t modify the YAML but exit before apply the resources
---silent, skip all prompting, uses the previous configuration
---watch, will monitor the main Red Hat ACM pod deployments for up to 10min
---search, will activate search as part of the deployment.
-
-$ ./start.sh --watch --search
-```
+1. Run the `start.sh` script. You have the following options when you run the command:
+    ```
+    -t modify the YAML but exit before apply the resources
+    --silent, skip all prompting, uses the previous configuration
+    --watch, will monitor the main Red Hat ACM pod deployments for up to 10min
+    --search, will activate search as part of the deployment.
+    
+    $ ./start.sh --watch --search
+    ```
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
     - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
     - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-custom-registry?tab=tags
+    
+    For example, your SNAPSHOT tag might resemble the following information:
+    ```bash
+    2.0.5-SNAPSHOT-2020-10-26-21-38-29
+    ```
+    NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
 
-  For example, your SNAPSHOT tag might resemble the following information:
-  ```bash
-2.0.5-SNAPSHOT-2020-10-26-21-38-29
-  ```
-  NOTE: To change the default SNAPSHOT tag, edit `snapshot.ver`, which contains a single line that specifies the SNAPSHOT tag.  This method of updating the default SNAPSHOT tag is useful when using the `--silent` option.
-2. Depending on your script Option choice, `open-cluster-management` will be deployed or deploying. For 2.0 releases of open-cluster-management and below, use 'watch oc -n open-cluster-management get pods' to view the progress.  For 2.1+ releases of open-cluster-management, you can monitor the status fields of the multiclusterhub object created in the `open-cluster-management` namespace (namespace will differ if TARGET_NAMESPACE is set).
+3. Depending on your script option choice, `open-cluster-management` will be deployed or deploying.
 
-3. The script provides you with the `Open Cluster Management` URL.
+    For version 2.1+, you can monitor the status fields of the multiclusterhub object created in the `open-cluster-management` namespace (namespace will differ if TARGET_NAMESPACE is set).
+
+    For version 2.0 and below, use `watch oc -n open-cluster-management get pods` to view the progress.
+
+4. The script provides you with the `Open Cluster Management` URL.
 
 Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
 
@@ -132,23 +137,24 @@ Note: This script can be run multiple times and will attempt to continue where i
 ## Deploying Downstream Builds SNAPSHOTS for Product Quality Engineering
 
 To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE_BUNDLE=true` and ensure that your OCP cluster meets two conditions:
-1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).  To apply the ImageContentSourcePolicy, run `oc apply -f icsp.yaml` with `icsp.yaml` containing the following:
 
-**2.0+**
-```
-apiVersion: operator.openshift.io/v1alpha1
-kind: ImageContentSourcePolicy
-metadata:
-  name: rhacm-repo
-spec:
-  repositoryDigestMirrors:
-  - mirrors:
-    - quay.io:443/acm-d
-    source: registry.redhat.io/rhacm2
-  - mirrors:
-    - registry.redhat.io/openshift4/ose-oauth-proxy
-    source: registry.access.redhat.com/openshift4/ose-oauth-proxy
-```
+1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).  To apply the ImageContentSourcePolicy, run `oc apply -f icsp.yaml` with `icsp.yaml` containing the following:
+    
+    **2.0+**
+    ```
+    apiVersion: operator.openshift.io/v1alpha1
+    kind: ImageContentSourcePolicy
+    metadata:
+      name: rhacm-repo
+    spec:
+      repositoryDigestMirrors:
+      - mirrors:
+        - quay.io:443/acm-d
+        source: registry.redhat.io/rhacm2
+      - mirrors:
+        - registry.redhat.io/openshift4/ose-oauth-proxy
+        source: registry.access.redhat.com/openshift4/ose-oauth-proxy
+    ```
 
 2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).  You have to edit the pull secret to include the section detailed below via the oc cli: `oc edit secret/pull-secret -n openshift-config`, OpenShift console, or [bootstrap repo](https://github.com/open-cluster-management/bootstrap#how-to-use) at cluster create time:
     <pre>
@@ -356,35 +362,35 @@ Repeat the commands above, but change `"value":"true"` to `"value":"false"`
 You can test the upgrade process with `downstream` builds only, using this repo. To test upgrade follow the instructions below:
 
 1. Export environment variables needed for `downstream` deployment:  
-```
+   ```
    export CUSTOM_REGISTRY_REPO=quay.io/acm-d
    export DOWNSTREAM=true
    export COMPOSITE_BUNDLE=true
-```  
+   ```
 2. Apply ImageContentSourcePolicy to redirect `registry.redhat.io/rhacm2` to `quay.io:443/acm-d`
-```
+   ```
    oc apply -k addons/downstream
-```  
+   ```
 3. In order to perform an `upgrade` you need to install a previously GA'd version of ACM. To do that you will need to set the following variables:
-```
+   ```
    export MODE=Manual     # MODE is set to Manual so that we can specify a previous version to install
    export STARTING_VERSION=2.x.x  # Where 2.x.x is a previously GA'd version of ACM i.e. `STARTING_VERSION=2.0.4`
-```
+   ```
 4. Run the `start.sh` script  
-```
+   ```
    ./start.sh --watch
-```
+   ```
 
 Once the installation is complete you can then attempt to upgrade the ACM instance by running the `upgrade.sh` script. You will need to set additional variables in your environment to tell the upgrade script what you want it to do:
 1. Export environment variables needed by the `upgrade.sh` script
-```
+   ```
    export NEXT_VERSION=2.x.x      # Where 2.x.x is some value greater than the version you previously defined in the STARTING_VERSION=2.x.x
    export NEXT_SNAPSHOT=2.X.X-DOWNSTREAM-YYYY-MM-DD-HH-MM-SS      #This variable will specify the registry pod and wait for completion
-```
+   ```
 2. Now run the upgrade process:
-```
+   ```
    ./upgrade.sh
-```
+   ```
 
 # MultiCluster Engine
 
