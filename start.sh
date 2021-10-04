@@ -233,10 +233,10 @@ if [[ " $@ " =~ " -t " ]]; then
 fi
 
 printf "\n##### Creating the $TARGET_NAMESPACE namespace\n"
-kubectl create ns $TARGET_NAMESPACE
+kubectl create ns "$TARGET_NAMESPACE"
 
 seconds=0
-while [ -z $(kubectl get sa -n $TARGET_NAMESPACE -o name default) ]; do
+while [ -z $(kubectl get sa -n "$TARGET_NAMESPACE" -o name default) ]; do
     echo "--- waiting for namespace: $TARGET_NAMESPACE to create with default service account ---"
     sleep 10
     (( seconds=seconds+10 ))
@@ -248,11 +248,11 @@ done;
 
 if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
     printf "\n##### Applying community operator subscriptions\n"
-    oc apply -k community-subscriptions/ -n ${TARGET_NAMESPACE}
+    oc apply -k community-subscriptions/ -n "${TARGET_NAMESPACE}"
 fi
 
 printf "\n##### Applying prerequisites\n"
-kubectl apply --openapi-patch=true -k prereqs/ -n ${TARGET_NAMESPACE}
+kubectl apply --openapi-patch=true -k prereqs/ -n "${TARGET_NAMESPACE}"
 
 printf "\n##### Allow secrets time to propagate #####\n"
 sleep 60
@@ -261,16 +261,16 @@ printf "\n##### Applying $OPERATOR_DIRECTORY subscription #####\n"
 if [[ "${TARGET_NAMESPACE}" != "open-cluster-management" ]]; then
     TMP_OP_DIR="operator_tmp"
     printf "* Creating temporary directory ${TMP_OP_DIR}/ to customize namespace\n"
-    mkdir ${TMP_OP_DIR}/
-    cp ${OPERATOR_DIRECTORY}/*.yaml ${TMP_OP_DIR}/
-    ${SED} -i "s/\.open-cluster-management\./.${TARGET_NAMESPACE}./" ${TMP_OP_DIR}/catalog-source.yaml
-    ${SED} -i "s/^  - open-cluster-management$/  - ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/operator-group.yaml
-    ${SED} -i "s/^  sourceNamespace: open-cluster-management$/  sourceNamespace: ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/subscription.yaml
-    kubectl apply -k $TMP_OP_DIR/ -n ${TARGET_NAMESPACE}
+    mkdir "${TMP_OP_DIR}/"
+    cp "${OPERATOR_DIRECTORY}"/*.yaml "${TMP_OP_DIR}/"
+    ${SED} -i "s/\.open-cluster-management\./.${TARGET_NAMESPACE}./" "${TMP_OP_DIR}/catalog-source.yaml"
+    ${SED} -i "s/^  - open-cluster-management$/  - ${TARGET_NAMESPACE}/" "${TMP_OP_DIR}/operator-group.yaml"
+    ${SED} -i "s/^  sourceNamespace: open-cluster-management$/  sourceNamespace: ${TARGET_NAMESPACE}/" "${TMP_OP_DIR}/subscription.yaml"
+    kubectl apply -k "$TMP_OP_DIR/" -n "${TARGET_NAMESPACE}"
     printf "* Removing temporary directory ${TMP_OP_DIR}/\n"
     rm -rf ${TMP_OP_DIR}/
 else
-    kubectl apply -k $OPERATOR_DIRECTORY/ -n ${TARGET_NAMESPACE}
+    kubectl apply -k "$OPERATOR_DIRECTORY/" -n "${TARGET_NAMESPACE}"
 fi
 
 if [[ "$MODE" == "Manual" ]]; then
