@@ -152,6 +152,9 @@ To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE
         - quay.io:443/acm-d
         source: registry.redhat.io/rhacm2
       - mirrors:
+        - quay.io:443/acm-d
+        source: registry.redhat.io/multicluster-engine
+      - mirrors:
         - registry.redhat.io/openshift4/ose-oauth-proxy
         source: registry.access.redhat.com/openshift4/ose-oauth-proxy
     ```
