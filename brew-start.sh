@@ -7,8 +7,7 @@
 
 
 #-----BOOTSTRAP HELPERS-----#
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$DIR/lib/helpers.sh"
+source helpers.sh
 
 
 #-----PREPARATION & VARS-----#
@@ -155,7 +154,7 @@ printf "${CLEAR}"
 
 #-----WAIIT FOR OPERATOR TO BECOME AVAILABLE-----#
 #### Use our helper to wait for the operator
-waitForPod "multiclusterhub-operator" "${SUBSCRIPTION_NAME}" "\([0-9]\+\)\/\1"
+waitForPod "multiclusterhub-operator" "${SUBSCRIPTION_NAME}"
 
 
 #-----CREATE A MULTICLUSTERHUB-----#
@@ -176,7 +175,7 @@ printf "${CLEAR}"
 
 #-----WAIT FOR THE MCH INSTALL TO COMPLETE-----#
 #### Use our helper to wait for the multicluster-operators-application to become ready
-waitForPod "multicluster-operators-application" "" "\([0-9]\+\)\/\1"
+waitForPod "multicluster-operators-application" ""
 
 #### Poll for the MCH status to become ready
 printf "${BLUE}Polling MCH status.${CLEAR}\n"

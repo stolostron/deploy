@@ -7,12 +7,43 @@
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$DIR/lib/helpers.sh"
-
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
 TOTAL_POD_COUNT_2X=55
+
+function waitForPod() {
+    FOUND=1
+    MINUTE=0
+    podName=$1
+    ignore=$2
+    running="$3"
+    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
+    while [ ${FOUND} -eq 1 ]; do
+        # Wait up to 4min, should only take about 20-30s
+        if [ $MINUTE -gt 240 ]; then
+            echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
+            echo "List of current pods:"
+            oc -n ${TARGET_NAMESPACE} get pods
+            echo
+            echo "You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods"
+            exit 1
+        fi
+        if [ "$ignore" == "" ]; then
+            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName}`
+        else
+            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
+        fi
+        if [[ "$operatorPod" =~ "${running}     Running" ]]; then
+            echo "* ${podName} is running"
+            break
+        elif [ "$operatorPod" == "" ]; then
+            operatorPod="Waiting"
+        fi
+        echo "* STATUS: $operatorPod"
+        sleep 3
+        (( MINUTE = MINUTE + 3 ))
+    done
+}
 
 # fix sed issue on mac
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
