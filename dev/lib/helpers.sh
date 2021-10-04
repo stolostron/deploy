@@ -27,32 +27,38 @@ function waitForPod() {
     # Arguments:
     #       podname ($1) - the name of the pod to poll for
     #       ignore  ($2) - pod names to ignore (grep string)
+    #       running ($3) - regex to check if all pod replicas are ready
     FOUND=1
     MINUTE=0
     podName=$1
     ignore=$2
-    running="\([0-9]\+\)\/\1"
-    printf "${BLUE}Waiting for ${podName} to reach running state (4min).\n${CLEAR}"
+    running="$3"
+    printf "${BLUE}Waiting for ${TARGET_NAMESPACE}/${podName} to reach running state (4min).\n${CLEAR}"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
             printf "${YELLOW}Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again.${CLEAR}\n"
             printf "${YELLOW}List of current pods:${CLEAR}\n"
             printf "${YELLOW}"
-            oc -n ${TARGET_NAMESPACE} get pods
+            oc -n "${TARGET_NAMESPACE}" get pods
             printf "${CLEAR}"
             printf "${BLUE}You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods.${CLEAR}\n"
             exit 1
         fi
-        if [ "$ignore" == "" ]; then
-            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName}`
+
+        if [[ "$ignore" == "" ]]; then
+            operatorPod=$(oc -n "${TARGET_NAMESPACE}" get pods | grep "${podName}")
         else
-            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
+            operatorPod=$(oc -n "${TARGET_NAMESPACE}" get pods | grep "${podName}" | grep -v "${ignore}")
         fi
-        if [[ $(echo $operatorPod | grep "${running}") ]]; then
+
+        if [[ "$operatorPod" =~ "${running}     Running" ]]; then
             printf "${BLUE}* ${podName} is running${CLEAR}\n"
             break
-        elif [ "$operatorPod" == "" ]; then
+        elif [[ "$operatorPod" =~ "ImagePullBackOff" ]]; then
+            echo "ERROR: ${TARGET_NAMESPACE}/${podName} has ImagePullBackOff"
+            exit 1
+        elif [[ "$operatorPod" == "" ]]; then
             operatorPod="Waiting"
         fi
         printf "${BLUE}* STATUS: $operatorPod${CLEAR}\n"
