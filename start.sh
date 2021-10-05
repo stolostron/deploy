@@ -395,6 +395,6 @@ if [ "${OS}" == "darwin" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
     fi
 else
-  echo "Deploying, for 2.1+ releases monitor monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods."
+  echo "Deploying, for 2.1+ releases monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods."
 fi
 

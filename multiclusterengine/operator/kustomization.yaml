@@ -1,0 +1,6 @@
+namespace: multicluster-engine
+
+resources:
+- catalogsource.yaml
+- operatorgroup.yaml
+- subscription.yaml
