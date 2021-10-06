@@ -219,20 +219,6 @@ else
     echo "* Invalid MODE... Must be one of Automatic|Manual but found ${MODE}."
     exit -1
 fi
-echo "* Applying multicluster-hub-cr values"
-${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
-cp -r multiclusterhub applied-mch
-if [[ "$DOWNSTREAM" != "true" ]]; then
-    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
-else
-    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
-fi
-
-if [[ " $@ " =~ " -t " ]]; then
-    echo "* Test mode, see yaml files for updates"
-    exit 0
-fi
 
 printf "\n##### Creating the $TARGET_NAMESPACE namespace\n"
 kubectl create ns $TARGET_NAMESPACE
@@ -292,6 +278,21 @@ fi
 if [[ -z $SKIP_MCH_INSTALL ]]; then
 
 printf "\n* Beginning deploy...\n"
+
+echo "* Applying multicluster-hub-cr values"
+${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
+cp -r multiclusterhub applied-mch
+if [[ "$DOWNSTREAM" != "true" ]]; then
+    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
+else
+    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
+fi
+
+if [[ " $@ " =~ " -t " ]]; then
+    echo "* Test mode, see yaml files for updates"
+    exit 0
+fi
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
