@@ -142,6 +142,7 @@ To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE
     
     **2.0+**
     ```
+    echo "
     apiVersion: operator.openshift.io/v1alpha1
     kind: ImageContentSourcePolicy
     metadata:
@@ -153,7 +154,7 @@ To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE
         source: registry.redhat.io/rhacm2
       - mirrors:
         - registry.redhat.io/openshift4/ose-oauth-proxy
-        source: registry.access.redhat.com/openshift4/ose-oauth-proxy
+        source: registry.access.redhat.com/openshift4/ose-oauth-proxy" | kubectl apply -f -
     ```
 
 2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).  You have to edit the pull secret to include the section detailed below via the oc cli: `oc edit secret/pull-secret -n openshift-config`, OpenShift console, or [bootstrap repo](https://github.com/open-cluster-management/bootstrap#how-to-use) at cluster create time:
