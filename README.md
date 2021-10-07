@@ -65,7 +65,7 @@ There are __helper__ scripts in the root of this repo:
 You have multiple choices of installation:
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will assist you through the process.
   - [the hard way](#the-hard-way) - instructions to deploy _open-cluster-management_ with only `oc` commands.
-  - [downstream images](https://github.com/SimonBaeumer/deploy/tree/add-quotes#deploying-downstream-builds-snapshots-for-product-quality-engineering-only-20) - instructions to deploy downstream images, i.e. for QE
+  - [downstream images v2.0+](https://github.com/SimonBaeumer/deploy/tree/add-quotes#deploying-downstream-builds-snapshots-for-product-quality-engineering-only-20) - instructions to deploy downstream images, i.e. for QE
 
 Either way you choose to go, you are going to need a `pull-secret` in order to gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
 
@@ -161,7 +161,7 @@ To deploy a downstream build from `quay.io/acm-d` ensure that your OCP cluster m
     ```
 
 2. Add the pull-secrets for the `quay.io:443` registry with access to the `quay.io/acm-d` repository in your OpenShift 
-   main pull-secrets. (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).
+   main pull-secret. (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).
 
    ```
    # Replace <USER> and <PASSWORD> with your credentials
