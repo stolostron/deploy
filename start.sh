@@ -129,7 +129,6 @@ EOF
 
 fi
 
-if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
 DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
@@ -154,6 +153,18 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     exit 2
 fi
 SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
+
+# Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
+if [[ $DEFAULT_SNAPSHOT == 1.0* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+elif [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[0-9]+\.[0-9]+.* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
+else
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+    echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
+fi
+
+if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
@@ -181,16 +192,6 @@ echo "* Composite Bundle: $COMPOSITE_BUNDLE   Image Registry (CUSTOM_REGISTRY_RE
 if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     echo "ERROR: invalid SNAPSHOT format... snapshot must begin with 'X.0.0-' not '$SNAPSHOT_PREFIX', if DOWNSTREAM isn't set"
     exit 1
-fi
-
-# Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
-if [[ $DEFAULT_SNAPSHOT == 1.0* ]]; then
-    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
-elif [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[0-9]+\.[0-9]+.* ]]; then
-    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
-else
-    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
-    echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
 fi
 
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
