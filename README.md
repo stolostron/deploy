@@ -225,6 +225,77 @@ Use the following command to enable search
 oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
 ```
 
+## Deploy managed cluster
+
+Run on the hub cluster:
+
+```
+# Create a namespace managed cluster namespace on the hub cluster
+export CLUSTER_NAME=managed-cluster1
+oc new-project "${CLUSTER_NAME}"
+oc label namespace "${CLUSTER_NAME}" cluster.open-cluster-management.io/managedCluster="${CLUSTER_NAME}"
+
+# Create the managed cluster
+echo "
+    apiVersion: cluster.open-cluster-management.io/v1
+    kind: ManagedCluster
+    metadata:
+      name: ${CLUSTER_NAME}
+    spec:
+      hubAcceptsClient: true" | kubectl apply -f -
+
+# Create the KlusterletAddonConfig
+echo "
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: ${CLUSTER_NAME}
+  namespace: ${CLUSTER_NAME}
+spec:
+  clusterName: ${CLUSTER_NAME}
+  clusterNamespace: ${CLUSTER_NAME}
+  applicationManager:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  clusterLabels:
+    cloud: auto-detect
+    vendor: auto-detect
+  iamPolicyController:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  version: 2.2.0" | kubectl apply -f -
+
+oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.crds\\.yaml} | base64 --decode > klusterlet-crd.yaml
+oc get secret "${CLUSTER_NAME}"-import -n $"{CLUSTER_NAME}" -o jsonpath={.data.import\\.yaml} | base64 --decode > import.yaml
+
+```
+
+Next apply the saved YAML manifests to you managed cluster:
+
+```
+# Change kubconfig to the managed cluster
+
+# Apply klusterlet-crd
+kubectl apply -f klusterlet-crd.yaml
+
+# Apply the import.yaml
+kubectl apply -f import.yaml
+
+# Validate the pod status on the managed cluster
+kubectl get pod -n open-cluster-management-agent
+```
+
+Validate the imported cluster's status in the **hub cluster**:
+
+```
+kubectl get managedcluster ${CLUSTER_NAME}
+kubectl get pod -n open-cluster-management-agent-addon
+```
+
 ## To Delete a MultiClusterHub Instance (the easy way)
 
 1. Run the `uninstall.sh` script in the root of this repo.
