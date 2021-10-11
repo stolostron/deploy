@@ -129,6 +129,7 @@ EOF
 
 fi
 
+
 DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
     DEFAULT_SNAPSHOT=`cat ./snapshot.ver`
@@ -152,6 +153,18 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
     exit 2
 fi
 SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
+
+# Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
+if [[ $DEFAULT_SNAPSHOT == 1.0* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+elif [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[0-9]+\.[0-9]+.* ]]; then
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
+else
+    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
+    echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
+fi
+
+if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
@@ -181,16 +194,6 @@ if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
     exit 1
 fi
 
-# Change our expected pod count based on what version snapshot we detect, defaulting to 1.0 (smallest number of pods as of writing)
-if [[ $DEFAULT_SNAPSHOT == 1.0* ]]; then
-    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
-elif [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[0-9]+\.[0-9]+.* ]]; then
-    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_2X}
-else
-    TOTAL_POD_COUNT=${TOTAL_POD_COUNT_1X}
-    echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
-fi
-
 printf "* Using: ${DEFAULT_SNAPSHOT}\n\n"
 
 echo "* Applying SNAPSHOT to multiclusterhub-operator subscription"
@@ -216,20 +219,6 @@ elif [[ "$MODE" == "Manual" ]]; then
 else
     echo "* Invalid MODE... Must be one of Automatic|Manual but found ${MODE}."
     exit -1
-fi
-echo "* Applying multicluster-hub-cr values"
-${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
-cp -r multiclusterhub applied-mch
-if [[ "$DOWNSTREAM" != "true" ]]; then
-    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
-else
-    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
-fi
-
-if [[ " $@ " =~ " -t " ]]; then
-    echo "* Test mode, see yaml files for updates"
-    exit 0
 fi
 
 printf "\n##### Creating the $TARGET_NAMESPACE namespace\n"
@@ -283,8 +272,28 @@ if [[ "$MODE" == "Manual" ]]; then
 fi
 
 waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}"
+
+
+fi
+
+if [[ -z $SKIP_MCH_INSTALL ]]; then
+
 printf "\n* Beginning deploy...\n"
 
+echo "* Applying multicluster-hub-cr values"
+${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
+cp -r multiclusterhub applied-mch
+if [[ "$DOWNSTREAM" != "true" ]]; then
+    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
+else
+    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
+fi
+
+if [[ " $@ " =~ " -t " ]]; then
+    echo "* Test mode, see yaml files for updates"
+    exit 0
+fi
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
@@ -398,3 +407,4 @@ else
   echo "Deploying, for 2.1+ releases monitor the status of the multiclusterhub created in the ${TARGET_NAMESPACE} namespace, for 2.0 releases use \"watch oc -n ${TARGET_NAMESPACE} get pods\" to monitor progress. Expect around ${TOTAL_POD_COUNT} pods."
 fi
 
+fi
