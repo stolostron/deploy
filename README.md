@@ -225,7 +225,7 @@ Use the following command to enable search
 oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
 ```
 
-## Deploy managed cluster
+### Deploy a managed cluster with downstream images
 
 Run on the **hub cluster**:
 
