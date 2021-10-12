@@ -164,6 +164,16 @@ else
     echo "Snapshot doesn't contain a version number we recognize, looking for the 1.X release pod count of ${TOTAL_POD_COUNT} if wait is selected."
 fi
 
+echo "* Applying multicluster-hub-cr values"
+${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
+if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
+cp -r multiclusterhub applied-mch
+if [[ "$DOWNSTREAM" != "true" ]]; then
+    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
+else
+    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
+fi
+
 if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
@@ -284,16 +294,6 @@ fi
 if [[ -z $SKIP_MCH_INSTALL ]]; then
 
 printf "\n* Beginning deploy...\n"
-
-echo "* Applying multicluster-hub-cr values"
-${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example-multiclusterhub-cr.yaml
-if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
-cp -r multiclusterhub applied-mch
-if [[ "$DOWNSTREAM" != "true" ]]; then
-    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
-else
-    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
-fi
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
