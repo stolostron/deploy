@@ -273,16 +273,23 @@ oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.c
 oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.import\\.yaml} | base64 --decode > import.yaml
 ```
 
-Next apply the saved YAML manifests to you managed cluster:
+Next apply the saved YAML manifests to your managed cluster:
 
 ```
 # Change kubconfig to the managed cluster
 
+# Add quay credentials to the managed cluster too
+# Replace <USER> and <PASSWORD> with your credentials
+oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' >pull_secret.yaml
+oc registry login --registry="quay.io:443" --auth-basic="<USER>:<PASSWORD>" --to=pull_secret.yaml
+oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=pull_secret.yaml
+rm pull_secret.yaml
+
 # Apply klusterlet-crd
 kubectl apply -f klusterlet-crd.yaml
 
-# replace registries in import.yaml 
-# registry.redhat.io/rhacm2 -> quay.io:443/acm-d
+# replace the registry in import.yaml "registry.redhat.io/rhacm2" to "quay.io:443/acm-d"
+sed 's/registry.redhat.io\/rhacm2/quay.io:443\/acm-d/g' import.yaml > import.yaml
 
 # Apply the import.yaml
 kubectl apply -f import.yaml
@@ -322,7 +329,7 @@ spec:
           restartPolicy: OnFailure" | kubectl apply -f -
 ```
 
-On to the managed cluster check the hello pod is running:
+On the managed cluster validate that the hello pod is running:
 
 ```
 $ kubectl get pods -n default
