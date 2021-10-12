@@ -221,6 +221,11 @@ else
     exit -1
 fi
 
+if [[ " $@ " =~ " -t " ]]; then
+    echo "* Test mode, see yaml files for updates"
+    exit 0
+fi
+
 printf "\n##### Creating the $TARGET_NAMESPACE namespace\n"
 kubectl create ns $TARGET_NAMESPACE
 
@@ -288,11 +293,6 @@ if [[ "$DOWNSTREAM" != "true" ]]; then
     ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
 else
     ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
-fi
-
-if [[ " $@ " =~ " -t " ]]; then
-    echo "* Test mode, see yaml files for updates"
-    exit 0
 fi
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
