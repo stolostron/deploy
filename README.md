@@ -62,9 +62,10 @@ There are __helper__ scripts in the root of this repo:
   - `start.sh` - takes the edge off having to manually edit YAML files
   - `uninstall.sh` - we're not perfect yet; includes additional scripting to ensure we clean up our mess on your OCP cluster.
 
-You have two choices of installation:
+You have multiple choices of installation:
   - [the easy way](#deploy-using-the-startsh-script-the-easy-way) - using the provided `start.sh` script which will assist you through the process.
   - [the hard way](#the-hard-way) - instructions to deploy _open-cluster-management_ with only `oc` commands.
+  - [downstream images v2.0+](#deploying-downstream-builds-snapshots-for-product-quality-engineering-only-20) - instructions to deploy downstream images, i.e. for QE
 
 Either way you choose to go, you are going to need a `pull-secret` in order to gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
 
@@ -95,7 +96,7 @@ Either way you choose to go, you are going to need a `pull-secret` in order to g
 
 ## Deploy using the ./start.sh script (the easy way)
 
-We've added a very simple `start.sh` script to make your life easier.
+We've added a very simple `start.sh` script to make your life easier. To deploy downstream images please refer to "Deploying downstream builds" section below. 
 
 First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you).
 `deploy` installs ACM to the cluster configured in your `KUBECONFIG` env variable.
@@ -135,14 +136,17 @@ _Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releas
 Note: This script can be run multiple times and will attempt to continue where it left off. It is also good practice to run the `uninstall.sh` script if you have a failure and have installed multiple times.
 
 
-## Deploying Downstream Builds SNAPSHOTS for Product Quality Engineering
+## Deploying Downstream Builds SNAPSHOTS for Product Quality Engineering (only 2.0+)
 
-To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE_BUNDLE=true` and ensure that your OCP cluster meets two conditions:
+### Requirements
 
-1. The cluster must have an ImageContentSourcePolicy as follows (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).  To apply the ImageContentSourcePolicy, run `oc apply -f icsp.yaml` with `icsp.yaml` containing the following:
-    
-    **2.0+**
+To deploy a downstream build from `quay.io/acm-d` ensure that your OCP cluster meets the following requirements:
+
+1. The cluster must have an ImageContentSourcePolicy (**Caution**: if you modify this on a running cluster, it will cause a rolling restart of all nodes).
+    To create the ImageContentSourcePolicy run:
+
     ```
+    echo "
     apiVersion: operator.openshift.io/v1alpha1
     kind: ImageContentSourcePolicy
     metadata:
@@ -157,39 +161,29 @@ To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE
         source: registry.redhat.io/multicluster-engine
       - mirrors:
         - registry.redhat.io/openshift4/ose-oauth-proxy
-        source: registry.access.redhat.com/openshift4/ose-oauth-proxy
+        source: registry.access.redhat.com/openshift4/ose-oauth-proxy" | kubectl apply -f -
     ```
 
-2. Ensure that the main pull secret for your OpenShift cluster has pull access to `quay.io/acm-d` in an entry for `quay.io:443`.  Your main pull secret should look something like this (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).  You have to edit the pull secret to include the section detailed below via the oc cli: `oc edit secret/pull-secret -n openshift-config`, OpenShift console, or [bootstrap repo](https://github.com/open-cluster-management/bootstrap#how-to-use) at cluster create time:
-    <pre>
-    {
-      "auths": {
-        <b>"quay.io": {
-          "auth": "ENCODED SECRET",
-          "email": ""
-        }</b>
-      }
-    }
-    </pre>
-    Your final `OPENSHIFT_INSTALL_PULL_SECRET` should look like (bolded part is what you should add, also pretty printed):
+2. Add the pull-secrets for the `quay.io:443` registry with access to the `quay.io/acm-d` repository in your OpenShift 
+   main pull-secret. (**Caution**: if you apply this on a pre-existing cluster, it will cause a rolling restart of all nodes).
+
+   ```
+   # Replace <USER> and <PASSWORD> with your credentials
+   oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' >pull_secret.yaml
+   oc registry login --registry="quay.io:443" --auth-basic="<USER>:<PASSWORD>" --to=pull_secret.yaml
+   oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=pull_secret.yaml
+   rm pull_secret.yaml
+   ```
+
+   You can also set the pull secrets in the OpenShift console or using the [bootstrap repo](https://github.com/open-cluster-management/bootstrap#how-to-use) at cluster create time.
+
+    Your OpenShift main pull secret should contain an entry with `quay.io:443`.
     <pre>
     {
       "auths": {
         "cloud.openshift.com": {
           "auth": "ENCODED SECRET",
           "email": "email@address.com"
-        },
-        "quay.io": {
-          "auth": "ENCODED SECRET",
-          "email": "email@address.com"
-        },
-        "registry.connect.redhat.com": {
-          "auth": "ENCODED SECRET",
-          "email": "email@address.com"
-        },
-        "registry.redhat.io": {
-          "auth": "ENCODED SECRET",
-          "email": ""
         },
         <b>"quay.io:443": {
           "auth": "ENCODED SECRET",
@@ -199,8 +193,21 @@ To deploy a downstream build from `quay.io/acm-d`, you need to `export COMPOSITE
     }
     </pre>
 
+3. Set the `QUAY_TOKEN` environment variable
+    
+    In order to get a `QUAY_TOKEN`, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  
+    Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.
+    
+    If you copy the value of `.dockerconfigjson`, you can simplify setting the `QUAY_TOKEN` as follows:
+    
+    ```bash
+    export DOCKER_CONFIG=<The value after .dockerconfigjson from the quay.io>
+    export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)
+    ```
+    
+    (On Linux, use `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64 -w 0)` to ensure that there are no line breaks in the base64 encoded token)
 
-**If you're deploying a downstream build,** then set the following:
+### Deploy the downstream image
 
 **NOTE: You should only use a downstream build if you're doing QE on the final product builds.**
 
@@ -211,18 +218,8 @@ export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>
 ./start.sh --watch
 ```
 
-In order to get this QUAY_TOKEN, go to your quay.io "Account Settings" page by selecting your username/icon in the top right corner of the page, then "Generate Encrypted Password".  Choose "Kubernetes Secret" and copy just secret text that follows `.dockerconfigjson:`, `export DOCKER_CONFIG=` this value.
-
-If you copy the value of `.dockerconfigjson`, you can simplify setting the `QUAY_TOKEN` as follows:
-
-```bash
-export DOCKER_CONFIG=<The value after .dockerconfigjson from the quay.io>
-export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64)
-```
-
-(On Linux, use `export QUAY_TOKEN=$(echo $DOCKER_CONFIG | base64 -d | sed "s/quay\.io/quay\.io:443/g" | base64 -w 0)` to ensure that there are no line breaks in the base64 encoded token)
-
 ### Enable search later
+
 Use the following command to enable search
 ```bash
 oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
