@@ -270,8 +270,7 @@ spec:
   version: 2.2.0" | kubectl apply -f -
 
 oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.crds\\.yaml} | base64 --decode > klusterlet-crd.yaml
-oc get secret "${CLUSTER_NAME}"-import -n $"{CLUSTER_NAME}" -o jsonpath={.data.import\\.yaml} | base64 --decode > import.yaml
-
+oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.import\\.yaml} | base64 --decode > import.yaml
 ```
 
 Next apply the saved YAML manifests to you managed cluster:
@@ -281,6 +280,9 @@ Next apply the saved YAML manifests to you managed cluster:
 
 # Apply klusterlet-crd
 kubectl apply -f klusterlet-crd.yaml
+
+# replace registries in import.yaml 
+# registry.redhat.io/rhacm2 -> quay.io:443/acm-d
 
 # Apply the import.yaml
 kubectl apply -f import.yaml
@@ -294,6 +296,38 @@ Validate the imported cluster's status in the **hub cluster**:
 ```
 kubectl get managedcluster ${CLUSTER_NAME}
 kubectl get pod -n open-cluster-management-agent-addon
+```
+
+Test if it works by applying creating a `ManifestWork` in the Hub Cluster:
+
+```
+echo "apiVersion: work.open-cluster-management.io/v1
+kind: ManifestWork
+metadata:
+  name: mw-01
+  namespace: ${CLUSTER_NAME}
+spec:
+  workload:
+    manifests:
+      - apiVersion: v1
+        kind: Pod
+        metadata:
+          name: hello
+          namespace: default
+        spec:
+          containers:
+            - name: hello
+              image: busybox
+              command: ["sh", "-c", 'echo "Hello, Kubernetes!" && sleep 3600']
+          restartPolicy: OnFailure" | kubectl apply -f -
+```
+
+On to the managed cluster check the hello pod is running:
+
+```
+$ kubectl get pods -n default
+NAME    READY   STATUS    RESTARTS   AGE
+hello   1/1     Running   0          3m23s
 ```
 
 ## To Delete a MultiClusterHub Instance (the easy way)
@@ -410,14 +444,17 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
 
 # Enabling Bare metal and VMware consoles
 These consoles are enabled by default
+
 # Enabling Bare metal consoles
 To work with bare metal, two flags need to be flipped activated
+
 ## console-header
 Run the following command to enable the bare metal assets on the navigation menu
 ```bash
 oc -n open-cluster-management patch deploy console-header -p '{"spec":{"template":{"spec":{"containers":[{"name":"console-header","env":
 [{"name": "featureFlags_baremetal","value":"true"}]}]}}}}'
 ```
+
 ## console-ui
 Run the following commands to enable the bare metal button on the create cluster page
 ```bash
@@ -426,6 +463,7 @@ oc -n open-cluster-management patch ${DEPLOY_NAME} -p '{"spec":{"template":{"spe
 [{"name": "featureFlags_baremetal","value":"true"}]}]}}}}'
 
 ```
+
 ## Disable Baremetal consoles
 Repeat the commands above, but change `"value":"true"` to `"value":"false"`
 
