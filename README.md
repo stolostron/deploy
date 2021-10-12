@@ -227,7 +227,7 @@ oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
 
 ## Deploy managed cluster
 
-Run on the hub cluster:
+Run on the **hub cluster**:
 
 ```
 # Create a namespace managed cluster namespace on the hub cluster
@@ -273,7 +273,7 @@ oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.c
 oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.import\\.yaml} | base64 --decode > import.yaml
 ```
 
-Next apply the saved YAML manifests to your managed cluster:
+Next apply the saved YAML manifests to your **managed cluster**:
 
 ```
 # Change kubconfig to the managed cluster
@@ -305,7 +305,7 @@ kubectl get managedcluster ${CLUSTER_NAME}
 kubectl get pod -n open-cluster-management-agent-addon
 ```
 
-Test if it works by applying creating a `ManifestWork` in the Hub Cluster:
+Test if it works by applying creating a `ManifestWork` in the **hub cluster**:
 
 ```
 echo "apiVersion: work.open-cluster-management.io/v1
@@ -329,7 +329,7 @@ spec:
           restartPolicy: OnFailure" | kubectl apply -f -
 ```
 
-On the managed cluster validate that the hello pod is running:
+On the **managed cluster** validate that the hello pod is running:
 
 ```
 $ kubectl get pods -n default
