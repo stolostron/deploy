@@ -23,4 +23,4 @@ spec:
       tolerations:
       - key: node-role.kubernetes.io/infra
         effect: NoSchedule
-        operator: Exists      
+        operator: Exists
