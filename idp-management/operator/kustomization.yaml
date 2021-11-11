@@ -1,0 +1,6 @@
+namespace: idp-mgmt-config
+
+resources:
+- catalogsource.yaml
+- operatorgroup.yaml
+- subscription.yaml

@@ -1,0 +1,12 @@
+# Copyright Contributors to the Open Cluster Management project
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: idp-mgmt-config
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: idp-mgmt-config
+  source: idp-mgmt-config-catalog
+  sourceNamespace: idp-mgmt-config
