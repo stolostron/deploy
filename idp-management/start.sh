@@ -14,6 +14,8 @@ if [ $DOWNSTREAM == "true" ]; then
   exit 1
     _REGISTRY="brew.registry.redhat.io"
     _IMAGE_NAME="rh-osbs"
+
+#brew.registry.redhat.io/rh-osbs/iib:132957
 fi
 
 _REPO="${_REGISTRY}/${_IMAGE_NAME}"
@@ -33,18 +35,17 @@ echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
-printf "Find image tags @ ${_WEB_REPO}\nEnter IMAGE TAG: \n"
+printf "Find snapshot tags @ ${_WEB_REPO}\nEnter SNAPSHOT TAG: \n"
 read -e -r SNAPSHOT_CHOICE
 
 if [[ ! -n "${SNAPSHOT_CHOICE}" ]]; then
-    echo "ERROR: Make sure you are provide a valid IMAGE TAG"
+    echo "ERROR: Make sure you are provide a valid SNAPSHOT"
     exit 1
 else
-    echo "CHOICE is set to ${SNAPSHOT_CHOICE}"
+    echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
 IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' idp-management/operator/catalogsource.yaml
-
 oc create ns idp-mgmt-config --dry-run=client -o yaml | oc apply -f -
 oc apply -k idp-management/operator/
 
