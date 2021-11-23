@@ -5,7 +5,7 @@ kind: Subscription
 metadata:
   name: multicluster-engine
 spec:
-  channel: stable-1.0
+  channel: stable-2.0
   installPlanApproval: Automatic
   name: multicluster-engine
   source: multiclusterengine-catalog
