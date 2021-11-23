@@ -30,7 +30,7 @@ $ ./multiclusterengine/start.sh
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
     - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/cmb-custom-registry?tab=tags
-    - DOWNSTREAM snapshot tags - https://quay.io/repository/acm-d/backplane-custom-registry?tag=latest&tab=tags
+    - DOWNSTREAM snapshot tags - https://quay.io/repository/acm-d/mce-custom-registry?tag=latest&tab=tags
 
 After the tag has been provided, the installation will continue. Currently the installation deploys and manages its components in the `multicluster-engine` namespace which it creates.
 
