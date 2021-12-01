@@ -51,12 +51,12 @@ oc apply -k idp-management/operator/
 
 CSVName=""
 for run in {1..10}; do
-  output=$(oc get sub idp-mgmt-config -n idp-mgmt-config -o jsonpath='{.status.currentCSV}' >> /dev/null && echo "exists" || echo "not found")
+  output=$(oc get sub idp-mgmt-operator -n idp-mgmt-config -o jsonpath='{.status.currentCSV}' >> /dev/null && echo "exists" || echo "not found")
   if [ "$output" != "exists" ]; then
     sleep 2
     continue
   fi
-  CSVName=$(oc get sub -n idp-mgmt-config idp-mgmt-config -o jsonpath='{.status.currentCSV}')
+  CSVName=$(oc get sub idp-mgmt-operator -n idp-mgmt-config -o jsonpath='{.status.currentCSV}')
   if [ "$CSVName" != "" ]; then
     break
   fi
