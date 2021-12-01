@@ -2,7 +2,7 @@
 # Copyright Contributors to the Open Cluster Management project
 
 set -e
-set -x
+
 DOWNSTREAM=${DOWNSTREAM:-"false"}
 _REGISTRY="quay.io/identitatem"
 _IMAGE_NAME="idp-mgmt-operator-catalog"
