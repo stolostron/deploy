@@ -1,0 +1,11 @@
+# Copyright Contributors to the Open Cluster Management project
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: idp-mgmt-config-catalog
+  namespace: default
+spec:
+  displayName: identity configuration management for Kubernetes catalog
+  publisher: Red Hat
+  sourceType: grpc
+  image: "quay.io/identitatem/idp-mgmt-operator-catalog:v0.1.0"
