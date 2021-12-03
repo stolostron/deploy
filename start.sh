@@ -6,6 +6,7 @@
 # ./start.sh -t, this exits after modifying the files but not apply any of the yaml
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
+# ./start.sh --search, this enables search, but turning on redis
 
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
@@ -383,6 +384,11 @@ if [[ " $@ " =~ " --watch " ]]; then
         fi
         exit 1
     else
+        if [[ " $@ " =~ " --search " ]]; then
+            oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
+            echo "Search enabled"
+        fi
+
         echo "#####"
         echo "* Red Hat ACM URL: https://$CONSOLE_URL"
         echo "#####"
@@ -391,11 +397,7 @@ if [[ " $@ " =~ " --watch " ]]; then
     exit $COMPLETE
 fi
 
-# if using --search option make sure we install redis graph
-if [[ " $@ " =~ " --search " ]]; then
-    oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
-fi
-
+echo "Search may not have been enabled"
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
