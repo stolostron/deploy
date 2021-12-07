@@ -101,7 +101,8 @@ if [ $? -ne 0 ]; then
     exit 2
 fi
 #Shorten to the basedomain
-HOST_URL=${HOST_URL/apps./}
+HOST_URL=${HOST_URL/#router-default./}
+HOST_URL=${HOST_URL/#apps./}
 echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
