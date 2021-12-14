@@ -1,0 +1,6 @@
+apiVersion: identityconfig.identitatem.io/v1alpha1
+kind: IDPConfig
+metadata:
+  name: idp-config
+  namespace: idp-mgmt-config
+spec: {}
