@@ -82,6 +82,7 @@ done
 
 if [ $_apiReady -eq 1 ]; then
   oc apply -f idp-management/identityconfig_v1alpha1_idpconfig.yaml
+  sleep 5
   echo "identity configuration management installed successfully"
 else
   echo "identity configuration management subscription could not install in the allotted time."
