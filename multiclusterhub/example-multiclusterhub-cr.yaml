@@ -1,8 +1,10 @@
 apiVersion: operator.open-cluster-management.io/v1
 kind: MultiClusterHub
 metadata:
+  annotations:
+    installer.open-cluster-management.io/mce-subscription-spec: '{"channel": "stable-2.0","installPlanApproval": "Automatic","name":
+      	"multicluster-engine","source": "multiclusterengine-catalog","sourceNamespace": "openshift-marketplace"}'
   name: multiclusterhub
-  annotations: __ANNOTATION__
 spec:
   imagePullSecret: multiclusterhub-operator-pull-secret
   

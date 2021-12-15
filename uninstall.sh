@@ -64,4 +64,7 @@ kubectl delete -k community-subscriptions/ -n ${TARGET_NAMESPACE}
 echo "Cleaning up the ${TARGET_NAMESPACE} namespace.."
 oc delete namespace ${TARGET_NAMESPACE}
 
+
+kubectl delete -f catalogsources/
+
 exit 0

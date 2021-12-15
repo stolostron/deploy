@@ -12,8 +12,5 @@ images:
 
 # list of Resource Config to be Applied
 resources:
-  - deployment.yaml
-  - service.yaml
-  - catalog-source.yaml
   - operator-group.yaml
   - subscription.yaml

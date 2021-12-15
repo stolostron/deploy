@@ -21,6 +21,8 @@ CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
 MODE=${MODE:-"Automatic"}
 STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
+MCE_SNAPSHOT_CHOICE=${MCE_SNAPSHOT_CHOICE:-"UNSET"}
+
 
 # build starting csv variable from $STARTING_VERSION
 STARTING_CSV="advanced-cluster-management.v${STARTING_VERSION}"
@@ -179,8 +181,32 @@ fi
 if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
+    OPERATOR_DIRECTORY="acm-operator"
+    CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
+    IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/acm-operator.yaml
+    oc apply -f catalogsources/acm-operator.yaml
+else
+    OPERATOR_DIRECTORY="multicluster-hub-operator"
+    CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"
+    IMG="${CUSTOM_REGISTRY_REPO}/multicluster-hub-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml
+    oc apply -f catalogsources/multiclusterhub-operator.yaml
+fi
+
+# If 2.5.0 or higher, install MCE
+if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
+    _MCE_IMAGE_NAME="mce-custom-registry"
+    if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/open-cluster-management" ]]; then
+        _MCE_IMAGE_NAME="cmb-custom-registry"
+    fi
+
+    if [[ "$MCE_SNAPSHOT_CHOICE" == "UNSET" ]]; then
+        MCE_SNAPSHOT_CHOICE=${DEFAULT_SNAPSHOT}
+    fi
+
+    IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
+    oc apply -f catalogsources/multicluster-engine.yaml
+fi
 
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
@@ -258,7 +284,7 @@ if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
 fi
 
 printf "\n##### Applying prerequisites\n"
-kubectl apply --openapi-patch=true -k prereqs/ -n ${TARGET_NAMESPACE}
+kubectl apply --openapi-patch=true -k prereqs/ -n openshift-marketplace
 
 printf "\n##### Allow secrets time to propagate #####\n"
 sleep 60

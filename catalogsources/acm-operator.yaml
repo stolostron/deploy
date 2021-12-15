@@ -1,15 +1,15 @@
-# Copyright Contributors to the Open Cluster Management project
-
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
-  name: multiclusterengine-catalog
-  namespace: default
+  name: acm-custom-registry
+  namespace: openshift-marketplace
 spec:
-  displayName: MultiCluster Engine
+  displayName: Advanced Cluster Management
   publisher: Red Hat
   sourceType: grpc
   image: ""
   updateStrategy:
     registryPoll:
       interval: 10m
+  secrets:
+    - multiclusterhub-operator-pull-secret
