@@ -399,7 +399,7 @@ For detailed instructions to install and manage the MultiCluster Engine, see the
 
 ## Override MultiCluster Engine Catalogsource
 
-The default MultiClusterEngine catalogsource can be overriden by specifiying the `MCE_SNAPSHOT_CHOICE` environment variable before calling ./start.sh script.
+The default MultiClusterEngine catalogsource can be overriden by defining the `MCE_SNAPSHOT_CHOICE` environment variable with the proper tag before calling ./start.sh script.
 
 Example - 
 ```bash

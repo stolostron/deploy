@@ -43,6 +43,7 @@ function waitForPod() {
     MINUTE=0
     podName=$1
     ignore=$2
+    namespace=$3
     running="\([0-9]\+\)\/\1"
     printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
@@ -50,15 +51,15 @@ function waitForPod() {
         if [ $MINUTE -gt 240 ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
-            oc -n ${TARGET_NAMESPACE} get pods
+            oc -n ${namespace} get pods
             echo
             echo "You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods"
             exit 1
         fi
         if [ "$ignore" == "" ]; then
-            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName}`
+            operatorPod=`oc -n ${namespace} get pods | grep ${podName}`
         else
-            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
+            operatorPod=`oc -n ${namespace} get pods | grep ${podName} | grep -v ${ignore}`
         fi
         if [[ $(echo $operatorPod | grep "${running}") ]]; then
             echo "* ${podName} is running"
@@ -186,12 +187,14 @@ if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
     CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
     IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/acm-operator.yaml
     oc apply -f catalogsources/acm-operator.yaml
+    waitForPod "acm-custom-registry" "" "openshift-marketplace"
 else
     OPERATOR_DIRECTORY="multicluster-hub-operator"
     CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"
     IMG="${CUSTOM_REGISTRY_REPO}/multicluster-hub-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml
     oc apply -f catalogsources/multiclusterhub-operator.yaml
 fi
+
 
 # If 2.5.0 or higher, install MCE
 if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
@@ -206,6 +209,7 @@ if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
 
     IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
     oc apply -f catalogsources/multicluster-engine.yaml
+    waitForPod "multiclusterengine-catalog" "" "openshift-marketplace"
 fi
 
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
@@ -314,7 +318,7 @@ if [[ "$MODE" == "Manual" ]]; then
     oc patch InstallPlan $INSTALL_PLAN -n ${TARGET_NAMESPACE} --type "json" -p '[{"op":"replace","path":"/spec/approved","value":true}]'
 fi
 
-waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}"
+waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "${TARGET_NAMESPACE}"
 
 
 fi
@@ -325,7 +329,7 @@ printf "\n* Beginning deploy...\n"
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
-waitForPod "multicluster-operators-application" ""
+waitForPod "multicluster-operators-application" "" "${TARGET_NAMESPACE}"
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
