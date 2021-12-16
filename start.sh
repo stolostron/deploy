@@ -96,6 +96,17 @@ if [[ " $@ " =~ " --watch " ]]; then
     fi
 fi
 
+# Ensure yq exists
+if [ ! -x "$(command -v yq)"  ]; then
+    if [ "${OS}" == "darwin" ]; then
+        echo "Perform \"brew install yq\" and try again."
+        exit 1
+    elif [ "${OS}" == "linux" ]; then # if linux, assume it is canary, and install yq
+        echo "Attempting to install yq"
+        wget https://github.com/mikefarah/yq/releases/download/v4.12.2/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+    fi
+fi
+
 #This is needed for the deploy
 echo "* Testing connection"
 HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`

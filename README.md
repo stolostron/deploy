@@ -46,6 +46,8 @@ You must meet the following requirements to install the _open-cluster-management
     - On **macOS** install using: `brew install gnu-sed`
   - `jq`
     - On **macOS** install using: `brew install jq`
+  - `yq` (v4.12+)
+    - On **macOS** install using: `brew install yq`
 - The following utilities are **optional**:
   - `watch`
     - On **macOS** install using: `brew install watch`
