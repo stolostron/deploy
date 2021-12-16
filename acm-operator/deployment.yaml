@@ -20,3 +20,7 @@ spec:
         - containerPort: 50051
       imagePullSecrets:
       - name: multiclusterhub-operator-pull-secret
+      tolerations:
+      - key: node-role.kubernetes.io/infra
+        effect: NoSchedule
+        operator: Exists
