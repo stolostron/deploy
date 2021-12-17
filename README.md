@@ -46,6 +46,8 @@ You must meet the following requirements to install the _open-cluster-management
     - On **macOS** install using: `brew install gnu-sed`
   - `jq`
     - On **macOS** install using: `brew install jq`
+  - `yq` (v4.12+)
+    - On **macOS** install using: `brew install yq`
 - The following utilities are **optional**:
   - `watch`
     - On **macOS** install using: `brew install watch`
@@ -395,4 +397,13 @@ Once the installation is complete you can then attempt to upgrade the ACM instan
 
 # MultiCluster Engine
 
-For instructions to install and manage the MultiCluster Engine, see the following [README](multiclusterengine/README.md).
+For detailed instructions to install and manage the MultiCluster Engine, see the following [README](multiclusterengine/README.md).
+
+## Override MultiCluster Engine Catalogsource
+
+The default MultiClusterEngine catalogsource can be overriden by defining the `MCE_SNAPSHOT_CHOICE` environment variable with the proper tag before calling ./start.sh script.
+
+Example - 
+```bash
+MCE_SNAPSHOT_CHOICE=2.0.0-BACKPLANE-2021-12-02-18-35-02 ./start.sh
+```

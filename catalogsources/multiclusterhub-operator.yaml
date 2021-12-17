@@ -1,0 +1,15 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: multicluster-hub-custom-registry
+  namespace: openshift-marketplace
+spec:
+  displayName: Multiclusterhub Operator
+  publisher: Red Hat
+  sourceType: grpc
+  image: ""
+  updateStrategy:
+    registryPoll:
+      interval: 10m
+  secrets:
+    - multiclusterhub-operator-pull-secret

@@ -7,5 +7,5 @@ spec:
   installPlanApproval: Automatic
   name: advanced-cluster-management
   source: acm-custom-registry
-  sourceNamespace: open-cluster-management
+  sourceNamespace: openshift-marketplace
   startingCSV: advanced-cluster-management.v2.3.0

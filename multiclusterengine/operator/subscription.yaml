@@ -9,4 +9,4 @@ spec:
   installPlanApproval: Automatic
   name: multicluster-engine
   source: multiclusterengine-catalog
-  sourceNamespace: multicluster-engine
+  sourceNamespace: openshift-marketplace

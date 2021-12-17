@@ -39,7 +39,8 @@ else
     echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
-IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' multiclusterengine/operator/catalogsource.yaml
+IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
+oc apply -f catalogsources/multicluster-engine.yaml
 oc create ns multicluster-engine --dry-run=client -o yaml | oc apply -f -
 oc apply -k multiclusterengine/operator/
 

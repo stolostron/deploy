@@ -21,6 +21,8 @@ CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
 QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
 MODE=${MODE:-"Automatic"}
 STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
+MCE_SNAPSHOT_CHOICE=${MCE_SNAPSHOT_CHOICE:-"UNSET"}
+
 
 # build starting csv variable from $STARTING_VERSION
 STARTING_CSV="advanced-cluster-management.v${STARTING_VERSION}"
@@ -41,6 +43,7 @@ function waitForPod() {
     MINUTE=0
     podName=$1
     ignore=$2
+    namespace=$3
     running="\([0-9]\+\)\/\1"
     printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
     while [ ${FOUND} -eq 1 ]; do
@@ -48,15 +51,15 @@ function waitForPod() {
         if [ $MINUTE -gt 240 ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
-            oc -n ${TARGET_NAMESPACE} get pods
+            oc -n ${namespace} get pods
             echo
             echo "You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods"
             exit 1
         fi
         if [ "$ignore" == "" ]; then
-            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName}`
+            operatorPod=`oc -n ${namespace} get pods | grep ${podName}`
         else
-            operatorPod=`oc -n ${TARGET_NAMESPACE} get pods | grep ${podName} | grep -v ${ignore}`
+            operatorPod=`oc -n ${namespace} get pods | grep ${podName} | grep -v ${ignore}`
         fi
         if [[ $(echo $operatorPod | grep "${running}") ]]; then
             echo "* ${podName} is running"
@@ -90,6 +93,17 @@ if [[ " $@ " =~ " --watch " ]]; then
             echo "Perform \"brew install watch\" and try again."
         fi
         exit 1
+    fi
+fi
+
+# Ensure yq exists
+if [ ! -x "$(command -v yq)"  ]; then
+    if [ "${OS}" == "darwin" ]; then
+        echo "Perform \"brew install yq\" and try again."
+        exit 1
+    elif [ "${OS}" == "linux" ]; then # if linux, assume it is canary, and install yq
+        echo "Attempting to install yq"
+        wget https://github.com/mikefarah/yq/releases/download/v4.12.2/yq_linux_amd64 -O ~/bin/yq && chmod +x ~/bin/yq
     fi
 fi
 
@@ -179,8 +193,35 @@ fi
 if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="acm-operator"; else OPERATOR_DIRECTORY="multicluster-hub-operator"; fi;
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then CUSTOM_REGISTRY_IMAGE="acm-custom-registry"; else CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"; fi;
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
+    OPERATOR_DIRECTORY="acm-operator"
+    CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
+    IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/acm-operator.yaml
+    oc apply -f catalogsources/acm-operator.yaml
+    waitForPod "acm-custom-registry" "" "openshift-marketplace"
+else
+    OPERATOR_DIRECTORY="multicluster-hub-operator"
+    CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"
+    IMG="${CUSTOM_REGISTRY_REPO}/multicluster-hub-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml
+    oc apply -f catalogsources/multiclusterhub-operator.yaml
+fi
+
+
+# If 2.5.0 or higher, install MCE
+if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
+    _MCE_IMAGE_NAME="mce-custom-registry"
+    if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/open-cluster-management" ]]; then
+        _MCE_IMAGE_NAME="cmb-custom-registry"
+    fi
+
+    if [[ "$MCE_SNAPSHOT_CHOICE" == "UNSET" ]]; then
+        MCE_SNAPSHOT_CHOICE=${DEFAULT_SNAPSHOT}
+    fi
+
+    IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
+    oc apply -f catalogsources/multicluster-engine.yaml
+    waitForPod "multiclusterengine-catalog" "" "openshift-marketplace"
+fi
 
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
@@ -258,6 +299,7 @@ if [[ "$COMPOSITE_BUNDLE" != "true" ]]; then
 fi
 
 printf "\n##### Applying prerequisites\n"
+kubectl apply --openapi-patch=true -k prereqs/ -n openshift-marketplace
 kubectl apply --openapi-patch=true -k prereqs/ -n ${TARGET_NAMESPACE}
 
 printf "\n##### Allow secrets time to propagate #####\n"
@@ -269,9 +311,7 @@ if [[ "${TARGET_NAMESPACE}" != "open-cluster-management" ]]; then
     printf "* Creating temporary directory ${TMP_OP_DIR}/ to customize namespace\n"
     mkdir ${TMP_OP_DIR}/
     cp ${OPERATOR_DIRECTORY}/*.yaml ${TMP_OP_DIR}/
-    ${SED} -i "s/\.open-cluster-management\./.${TARGET_NAMESPACE}./" ${TMP_OP_DIR}/catalog-source.yaml
     ${SED} -i "s/^  - open-cluster-management$/  - ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/operator-group.yaml
-    ${SED} -i "s/^  sourceNamespace: open-cluster-management$/  sourceNamespace: ${TARGET_NAMESPACE}/" ${TMP_OP_DIR}/subscription.yaml
     kubectl apply -k $TMP_OP_DIR/ -n ${TARGET_NAMESPACE}
     printf "* Removing temporary directory ${TMP_OP_DIR}/\n"
     rm -rf ${TMP_OP_DIR}/
@@ -288,7 +328,7 @@ if [[ "$MODE" == "Manual" ]]; then
     oc patch InstallPlan $INSTALL_PLAN -n ${TARGET_NAMESPACE} --type "json" -p '[{"op":"replace","path":"/spec/approved","value":true}]'
 fi
 
-waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}"
+waitForPod "multiclusterhub-operator" "${CUSTOM_REGISTRY_IMAGE}" "${TARGET_NAMESPACE}"
 
 
 fi
@@ -299,7 +339,7 @@ printf "\n* Beginning deploy...\n"
 
 echo "* Applying the multiclusterhub-operator to install Red Hat Advanced Cluster Management for Kubernetes"
 kubectl apply -k applied-mch -n ${TARGET_NAMESPACE}
-waitForPod "multicluster-operators-application" ""
+waitForPod "multicluster-operators-application" "" "${TARGET_NAMESPACE}"
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
