@@ -104,6 +104,10 @@ if [ ! -x "$(command -v yq)"  ]; then
     elif [ "${OS}" == "linux" ]; then # if linux, assume it is canary, and install yq
         echo "Attempting to install yq"
         wget https://github.com/mikefarah/yq/releases/download/v4.12.2/yq_linux_amd64 -O ~/bin/yq && chmod +x ~/bin/yq
+        if [ ! -x "$(command -v yq)"  ]; then
+            echo "ERROR: yq is required, but attempts to install it failed"
+            exit 1
+        fi
     fi
 fi
 
