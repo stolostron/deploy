@@ -17,7 +17,7 @@ POLL_DURATION_21X=1500
 TARGET_NAMESPACE=${TARGET_NAMESPACE:-"open-cluster-management"}
 COMPOSITE_BUNDLE=${COMPOSITE_BUNDLE:-"true"}
 DOWNSTREAM=${DOWNSTREAM:-"false"}
-CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/stolostron"}
 QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
 MODE=${MODE:-"Automatic"}
 STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
@@ -157,7 +157,7 @@ fi
 if [[ " $@ " =~ " --silent " ]]; then
     echo "* Silent mode"
 else
-    printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    printf "Find snapshot tags @ https://quay.io/repository/stolostron/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
@@ -210,7 +210,7 @@ fi
 # If 2.5.0 or higher, install MCE
 if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
     _MCE_IMAGE_NAME="mce-custom-registry"
-    if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/open-cluster-management" ]]; then
+    if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/stolostron" ]]; then
         _MCE_IMAGE_NAME="cmb-custom-registry"
     fi
 
