@@ -3,7 +3,7 @@ kind: MultiClusterObservability
 metadata:
   name: observability
   annotations:
-    mco-imageRepository: quay.io/open-cluster-management
+    mco-imageRepository: quay.io/stolostron
     mco-imageTagSuffix: <SNAPSHOT>
 spec:
   storageConfigObject:

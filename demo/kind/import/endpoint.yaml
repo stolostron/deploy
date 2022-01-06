@@ -20,7 +20,7 @@ spec:
   iamPolicyController:
     enabled: true
   imagePullSecret: multiclusterhub-operator-pull-secret
-  imageRegistry: quay.io/open-cluster-management
+  imageRegistry: quay.io/stolostron
   policyController:
     enabled: true
   prometheusIntegration:

@@ -36,7 +36,7 @@ spec:
   clusterNamespace: <CLUSTER_NAME>
   iamPolicyController:
     enabled: true
-  imageRegistry: quay.io/open-cluster-management
+  imageRegistry: quay.io/stolostron
   policyController:
     enabled: true
   prometheusIntegration:

@@ -87,17 +87,17 @@ for rolebinding in $(oc get clusterrolebindings | grep mcm | cut -f 1 -d ' '); d
 oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print $2 " -n " $1 }' | xargs oc patch policies.policy.mcm.ibm.com --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]' || true
 oc get policies.policy.mcm.ibm.com --all-namespaces | tail -n +2 | awk '{ print $2 " -n " $1 }' | xargs oc delete policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true
 
-# Issue https://github.com/open-cluster-management/backlog/issues/1286
+# Issue https://github.com/stolostron/backlog/issues/1286
 oc delete crd compliances.compliance.mcm.ibm.com --wait=false --ignore-not-found || true
 oc delete crd policies.policy.mcm.ibm.com --wait=false --ignore-not-found || true
 
-# Issue https://github.com/open-cluster-management/backlog/issues/1794
+# Issue https://github.com/stolostron/backlog/issues/1794
 oc delete crd searchservices.search.acm.com --wait=false --ignore-not-found || true
 
-# Working on in https://github.com/open-cluster-management/backlog/issues/786
+# Working on in https://github.com/stolostron/backlog/issues/786
 for configmap in $(oc get configmap | grep ingress-controller | cut -f 1 -d ' '); do oc delete configmap $configmap --ignore-not-found; done
 
-# Working on in https://github.com/open-cluster-management/backlog/issues/787
+# Working on in https://github.com/stolostron/backlog/issues/787
 for secret in $(oc get Secret | grep cert-manager | cut -f 1 -d ' '); do oc delete Secret $secret --ignore-not-found; done
 
 # Issue pending

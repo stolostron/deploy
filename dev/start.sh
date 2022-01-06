@@ -117,7 +117,7 @@ fi
 if [[ " $@ " =~ " --silent " ]]; then
     echo "* Silent mode"
 else
-    printf "Find snapshot tags @ https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    printf "Find snapshot tags @ https://quay.io/repository/stolostron/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
@@ -130,8 +130,8 @@ if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
 fi
 SNAPSHOT_PREFIX=${DEFAULT_SNAPSHOT%%\-*}
 
-# Set the custom registry repo, defaulted to quay.io/open-cluster-management, but accomodate custom config focused on quay.io/acm-d for donwstream tests
-CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/open-cluster-management"}
+# Set the custom registry repo, defaulted to quay.io/stolostron, but accomodate custom config focused on quay.io/acm-d for donwstream tests
+CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO:-"quay.io/stolostron"}
 
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then OPERATOR_DIRECTORY="dev/acm-operator"; else OPERATOR_DIRECTORY="dev/multicluster-hub-operator"; fi;
@@ -242,8 +242,8 @@ docker run --network host \
 	--env waitInMinutes=10 \
 	--env mchImageRepository=${CUSTOM_REGISTRY_REPO} \
 	--volume ${KUBECONFIG}:/opt/.kube/config \
-	--volume ${RESULTS_DIR}:/go/src/github.com/open-cluster-management/multicloudhub-operator/test/results/ \
-	quay.io/open-cluster-management/multiclusterhub-operator-tests:${INSTALLER_IMAGE_TAG}
+	--volume ${RESULTS_DIR}:/go/src/github.com/stolostron/multicloudhub-operator/test/results/ \
+	quay.io/stolostron/multiclusterhub-operator-tests:${INSTALLER_IMAGE_TAG}
 
 ls -la ${RESULTS_DIR}
 

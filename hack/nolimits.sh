@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Remove all limits on OCM pods https://github.com/open-cluster-management/backlog/issues/1073
+# Remove all limits on OCM pods https://github.com/stolostron/backlog/issues/1073
 
 kubectl patch deploy $(kubectl get deploy -l component=applicationui -o  jsonpath='{.items[0].metadata.name }')  \
    --type='json' -p '[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/limits/cpu"}]'
