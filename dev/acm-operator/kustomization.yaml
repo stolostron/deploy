@@ -10,7 +10,7 @@ generatorOptions:
 
 images:
   - name: acm-custom-registry
-    newName: quay.io/open-cluster-management/acm-custom-registry
+    newName: quay.io/stolostron/acm-custom-registry
     newTag: 1.0.0-SNAPSHOT-2020-05-12-23-58-57
 
 # list of Resource Config to be Applied

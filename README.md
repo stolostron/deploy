@@ -29,7 +29,7 @@ If you're a Red Hat associate or partner needing access to open-cluster-manageme
 
 ## Let's get started...
 
-You can find our __work-in-progress__ documentation [here](https://github.com/open-cluster-management/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use the _open-cluster-management_ project. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
+You can find our __work-in-progress__ documentation [here](https://github.com/stolostron/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use the _open-cluster-management_ project. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
 
 You can find information on how to contribute to this project and our docs project in our [CONTRIBUTING.md](CONTRIBUTING.md) doc.
 
@@ -69,18 +69,18 @@ You have multiple choices of installation:
   - [the hard way](#the-hard-way) - instructions to deploy _open-cluster-management_ with only `oc` commands.
   - [downstream images v2.0+](#deploying-downstream-builds-snapshots-for-product-quality-engineering-only-20) - instructions to deploy downstream images, i.e. for QE
 
-Either way you choose to go, you are going to need a `pull-secret` in order to gain access to our built images residing in our private [Quay environment](https://quay.io/open-cluster-management). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-open-cluster-management-instance-only-do-once) to get your `pull-secret` setup.
+Either way you choose to go, you are going to need a `pull-secret` in order to gain access to our built images residing in our private [Quay environment](https://quay.io/stolostron). Please follow the instructions [Prepare to deploy Open Cluster Management Instance](#prepare-to-deploy-stolostron-instance-only-do-once) to get your `pull-secret` setup.
 
 ## Prepare to deploy Open Cluster Management Instance (only do once)
 
 1. Clone this repo locally
     ```bash
-    git clone https://github.com/open-cluster-management/deploy.git
+    git clone https://github.com/stolostron/deploy.git
     ```
 
 2. Generate your pull-secret:
-   - ensure you have access to the quay org ([open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags))
-   - to request access to [open-cluster-management](https://quay.io/repository/open-cluster-management/multiclusterhub-operator-index?tab=tags) in quay.io please contact the ACM CICD team via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com) or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel [#forum-acm-devops](https://coreos.slack.com/archives/CSZLMKPS5)) and indicate if you want upstream (`open-cluster-management`) or downstream (`acm-d`) repos (or both).  We'll need your quay ID.  Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
+   - ensure you have access to the quay org ([stolostron](https://quay.io/repository/stolostron/multiclusterhub-operator-index?tab=tags))
+   - to request access to [stolostron](https://quay.io/repository/stolostron/multiclusterhub-operator-index?tab=tags) in quay.io please contact the ACM CICD team via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com) or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel [#forum-acm-devops](https://coreos.slack.com/archives/CSZLMKPS5)) and indicate if you want upstream (`stolostron`) or downstream (`acm-d`) repos (or both).  We'll need your quay ID.  Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
    - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
    - click on `Generate Encrypted Password`
    - enter your quay.io password
@@ -118,7 +118,7 @@ _Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releas
     ```
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
-    - UPSTREAM snapshot tags - https://quay.io/repository/open-cluster-management/acm-custom-registry?tab=tags
+    - UPSTREAM snapshot tags - https://quay.io/repository/stolostron/acm-custom-registry?tab=tags
     - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-custom-registry?tab=tags
     
     For example, your SNAPSHOT tag might resemble the following information:
@@ -177,7 +177,7 @@ To deploy a downstream build from `quay.io/acm-d` ensure that your OCP cluster m
    rm pull_secret.yaml
    ```
 
-   You can also set the pull secrets in the OpenShift console or using the [bootstrap repo](https://github.com/open-cluster-management/bootstrap#how-to-use) at cluster create time.
+   You can also set the pull secrets in the OpenShift console or using the [bootstrap repo](https://github.com/stolostron/bootstrap#how-to-use) at cluster create time.
 
     Your OpenShift main pull secret should contain an entry with `quay.io:443`.
     <pre>
@@ -255,14 +255,14 @@ for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail 
   ```
 
 2. Update the `kustomization.yaml` file in the `acm-operator` dir to set `newTag`
-  You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/open-cluster-management/acm-custom-registry) Use a tag that has the word `SNAPSHOT` in it.
+  You can find a snapshot tag by viewing the list of tags available [here](https://quay.io/stolostron/acm-custom-registry) Use a tag that has the word `SNAPSHOT` in it.
   For downstream deploys, make sure to set `newName` differently, usually to `acm-d`.
     ```bash
     namespace: open-cluster-management
 
     images:
       - name: acm-custom-registry
-        newName: quay.io/open-cluster-management/acm-custom-registry
+        newName: quay.io/stolostron/acm-custom-registry
         newTag: 1.0.0-SNAPSHOT-2020-05-04-17-43-49
     ```
 

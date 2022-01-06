@@ -4,7 +4,7 @@
 set -e
 
 DOWNSTREAM=${DOWNSTREAM:-"false"}
-_REGISTRY="quay.io/open-cluster-management"
+_REGISTRY="quay.io/stolostron"
 _IMAGE_NAME="cmb-custom-registry"
 
 if [ $DOWNSTREAM == "true" ]; then
