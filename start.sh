@@ -197,9 +197,9 @@ ${SED} -i "s/example-multiclusterhub/multiclusterhub/" ./multiclusterhub/example
 if [[ -d applied-mch ]]; then rm -rf applied-mch; fi;
 cp -r multiclusterhub applied-mch
 if [[ "$DOWNSTREAM" != "true" ]]; then
-    ${SED} -i "s|__ANNOTATION__|{}|g" ./applied-mch/example-multiclusterhub-cr.yaml
+    yq eval -i 'del(.metadata.annotations.mch-imageRepository)' ./applied-mch/example-multiclusterhub-cr.yaml
 else
-    ${SED} -i "s|__ANNOTATION__|\n    \"mch-imageRepository\": \"${CUSTOM_REGISTRY_REPO}\"|g" ./applied-mch/example-multiclusterhub-cr.yaml
+    CUSTOM_REGISTRY_REPO=${CUSTOM_REGISTRY_REPO} yq eval -i '.metadata.annotations.mch-imageRepository = env(CUSTOM_REGISTRY_REPO)' ./applied-mch/example-multiclusterhub-cr.yaml
 fi
 
 if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
