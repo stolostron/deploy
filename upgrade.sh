@@ -23,15 +23,15 @@ function waitForInstallPlan() {
 
 function waitForACMRegistryPod() {
     for i in `seq 1 30`; do
-    	oc get po -n $TARGET_NAMESPACE -lapp=acm-custom-registry -oyaml
-        oc get po -n $TARGET_NAMESPACE -lapp=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
+    	oc get po -n openshift-marketplace -lolm.catalogSource=acm-custom-registry -oyaml
+        oc get po -n openshift-marketplace -lolm.catalogSource=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
         if [ $? -eq 0 ]; then
           break
         fi
         echo 'waiting for subscription pod to use new image'
-        oc get po -n $TARGET_NAMESPACE -lapp=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
+        oc get po -n openshift-marketplace -lolm.catalogSource=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
         echo 'patch again'
-        oc patch deployment acm-custom-registry -n $TARGET_NAMESPACE --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
+        oc patch catalogsource acm-custom-registry -n openshift-marketplace --type=json -p '[{"op":"replace","path":"/spec/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
 
         sleep 20
     done
@@ -52,7 +52,7 @@ if [ "${OS}" == "darwin" ]; then
     fi
 fi
 
-oc patch deployment acm-custom-registry -n ${TARGET_NAMESPACE} --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
+oc patch catalogsource acm-custom-registry -n openshift-marketplace --type=json -p '[{"op":"replace","path":"/spec/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
 waitForACMRegistryPod
 echo "Sleeping for 5 minutes to allow deployment to sync"
 sleep 300
