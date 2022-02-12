@@ -138,6 +138,7 @@ if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
     exit 1
 fi
 
+QUAY_TOKEN_OVERRIDE="false"
 if [ ! -f ./prereqs/pull-secret.yaml ]; then
     echo "SECURITY NOTICE: The encrypted dockerconfigjson is stored in ./prereqs/pull-secret.yaml. If you want to change the value, delete the file and run start.sh"
     if [[ "$QUAY_TOKEN" == "UNSET" ]]; then
@@ -154,9 +155,9 @@ metadata:
   name: multiclusterhub-operator-pull-secret
 type: kubernetes.io/dockerconfigjson
 EOF
-
+elif [[ "${QUAY_TOKEN}" != "UNSET" ]]; then
+    QUAY_TOKEN_OVERRIDE="true"
 fi
-
 
 DEFAULT_SNAPSHOT="MUST_PROVIDE_SNAPSHOT"
 if [ -f ./snapshot.ver ]; then
@@ -313,6 +314,10 @@ fi
 printf "\n##### Applying prerequisites\n"
 kubectl apply --openapi-patch=true -k prereqs/ -n openshift-marketplace
 kubectl apply --openapi-patch=true -k prereqs/ -n ${TARGET_NAMESPACE}
+if [[ "${QUAY_TOKEN_OVERRIDE}" == "true" ]]; then
+    printf "\n##### Patching secret with QUAY_TOKEN\n"
+    kubectl patch secret multiclusterhub-operator-pull-secret -n ${TARGET_NAMESPACE} -p '{"data":{".dockerconfigjson":"'${QUAY_TOKEN}'"}}'
+fi
 
 printf "\n##### Allow secrets time to propagate #####\n"
 sleep 60
