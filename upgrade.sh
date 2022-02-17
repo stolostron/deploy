@@ -8,6 +8,7 @@ POLL_DURATION_21X=1500
 
 TARGET_NAMESPACE=${TARGET_NAMESPACE:-"open-cluster-management"}
 NEXT_VERSION=${NEXT_VERSION:-"2.1.0"}
+MCE_SNAPSHOT_CHOICE=${MCE_SNAPSHOT_CHOICE:-"UNSET"}
 
 function waitForInstallPlan() {
     version=$1
@@ -21,17 +22,37 @@ function waitForInstallPlan() {
     done
 }
 
+function waitForMCERegistryPod() {
+    for i in `seq 1 30`; do
+    	oc get po -n openshift-marketplace -lolm.catalogSource=multiclusterengine-catalog -oyaml
+        oc get po -n openshift-marketplace -lolm.catalogSource=multiclusterengine-catalog -oyaml | grep "$NEXT_SNAPSHOT"
+        if [ $? -eq 0 ]; then
+          break
+        fi
+        _MCE_IMAGE_NAME="mce-custom-registry"
+        if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/stolostron" ]]; then
+            _MCE_IMAGE_NAME="cmb-custom-registry"
+        fi
+        echo 'waiting for subscription pod to use new image'
+        oc get po -n openshift-marketplace -lolm.catalogSource=multiclusterengine-catalog -oyaml | grep "$NEXT_SNAPSHOT"
+        echo 'patch again'
+        oc patch catalogsource multiclusterengine-catalog -n openshift-marketplace --type=json -p '[{"op":"replace","path":"/spec/image","value":"'${CUSTOM_REGISTRY_REPO}'/'${_MCE_IMAGE_NAME}':'${NEXT_SNAPSHOT}'"}]'
+
+        sleep 20
+    done
+}
+
 function waitForACMRegistryPod() {
     for i in `seq 1 30`; do
-    	oc get po -n $TARGET_NAMESPACE -lapp=acm-custom-registry -oyaml
-        oc get po -n $TARGET_NAMESPACE -lapp=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
+    	oc get po -n openshift-marketplace -lolm.catalogSource=acm-custom-registry -oyaml
+        oc get po -n openshift-marketplace -lolm.catalogSource=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
         if [ $? -eq 0 ]; then
           break
         fi
         echo 'waiting for subscription pod to use new image'
-        oc get po -n $TARGET_NAMESPACE -lapp=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
+        oc get po -n openshift-marketplace -lolm.catalogSource=acm-custom-registry -oyaml | grep "$NEXT_SNAPSHOT"
         echo 'patch again'
-        oc patch deployment acm-custom-registry -n $TARGET_NAMESPACE --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
+        oc patch catalogsource acm-custom-registry -n openshift-marketplace --type=json -p '[{"op":"replace","path":"/spec/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
 
         sleep 20
     done
@@ -52,10 +73,9 @@ if [ "${OS}" == "darwin" ]; then
     fi
 fi
 
-oc patch deployment acm-custom-registry -n ${TARGET_NAMESPACE} --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
+oc patch catalogsource acm-custom-registry -n openshift-marketplace --type=json -p '[{"op":"replace","path":"/spec/image","value":"'${CUSTOM_REGISTRY_REPO}'/acm-custom-registry:'${NEXT_SNAPSHOT}'"}]'
 waitForACMRegistryPod
-echo "Sleeping for 5 minutes to allow deployment to sync"
-sleep 300
+
 
 # this only changes the channel *IF* we are upgrading a Y version
 CHANNEL_VERSION=$(echo ${NEXT_VERSION} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
@@ -63,6 +83,24 @@ echo "* Applying channel 'release-${CHANNEL_VERSION}' to acm-operator-subscripti
 echo "* Applying startingCSV \'${STARTING_CSV}\' to acm-operator-subscription subscription"
 oc patch subscription.operators.coreos.com acm-operator-subscription -n $TARGET_NAMESPACE --type "json" -p "[{\"op\":\"replace\",\"path\": \"/spec/channel\",\"value\":\"release-$CHANNEL_VERSION\"},{\"op\": \"replace\",\"path\":\"/spec/startingCSV\",\"value\":\"$STARTING_CSV\"}]"
 
+# If 2.5.0 or higher, install MCE
+if [[ $NEXT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
+    _MCE_IMAGE_NAME="mce-custom-registry"
+    if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/stolostron" ]]; then
+        _MCE_IMAGE_NAME="cmb-custom-registry"
+    fi
+
+    if [[ "$MCE_SNAPSHOT_CHOICE" == "UNSET" ]]; then
+        MCE_SNAPSHOT_CHOICE=${NEXT_SNAPSHOT}
+    fi
+
+    IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
+    oc apply -f catalogsources/multicluster-engine.yaml
+    waitForMCERegistryPod
+fi
+
+echo "Sleeping for 5 minutes to allow deployment to sync"
+sleep 300
 # wait for install plan to be generated
 waitForInstallPlan ${NEXT_VERSION}
 
