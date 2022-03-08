@@ -73,6 +73,18 @@ function waitForPod() {
     done
 }
 
+function enable_search() {
+    if [[ ! " $@ " =~ " --skip-search " ]]; then
+        oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
+        echo "Search enabled"
+        echo ""
+    else
+        echo "Search was not enabled"
+        echo "Run 'oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}' to enable search."
+        echo ""
+    fi
+}
+
 # fix sed issue on mac
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 SED="sed"
@@ -442,10 +454,7 @@ if [[ " $@ " =~ " --watch " ]]; then
         fi
         exit 1
     else
-        if [[ " $@ " =~ " --search " ]]; then
-            oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
-            echo "Search enabled"
-        fi
+        enable_search
 
         echo "#####"
         echo "* Red Hat ACM URL: https://$CONSOLE_URL"
@@ -455,7 +464,9 @@ if [[ " $@ " =~ " --watch " ]]; then
     exit $COMPLETE
 fi
 
-echo "Search may not have been enabled"
+echo "Search will only be automaticaly enabled with '--watch' is set."
+echo "Run 'oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}' to enable search."
+echo ""
 echo "#####"
 echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
 echo "#####"
