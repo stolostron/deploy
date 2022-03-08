@@ -128,6 +128,9 @@ CATALOGSOURCE_RESOURCE_NAME -   The name of the CatalogSource resource, default:
 SUBSCRIPTION_NAME           -   The name of the Subscription resource, default: "start-brew-sub"
 ```
 
+Note: if you are given an image for the catalogsource that has a CATALOGSOURCE_REPO such as
+`registry-proxy.engineering.redhat.com/rh-osbs` then replace with `brew.registry.redhat.io/rh-osbs`
+
 ### The Hard Way (NOT recomended)
 
 #### Step 0: Disable Old CatalogSources
