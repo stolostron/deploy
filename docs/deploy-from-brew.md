@@ -12,7 +12,16 @@ The definitive source on this process is the [official brew deploy documentation
 ```
 # Get a Kerberos Ticket
 kinit (username)@IPA.REDHAT.COM
+```
+Note: prior to this `kinit` step you may need to set your IdM password [here](https://identity.corp.redhat.com/)
 
+A proper /etc/krb5.conf file is also necessary - steps for setting this up on MacOS are [here](https://source.redhat.com/groups/public/identity-access-management/identity__access_management_wiki/how_to_mac_os_idm_client_configuration)
+
+Additionally, sample krb5.conf files are [here](https://gitlab.corp.redhat.com/it-iam/system-configs/-/tree/master/krb5/idm)
+
+
+After successfully performing `kinit`:
+```
 # Create token if you don't have one or want a new one:
 curl --negotiate -u : -X POST -H 'Content-Type: application/json'          \
     --data '{"description":"(describe what the token will be used for)"}' \
@@ -77,6 +86,22 @@ spec:
 EOF
 ```
 
+Note: If any of the images you are pulling are in `/rhacm2` then you may also need to edit the `rhacm-repo`
+ImageContentSourcePolicy.
+
+Change:
+```
+  - mirrors:
+    - quay.io:443/acm-d
+    source: registry.redhat.io/rhacm2
+```
+To:
+```
+  - mirrors:
+    - brew.registry.redhat.io/rhacm2
+    source: registry.redhat.io/rhacm2
+```
+
 ## Deploying ACM from Brew
 
 ### The Easy Way (RECOMMNDED)
@@ -102,6 +127,9 @@ TARGET_NAMESPACE        -   The namespace in which to deploy the CatalogSoruce, 
 CATALOGSOURCE_RESOURCE_NAME -   The name of the CatalogSource resource, default: "start-brew-iib"
 SUBSCRIPTION_NAME           -   The name of the Subscription resource, default: "start-brew-sub"
 ```
+
+Note: if you are given an image for the catalogsource that has a CATALOGSOURCE_REPO such as
+`registry-proxy.engineering.redhat.com/rh-osbs` then replace with `brew.registry.redhat.io/rh-osbs`
 
 ### The Hard Way (NOT recomended)
 
