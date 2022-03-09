@@ -78,28 +78,15 @@ spec:
     - brew.registry.redhat.io
     source: registry.redhat.io
   - mirrors:
+    - brew.registry.redhat.io/rhacm2
+    source: registry.redhat.io/rhacm2
+  - mirrors:
     - brew.registry.redhat.io
     source: registry.stage.redhat.io
   - mirrors:
     - brew.registry.redhat.io
     source: registry-proxy.engineering.redhat.com
 EOF
-```
-
-Note: If any of the images you are pulling are in `/rhacm2` then you may also need to edit the `rhacm-repo`
-ImageContentSourcePolicy.
-
-Change:
-```
-  - mirrors:
-    - quay.io:443/acm-d
-    source: registry.redhat.io/rhacm2
-```
-To:
-```
-  - mirrors:
-    - brew.registry.redhat.io/rhacm2
-    source: registry.redhat.io/rhacm2
 ```
 
 ## Deploying ACM from Brew
