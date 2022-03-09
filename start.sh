@@ -145,7 +145,7 @@ echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
-if ! [[ $VER =~ .*[4-9]\.[3-9]\..* ]]; then
+if ! [[ $VER =~ .*[4-9]\.([3-9]|10)\..* ]]; then
     echo "oc cli version 4.3 or greater required. Please visit https://access.redhat.com/downloads/content/290/ver=4.3/rhel---8/4.3.9/x86_64/product-software."
     exit 1
 fi
@@ -217,8 +217,8 @@ fi
 
 if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
-# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.  
-if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
+# If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
+if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
     OPERATOR_DIRECTORY="acm-operator"
     CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
     IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/acm-operator.yaml
@@ -251,9 +251,9 @@ fi
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
     SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_PREFIX} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
-    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then 
-        SUBSCRIPTION_CHANNEL_PREFIX="release"; 
-    else 
+    if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
+        SUBSCRIPTION_CHANNEL_PREFIX="release";
+    else
         SUBSCRIPTION_CHANNEL_PREFIX="snapshot";
     fi;
 
