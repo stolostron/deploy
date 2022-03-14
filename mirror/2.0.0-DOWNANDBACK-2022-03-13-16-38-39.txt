@@ -24,11 +24,12 @@ quay.io/acm-d/hypershift-rhel8@sha256:e7d29478b58c2c61321d9e4d6d440a73a7273ddc6d
 quay.io/acm-d/klusterlet-operator-bundle@sha256:0d8624b962ec22ca0de7351d2229b3fbfec8b9be24069126dfaea52c31dba137=__DESTINATION_ORG__/klusterlet-operator-bundle:v2.0.0-17
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:89daac41d252360cb5df30b3894ed1b10a48d8d61e2301897942fe860341424d=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.0.0-11
 quay.io/acm-d/managed-serviceaccount-rhel8@sha256:46cc39dd83af95298ba9a9a77bb8ea83a36bd79bf03ebe19b7cbaea696493f58=__DESTINATION_ORG__/managed-serviceaccount-rhel8:v2.0.0-6
-quay.io/acm-d/mce-custom-registry@sha256:0a71cdf5f20c5acc1798f74df1e35341aac2df6c3d98326a06e7fc36054ccb96=__DESTINATION_ORG__/mce-custom-registry:2.0.0-DOWNANDBACK-2022-03-13-16-38-39
+quay.io/acm-d/mce-custom-registry@sha256:3220b54e3e756dffcb520b936454eb6ee5b24d2e51adfaaf9bb6692902e712e1=__DESTINATION_ORG__/mce-custom-registry:2.0.0-DOWNANDBACK-2022-03-13-16-38-39
 quay.io/acm-d/mce-operator-bundle@sha256:bf575b3e7298a9c7ba81ab05529375d6ca4275b9b44f0d0d2c37f2478fe77aba=__DESTINATION_ORG__/mce-operator-bundle:v2.0.0-49
 quay.io/acm-d/multicloud-manager-rhel8@sha256:b965a7fa5e0e3a3642c016c6c04827092ff9b062ffeb20320bcb98f375237640=__DESTINATION_ORG__/multicloud-manager-rhel8:v2.0.0-11
 quay.io/acm-d/must-gather-rhel8@sha256:48ce1dedaa32396340637bc665dac32f2a62ba4104ed028bea75fb4e65289cdf=__DESTINATION_ORG__/must-gather-rhel8:v2.0.0-9
 quay.io/acm-d/placement-rhel8@sha256:e7677e5287153b6c6d6a28cf36fe62c9ce4eb5ad250c19b94f96057c2ade9634=__DESTINATION_ORG__/placement-rhel8:v2.0.0-8
+quay.io/acm-d/postgresql-12@sha256:b006af9af125adce28546d0ed9d77421abe54182741f6b5e1d31c88dd763580b=__DESTINATION_ORG__/postgresql-12:1-92.1645816964
 quay.io/acm-d/provider-credential-controller-rhel8@sha256:42528e3ae4d0b547cf2243bf94f4e5f918c49baac0ece8d42e0c081d8fb193b4=__DESTINATION_ORG__/provider-credential-controller-rhel8:v2.0.0-3
 quay.io/acm-d/registration-operator-rhel8@sha256:bd68302e6baed11409235c6841ff371bc2414d26d3838f213469500e148d9e92=__DESTINATION_ORG__/registration-operator-rhel8:v2.0.0-11
 quay.io/acm-d/registration-rhel8@sha256:221aeb3b253bbd7ea0526a80fec3d2c4bdc78bf3df9df63eac279bb6c6247101=__DESTINATION_ORG__/registration-rhel8:v2.0.0-11
