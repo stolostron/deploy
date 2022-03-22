@@ -1,7 +1,7 @@
-quay.io/acm-d/acm-custom-registry@sha256:a4778f13560832c7fce5131c95d0325c5cd3a4919f55008def654ea3924c0177=__DESTINATION_ORG__/acm-custom-registry:2.3.8-DOWNSTREAM-2022-03-21-21-44-27
+quay.io/acm-d/acm-custom-registry@sha256:97bbe7a620106e857f5f03f966a155e7a1bb33fb7ad4d59a0aecf5f23ccee977=__DESTINATION_ORG__/acm-custom-registry:2.3.8-DOWNSTREAM-2022-03-21-21-44-27
 quay.io/acm-d/acm-grafana-rhel8@sha256:f15d95ad31243fde1ba63b02114e7fb5e82651d9509fba2d0f8773abb3ca48ea=__DESTINATION_ORG__/acm-grafana-rhel8:v2.3.8-3
-quay.io/acm-d/acm-must-gather-rhel8@sha256:da73cd6143deb3a31486054855c64e3e4bf06642ca2a46f0d4e4bd653bc64046=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.3.8-2
-quay.io/acm-d/acm-operator-bundle@sha256:310e4358aa6dbbac24e7a0ed8e5e66c01b248d55612dced7005a707504356735=__DESTINATION_ORG__/acm-operator-bundle:v2.3.8-6
+quay.io/acm-d/acm-must-gather-rhel8@sha256:63f1082d62db7e153794ab6e3a09944f4433ff84a2f6dd0a41005e20c7e1004d=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.3.8-3
+quay.io/acm-d/acm-operator-bundle@sha256:4f2893421c649facf66a5fc5009cb27e44f18b83cb1df27166b385eb93317155=__DESTINATION_ORG__/acm-operator-bundle:v2.3.8-7
 quay.io/acm-d/agent-service-rhel8@sha256:dd9529b94e3a3567fc028f435260c4da9a11fb9f31e0cb8bbc16122644f69c2c=__DESTINATION_ORG__/agent-service-rhel8:v2.3.8-2
 quay.io/acm-d/application-ui-rhel8@sha256:4a950b22eff43816ded5d215e94e693454ba26c618bc5ea5798463286f607e64=__DESTINATION_ORG__/application-ui-rhel8:v2.3.8-3
 quay.io/acm-d/assisted-installer-agent-rhel8@sha256:d5206343e21c4bd014e86ade49583970a0d2ed8151d9694b65c009cb4d03c07b=__DESTINATION_ORG__/assisted-installer-agent-rhel8:v2.3.8-2
@@ -12,7 +12,7 @@ quay.io/acm-d/cluster-curator-controller-rhel8@sha256:87e5d191ba6232f84b9184056b
 quay.io/acm-d/clusterlifecycle-state-metrics-rhel8@sha256:5bab4681c5010dfe051074891f7e8ada4e5422d429296a05541a010ae4a8722f=__DESTINATION_ORG__/clusterlifecycle-state-metrics-rhel8:v2.3.8-2
 quay.io/acm-d/config-policy-controller-rhel8@sha256:707dca4aa0de178068487680a7e8200e3e744feb21169917a30696f2acc7e402=__DESTINATION_ORG__/config-policy-controller-rhel8:v2.3.8-2
 quay.io/acm-d/console-api-rhel8@sha256:ab86da26f1a1885b1ddcc93f3427fcccb5d0255ce0820b980c603cb954bc341d=__DESTINATION_ORG__/console-api-rhel8:v2.3.8-2
-quay.io/acm-d/console-rhel8@sha256:21d539e8e759107cefa6fd6c62357da992ab2a46f7e75fed0a33b5845a807e3e=__DESTINATION_ORG__/console-rhel8:v2.3.8-2
+quay.io/acm-d/console-rhel8@sha256:7bcd8816ea59cf2f1a28c02e7472143de372e770e83419101eb05b3b116aa607=__DESTINATION_ORG__/console-rhel8:v2.3.8-3
 quay.io/acm-d/discovery-rhel8-operator@sha256:65ec96a16bddefe40747abe0832ade99b1926db280afef473e4190f21105b309=__DESTINATION_ORG__/discovery-rhel8-operator:v2.3.8-2
 quay.io/acm-d/endpoint-monitoring-rhel8-operator@sha256:339b7520d7872bba88a145fea41ac4b4d97b902750fddf3aeb466876d6dc8e72=__DESTINATION_ORG__/endpoint-monitoring-rhel8-operator:v2.3.8-2
 quay.io/acm-d/governance-policy-propagator-rhel8@sha256:472b926648ae3a9b90f0c1199db32976bc6d7caba62001e93a9af7b6f01e0838=__DESTINATION_ORG__/governance-policy-propagator-rhel8:v2.3.8-2
@@ -21,13 +21,13 @@ quay.io/acm-d/governance-policy-status-sync-rhel8@sha256:3299d3649a883bba8c6dd64
 quay.io/acm-d/governance-policy-template-sync-rhel8@sha256:5978aef35c48202afa48e89b873c0295331f71e2be23ef654c38f0262114067e=__DESTINATION_ORG__/governance-policy-template-sync-rhel8:v2.3.8-2
 quay.io/acm-d/grafana-dashboard-loader-rhel8@sha256:a4e9cdfe14cc3132f39cedb20b585382755efd2ce1f4a0e0dd19475b4c10da30=__DESTINATION_ORG__/grafana-dashboard-loader-rhel8:v2.3.8-2
 quay.io/acm-d/grc-ui-api-rhel8@sha256:af7b52f31b46f592729f91d206aa65e5fbdbc68bd0466d8f0c3962665ac5a9f4=__DESTINATION_ORG__/grc-ui-api-rhel8:v2.3.8-2
-quay.io/acm-d/grc-ui-rhel8@sha256:51e8ddc9c0ac532ad7403433bd4827b801b51db9ca519a58d94e4012ee3d9e20=__DESTINATION_ORG__/grc-ui-rhel8:v2.3.8-3
+quay.io/acm-d/grc-ui-rhel8@sha256:32e7776d27051202e216f57cc58434d3a6c4cb50f16ceb8c4864d8d7ade9937f=__DESTINATION_ORG__/grc-ui-rhel8:v2.3.8-4
 quay.io/acm-d/iam-policy-controller-rhel8@sha256:b59623bcc91bba53e1f7ebfee5323ee5c76871ae4c69cb7c9041b9154f660275=__DESTINATION_ORG__/iam-policy-controller-rhel8:v2.3.8-2
 quay.io/acm-d/insights-client-rhel8@sha256:30dc99f0dbfb0c26194c8668ed14312893a7f5ced0ffc8608b63ebba2a1b2e9b=__DESTINATION_ORG__/insights-client-rhel8:v2.3.8-2
 quay.io/acm-d/insights-metrics-rhel8@sha256:317bbe2fd2059c5437aa3dd706fb22f65ef346b2b8a9abe1198b8d0b74423970=__DESTINATION_ORG__/insights-metrics-rhel8:v2.3.8-2
 quay.io/acm-d/klusterlet-addon-controller-rhel8@sha256:ad804f451cda5193c6bf6dc1f024736ec977623f09f3334716bf583b59d13ae0=__DESTINATION_ORG__/klusterlet-addon-controller-rhel8:v2.3.8-2
-quay.io/acm-d/klusterlet-addon-rhel8-operator@sha256:df5eca25f0a4a22654241391d1061356d105dd0bbc394ffe662ac518aa5291ad=__DESTINATION_ORG__/klusterlet-addon-rhel8-operator:v2.3.8-2
-quay.io/acm-d/kui-web-terminal-rhel8@sha256:b3c5e654b315a32a44fbb0d82578d6bd2163829785968a8461bf95840e9d1f7e=__DESTINATION_ORG__/kui-web-terminal-rhel8:v2.3.8-3
+quay.io/acm-d/klusterlet-addon-rhel8-operator@sha256:4e19a2678295e07b3d5fb8f3ae6d698f90440b19e30eaf5b15c7bdb3be934c92=__DESTINATION_ORG__/klusterlet-addon-rhel8-operator:v2.3.8-3
+quay.io/acm-d/kui-web-terminal-rhel8@sha256:3aa3ffa0c287066fd92ceda1df48685a5e4b1574b9ce894f9563150de5d1be58=__DESTINATION_ORG__/kui-web-terminal-rhel8:v2.3.8-4
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:3ca0f101bc8969f9bf913037075dca5a981c5e33ddfb6f824156d60b08459d10=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.3.8-2
 quay.io/acm-d/management-ingress-rhel7@sha256:880fc7afafc9eb604183b72d783d31f38ffbcc60392a586b1fcfbfd0d211d925=__DESTINATION_ORG__/management-ingress-rhel7:v2.3.8-1
 quay.io/acm-d/memcached-exporter-rhel7@sha256:859b419ba5b3b75a633ca14f764024abbcb704f465ae1025683724293d9204e8=__DESTINATION_ORG__/memcached-exporter-rhel7:v2.3.8-1
@@ -60,7 +60,7 @@ quay.io/acm-d/search-aggregator-rhel8@sha256:21aa96da6eb9ac365aaa36b947f3a712eac
 quay.io/acm-d/search-api-rhel8@sha256:252e14488895b2140ad58c6ec67c9ec4416f2a3fd0703296b49f66fc3f57c0af=__DESTINATION_ORG__/search-api-rhel8:v2.3.8-2
 quay.io/acm-d/search-collector-rhel8@sha256:9c561c52dcf9f9a49e97140400275eadd29d3fbadab9fff9c64aa34f04a5f803=__DESTINATION_ORG__/search-collector-rhel8:v2.3.8-2
 quay.io/acm-d/search-rhel8@sha256:69aba28248205589d04c6fe2f0d9d51ca4659e3329cc9a38a365aecf6a501b89=__DESTINATION_ORG__/search-rhel8:v2.3.8-2
-quay.io/acm-d/search-ui-rhel8@sha256:c1e007c782cc9b641344ddcc2fae9c3d39ed8e6b920b316251c08cb5a9339b95=__DESTINATION_ORG__/search-ui-rhel8:v2.3.8-2
+quay.io/acm-d/search-ui-rhel8@sha256:d3348f5887f5a228ca949787b539d37f33b476f39f75f418a4d3b2a4a8677d7e=__DESTINATION_ORG__/search-ui-rhel8:v2.3.8-3
 quay.io/acm-d/submariner-addon-rhel8@sha256:779b459d0ad6717ad077ec61a25d2d577ec72a4c846d1abc062c83e1da442019=__DESTINATION_ORG__/submariner-addon-rhel8:v2.3.8-2
 quay.io/acm-d/thanos-receive-controller-rhel8@sha256:94515e0c57c5b1b92287f636e4494c95abf7fd21ed869e81847e4c7654b89b68=__DESTINATION_ORG__/thanos-receive-controller-rhel8:v2.3.8-2
 quay.io/acm-d/thanos-rhel7@sha256:9f2a1bf878ec161a1481f78bd6600af46bfe938c9ab7c456e8a21efeef94a510=__DESTINATION_ORG__/thanos-rhel7:v2.3.8-2
