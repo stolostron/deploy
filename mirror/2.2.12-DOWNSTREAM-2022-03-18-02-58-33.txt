@@ -1,7 +1,7 @@
-quay.io/acm-d/acm-custom-registry@sha256:a94c5981ef63ba7891a6eb1dbe8e535c2a4a387148863aa5e0fea0320e382861=__DESTINATION_ORG__/acm-custom-registry:2.2.12-DOWNSTREAM-2022-03-18-02-58-33
+quay.io/acm-d/acm-custom-registry@sha256:ca8be54e1df4995d679130e55f5617aa8bf4c4068ecc63bb3c73acd8c5b1d975=__DESTINATION_ORG__/acm-custom-registry:2.2.12-DOWNSTREAM-2022-03-18-02-58-33
 quay.io/acm-d/acmesolver-rhel8@sha256:526bbb153806ef0f7751bf948fae166f96acadb7205e7491fea71f3eea79cb42=__DESTINATION_ORG__/acmesolver-rhel8:v2.2.12-2
 quay.io/acm-d/acm-must-gather-rhel8@sha256:5eaaf21728512cfde96d580bc25cfdee4d1d80d89e44de9379030b16fdee67f3=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.2.12-2
-quay.io/acm-d/acm-operator-bundle@sha256:6994d0443eba40b97a3aef2e490c0712ac00cfc369767072cd55aa9f5754f9f7=__DESTINATION_ORG__/acm-operator-bundle:v2.2.12-4
+quay.io/acm-d/acm-operator-bundle@sha256:f8557fe336409cfdbc3829e6cb31064c8d51ff1607cb0195411e3dbc38950b23=__DESTINATION_ORG__/acm-operator-bundle:v2.2.12-5
 quay.io/acm-d/application-ui-rhel8@sha256:9857ccf0154f0149c4df99c4f9c5aea241eefb5169de6dab271cb8bb648ba092=__DESTINATION_ORG__/application-ui-rhel8:v2.2.12-3
 quay.io/acm-d/cainjector-rhel8@sha256:da7bc541b56d82514c42ffecbb7132746008070d91d96e0055b363d655c16432=__DESTINATION_ORG__/cainjector-rhel8:v2.2.12-2
 quay.io/acm-d/cert-manager-controller-rhel8@sha256:4ad86243d4d3dc1ec697ffc6b4e16c2cbf70b143069bc0c0f5ec8cb9bce8611c=__DESTINATION_ORG__/cert-manager-controller-rhel8:v2.2.12-2
@@ -13,7 +13,7 @@ quay.io/acm-d/config-policy-controller-rhel8@sha256:921d526f662b3344be52e7307d12
 quay.io/acm-d/console-api-rhel8@sha256:6d2e3fb55d1a38eb78ad678f9a37a3c4b12784f4784f6e57db329127f071ef28=__DESTINATION_ORG__/console-api-rhel8:v2.2.12-3
 quay.io/acm-d/console-header-rhel8@sha256:270a8029d2d147ef0eb1029dfd4cfa4dc489a8d0dc3b5e3e91e1cc4dc44a6202=__DESTINATION_ORG__/console-header-rhel8:v2.2.12-3
 quay.io/acm-d/console-rhel8@sha256:75197e2c66ca1c0bb3a50546427cf75b885769684c442fc7eeb70f69be346f57=__DESTINATION_ORG__/console-rhel8:v2.2.12-3
-quay.io/acm-d/endpoint-component-rhel8-operator@sha256:02a292cbfd63b8a69610ddcf7b2dcbafd44ec7fb0a5e84d2371cb980369a46b1=__DESTINATION_ORG__/endpoint-component-rhel8-operator:v2.2.12-1
+quay.io/acm-d/endpoint-component-rhel8-operator@sha256:f6427a9ae00b790e155bd17d9fabd8bce26010b34350c99601827214d46306a5=__DESTINATION_ORG__/endpoint-component-rhel8-operator:v2.2.12-2
 quay.io/acm-d/endpoint-monitoring-rhel8-operator@sha256:6b62598e2de46701ee97337695a052bf51188236b06c3e602c1a7b4711d114ad=__DESTINATION_ORG__/endpoint-monitoring-rhel8-operator:v2.2.12-2
 quay.io/acm-d/endpoint-rhel8-operator@sha256:e41517d77f37a2b2fac71471928a43d80104c12e95911090c169cea83fde20ae=__DESTINATION_ORG__/endpoint-rhel8-operator:v2.2.12-2
 quay.io/acm-d/governance-policy-propagator-rhel8@sha256:660cdd9bf348ea0093850681af7c2cb92aed29beb7a9f9cd3a9d8ada18d73037=__DESTINATION_ORG__/governance-policy-propagator-rhel8:v2.2.12-2
@@ -34,7 +34,7 @@ quay.io/acm-d/memcached-rhel8@sha256:9bc9f3d1dca6c277670489af0ca2a75d345279715d7
 quay.io/acm-d/metrics-collector-rhel8@sha256:1776d8eb98b5e1a4e0822b1576a949af659d303eef99e50b21c64ee1786660d2=__DESTINATION_ORG__/metrics-collector-rhel8:v2.2.12-2
 quay.io/acm-d/multicloud-manager-rhel8@sha256:36adc74bde42350afefa95266d63da8e3caae2d7046da8f7f55615f4f1074e05=__DESTINATION_ORG__/multicloud-manager-rhel8:v2.2.12-2
 quay.io/acm-d/multiclusterhub-repo-rhel8@sha256:6b699eb27577c64f7d3339cd624e381c1cd77d45ff760557d151b2bc3761492c=__DESTINATION_ORG__/multiclusterhub-repo-rhel8:v2.2.12-1
-quay.io/acm-d/multiclusterhub-rhel8@sha256:6bd33f8f1d47e0a3ffcd671c17e9f3429ab2a80fa7a3c087a12f8be653af7753=__DESTINATION_ORG__/multiclusterhub-rhel8:v2.2.12-4
+quay.io/acm-d/multiclusterhub-rhel8@sha256:1a091fd9869a68e056a7b635a0723fe9791b869da2792ba58156e0cfb5eb6bdc=__DESTINATION_ORG__/multiclusterhub-rhel8:v2.2.12-5
 quay.io/acm-d/multicluster-observability-rhel8-operator@sha256:27ec08b13e8f66b0e8f821682bd2b704aa8980209b21a01e1487de3634ff862c=__DESTINATION_ORG__/multicluster-observability-rhel8-operator:v2.2.12-1
 quay.io/acm-d/multicluster-operators-application-rhel8@sha256:896b26b945c556d19449e13d5f52c35ebbe5bb5392f431c0b8a5a934165738d9=__DESTINATION_ORG__/multicluster-operators-application-rhel8:v2.2.12-2
 quay.io/acm-d/multicluster-operators-channel-rhel8@sha256:ac8b36ace99fe8e2bfab174cb6c29b39ff45d477f2b737ede777411eb5656e37=__DESTINATION_ORG__/multicluster-operators-channel-rhel8:v2.2.12-2
