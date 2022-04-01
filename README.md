@@ -215,6 +215,7 @@ To deploy a downstream build from `quay.io/acm-d` ensure that your OCP cluster m
 
 ```bash
 export COMPOSITE_BUNDLE=true
+export DOWNSTREAM=true
 export CUSTOM_REGISTRY_REPO="quay.io:443/acm-d"
 export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>
 ./start.sh --watch
