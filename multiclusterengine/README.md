@@ -34,6 +34,30 @@ $ ./multiclusterengine/start.sh
 
 After the tag has been provided, the installation will continue. Currently the installation deploys and manages its components in the `multicluster-engine` namespace which it creates.
 
+## Upgrading (Development only)
+You can upgrade you UPSTREAM Multicluster Engine with the upgade.sh script.
+
+### Run interactive
+1. Run the script
+   ```bash
+   # Use the optional --watch parameter
+   ./upgrade.sh
+   ```
+2. You will be prompted to enter the snapshot, make sure you choose a `2.0.0-BACKPLANE-...` snapshot
+3. If you added the `--watch` parameter, a watch on the pods will start, so you can see the changes.
+   * You will ALWAYS see the `multicluster-engine-operator-...` pods (two of them) restart.
+   * Any other images that are new to the snapshot will be restarted
+   * The pods are sorted with NEWEST last
+   * When the `multicluster-engine-operator` restarts, it will apply any CRD changes
+4. Press ctrl-c to end the watch!
+
+### Run with no input
+1. Run the script, including the snapshot
+   ```bash
+   export snapshot=2.0.0-BACKPLANE-2022-04-29-01-53-52 && ./upgrade.sh
+   ```
+2. The upgrade is performed, but the script does not WAIT for any pod change to occur
+
 ## Uninstallation
 
 To uninstall the MultiCluster Engine, follow these steps:
