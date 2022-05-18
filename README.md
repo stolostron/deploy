@@ -25,8 +25,6 @@ Our code is open! To reach us in the open source community please head to https:
 If you're looking for RHACM, the Red Hat multicluster management product that runs on OpenShift, your Red Hat account team rep should be able to help you get an evaluation of ACM so that you can use the actual product bits in a supported way. There is also a self-supported evaluation if you prefer that, and you can get started right away at: https://www.redhat.com/en/technologies/management/advanced-cluster-management
 -> click the “Try It” button. 
 
-If you're a Red Hat associate or partner needing access to open-cluster-management in quay.io, please contact the ACM CICD team via email at acm-contact@redhat.com or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel #forum-acm-devops. Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
-
 ## Let's get started...
 
 You can find our __work-in-progress__ documentation [here](https://github.com/stolostron/rhacm-docs/blob/doc_prod/README.md). Please read through the docs to find out how you can use the _open-cluster-management_ project. Oh, and please submit an issue for any problems you may find, or clarifications you might suggest.
@@ -141,6 +139,12 @@ Note: This script can be run multiple times and will attempt to continue where i
 ## Deploying Downstream Builds SNAPSHOTS for Product Quality Engineering (only 2.0+)
 
 ### Requirements
+
+#### Required Access
+
+To deploy downstream builds, you need access to pull the related images from the downstream mirror respository, quay.io/acm-d.  Access is internal to Red Hat only for Dev/Test/QE use.  Contact ACM CICD in [#forum-acm-devops](https://coreos.slack.com/archives/CSZLMKPS5) on CoreOS Slack for access.
+
+#### Configuration
 
 To deploy a downstream build from `quay.io/acm-d` ensure that your OCP cluster meets the following requirements:
 
