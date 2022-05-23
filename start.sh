@@ -395,26 +395,28 @@ if [[ " $@ " =~ " --watch " ]]; then
                     reason="$(echo $component | jq -r '.reason')";
                     message="$(echo $component | jq -r '.message')";
                     printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
-                done      
-                mce_find=$(oc get mce --all-namespaces 2>&1)
-                if [[ $mce_find == *"No resources found"* ]]; then
-                    echo "Still waiting on MCE to be created"
-                else
-                    component_list=$(oc get mce --all-namespaces -o json | jq -r '.items[].status.components') 2>/dev/null
-                    printf "\n"
-                    printf "MCE COMPONENTS"
-                    printf "\n"
-                    printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
-                    size=$(echo $component_list | jq -r '. | length')
-                    for (( c=0; c<$size; c++ )) do
-                        component=$(echo $component_list | jq --argjson c $c '.[$c]')
-                        status_item="$(echo $component | jq -r '.name')";
-                        component_status="$(echo $component | jq -r '.status')";
-                        type="$(echo $component | jq -r '.type')";
-                        reason="$(echo $component | jq -r '.reason')";
-                        message="$(echo $component | jq -r '.message')";
-                        printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
-                    done
+                done     
+                if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then 
+                    mce_find=$(oc get mce --all-namespaces 2>&1)
+                    if [[ $mce_find == *"No resources found"* ]]; then
+                        echo "Still waiting on MCE to be created"
+                    else
+                        component_list=$(oc get mce --all-namespaces -o json | jq -r '.items[].status.components') 2>/dev/null
+                        printf "\n"
+                        printf "MCE COMPONENTS"
+                        printf "\n"
+                        printf "%-30s\t%-10s\t%-30s\t%-30s\n" "COMPONENT" "STATUS" "TYPE" "REASON"
+                        size=$(echo $component_list | jq -r '. | length')
+                        for (( c=0; c<$size; c++ )) do
+                            component=$(echo $component_list | jq --argjson c $c '.[$c]')
+                            status_item="$(echo $component | jq -r '.name')";
+                            component_status="$(echo $component | jq -r '.status')";
+                            type="$(echo $component | jq -r '.type')";
+                            reason="$(echo $component | jq -r '.reason')";
+                            message="$(echo $component | jq -r '.message')";
+                            printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
+                        done
+                    fi
                 fi
             fi
             echo ""
