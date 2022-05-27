@@ -247,6 +247,15 @@ oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
 ```bash
 for helmrelease in $(oc get helmreleases.apps.open-cluster-management.io | tail -n +2 | cut -f 1 -d ' '); do oc patch helmreleases.apps.open-cluster-management.io $helmrelease --type json -p '[{ "op": "remove", "path": "/metadata/finalizers" }]'; done
 ```
+2. If you need to get the build snapshot from your hub, the snapshot comes from image tagging CICD does to group components into builds. This snapshot is set in the catalogsource when deploying from acm-d. So to get what version was deployed you would read the image of the ACM catalogsource. An example of how to do this is 
+
+```oc get catalogsource acm-custom-registry -n openshift-marketplace -o jsonpath='
+
+{.spec.image}
+'
+```
+which returns `quay.io/stolostron/acm-custom-registry:2.5.0-SNAPSHOT-2022-05-26-19-51-06`
+
 
 #### the hard way
 <details><summary>Click if you dare</summary>
