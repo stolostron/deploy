@@ -59,15 +59,22 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-oc -n multicluster-engine delete csv multicluster-engine.v2.0.0
-if [ $? -ne 0 ]; then
-  exit 1
+mceRef=`oc -n multicluster-engine get csv -o name | grep multicluster-engine.v`
+if [ $? -eq 0 ]; then
+  oc -n multicluster-engine delete ${mceRef}
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
+else
+  echo WARNING: CSV with multicluster-engine was not found in project multicluster-engine.
 fi
+
+# We do not exit, because we still the the subscription check which may re-generate the CSV in specific failure scenarios
 oc -n multicluster-engine delete subscription multicluster-engine
 if [ $? -ne 0 ]; then
   exit 1
 fi
- 
+
 oc create -f - <<EOF
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
@@ -77,7 +84,7 @@ metadata:
   name: multicluster-engine
   namespace: multicluster-engine
 spec:
-  channel: stable-2.0
+  channel: stable-${snapshot:0:3}
   installPlanApproval: Automatic
   name: multicluster-engine
   source: multiclusterengine-catalog
