@@ -53,6 +53,12 @@ kubectl delete -k multiclusterhub/ -n ${TARGET_NAMESPACE}
 echo "Sleeping for 200 seconds to allow resources to finalize ..."
 sleep 200
 
+kubectl get multiclusterhub >/dev/null 2>&1
+if [ $? -ne 1 ]; then
+    echo "ERROR: MultiClusterHub was not deleted! Make sure to remove resource dependencies"
+    exit 1
+fi
+
 kubectl delete -k multicluster-hub-operator/ -n ${TARGET_NAMESPACE}
 ./multicluster-hub-operator/uninstall.sh
 
