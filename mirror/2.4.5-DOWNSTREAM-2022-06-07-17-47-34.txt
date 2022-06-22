@@ -1,7 +1,7 @@
-quay.io/acm-d/acm-custom-registry@sha256:29eb1cf4794c2d9d08d6ef430971607fb3a540173ab135c5ab0bf67879d34233=__DESTINATION_ORG__/acm-custom-registry:2.4.5-DOWNSTREAM-2022-06-07-17-47-34
+quay.io/acm-d/acm-custom-registry@sha256:df48a8c28e933476134838fce1134471f22971f3ba01827cea0972b380c664de=__DESTINATION_ORG__/acm-custom-registry:2.4.5-DOWNSTREAM-2022-06-07-17-47-34
 quay.io/acm-d/acm-grafana-rhel8@sha256:166c6d6714e68c26ee3a6896c42e118f3dd3bccda72a0a5ce076301329605e2a=__DESTINATION_ORG__/acm-grafana-rhel8:v2.4.5-6
 quay.io/acm-d/acm-must-gather-rhel8@sha256:bf59fbfd6bd75c79d798eae05b8492503f406299a6fbb8e93f8506d444358112=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.4.5-5
-quay.io/acm-d/acm-operator-bundle@sha256:b84497b454178e8ded1aa4e13c2f3f3070f810426c6245869a24e19413ee6c95=__DESTINATION_ORG__/acm-operator-bundle:v2.4.5-46
+quay.io/acm-d/acm-operator-bundle@sha256:ea227b474213982fdd365909d04e265a7506e8f4615e14496f4a2def6bd75f41=__DESTINATION_ORG__/acm-operator-bundle:v2.4.5-47
 quay.io/acm-d/agent-service-rhel8@sha256:d149e977c21cbc6d404f4968770c9af7042454b2a81106e592a87262ac5a0b1e=__DESTINATION_ORG__/agent-service-rhel8:v2.4.5-9
 quay.io/acm-d/application-ui-rhel8@sha256:ca6393ef1c2bcdfabb9608a74257432865910d6a13a655e54b2402e0745d3fe6=__DESTINATION_ORG__/application-ui-rhel8:v2.4.5-12
 quay.io/acm-d/assisted-image-service-rhel8@sha256:8f4a11fd91aad2c579f51941b26ece7885e7edf6e6425623784181c4913a1157=__DESTINATION_ORG__/assisted-image-service-rhel8:v2.4.5-5
@@ -30,7 +30,7 @@ quay.io/acm-d/iam-policy-controller-rhel8@sha256:935f1e458a6fc559ee60c011d5a67d7
 quay.io/acm-d/insights-client-rhel8@sha256:9bc6274050a08f257d4b598391b546554a9fec3113f9129bf3ba8c76c5ac8130=__DESTINATION_ORG__/insights-client-rhel8:v2.4.5-6
 quay.io/acm-d/insights-metrics-rhel8@sha256:f9fe328f41d38840bd48b1c66db807062e4236e6fd8e66d3a95682e761e03dc4=__DESTINATION_ORG__/insights-metrics-rhel8:v2.4.5-5
 quay.io/acm-d/klusterlet-addon-controller-rhel8@sha256:d7af520be3236ef0986f7642016329f77d9f0a75741195c02ea5f47cd78a202e=__DESTINATION_ORG__/klusterlet-addon-controller-rhel8:v2.4.5-6
-quay.io/acm-d/klusterlet-addon-rhel8-operator@sha256:99a7d89ce31f47de46880fce7ea2f2bf7c4c6dd318da46217d4846e23ab25dca=__DESTINATION_ORG__/klusterlet-addon-rhel8-operator:v2.4.5-5
+quay.io/acm-d/klusterlet-addon-rhel8-operator@sha256:0305b9c8179c5653ca14b049cf07d399f7eef7f8bac719e36afe93f8ab1d5ddb=__DESTINATION_ORG__/klusterlet-addon-rhel8-operator:v2.4.5-6
 quay.io/acm-d/kube-rbac-proxy-rhel8@sha256:d0c01ed2fae42fa5811c54ddbd8de9d949619357bdf36903fc2df05c7ee6f9cf=__DESTINATION_ORG__/kube-rbac-proxy-rhel8:v2.4.5-6
 quay.io/acm-d/kube-state-metrics-rhel8@sha256:00ad08bf81ed704d59cfcc338bad3bec0248bae0cc4fe593d29d2cc9ab92abb2=__DESTINATION_ORG__/kube-state-metrics-rhel8:v2.4.5-7
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:e672b50c6d345e25c9ac21f54e4b72bc872a7b93e74cadabc7b6459f0282d41c=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.4.5-7
