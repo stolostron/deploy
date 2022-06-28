@@ -39,10 +39,20 @@ else
     echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
+SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_CHOICE} | sed -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+if [[ ! ( $SUBSCRIPTION_CHANNEL_VERSION =~ [0-9]+\.[0-9]+ ) ]]; then
+    echo "Failed to detect SUBSCRIPTION_CHANNEL_VERSION, we detected ${SUBSCRIPTION_CHANNEL_VERSION} which doesn't seem correct.  Try exporting SUBSCRIPTION_CHANNEL_VERSION and rerunning."
+    exit 1
+fi
+
+OPERATOR_DIRECTORY=multiclusterengine/operator/
+echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterengine-operator subscription"
+sed -i "s|channel: .*$|channel: stable-${SUBSCRIPTION_CHANNEL_VERSION}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+
 IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
 oc apply -f catalogsources/multicluster-engine.yaml
 oc create ns multicluster-engine --dry-run=client -o yaml | oc apply -f -
-oc apply -k multiclusterengine/operator/
+oc apply -k $OPERATOR_DIRECTORY
 
 CSVName=""
 for run in {1..10}; do
