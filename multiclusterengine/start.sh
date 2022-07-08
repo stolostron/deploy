@@ -29,13 +29,24 @@ echo "* Using baseDomain: ${HOST_URL}"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
-printf "Find snapshot tags @ ${_WEB_REPO}\nEnter SNAPSHOT TAG: \n"
-read -e -r SNAPSHOT_CHOICE
+if [ -f ./snapshot.ver ]; then
+    SNAPSHOT_CHOICE=`cat ./snapshot.ver`
+elif [[ " $@ " =~ " --silent " ]]; then
+    echo "ERROR: Silent mode will not work when ./snapshot.ver is missing"
+    exit 1
+fi
+
+if [[ " $@ " =~ " --silent " ]]; then
+    echo "* Silent mode"
+else
+    printf "Find snapshot tags @ ${_WEB_REPO}\nEnter SNAPSHOT TAG: \n"
+    read -e -r SNAPSHOT_CHOICE
+fi
 
 if [[ ! -n "${SNAPSHOT_CHOICE}" ]]; then
     echo "ERROR: Make sure you are provide a valid SNAPSHOT"
     exit 1
-else 
+else
     echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
