@@ -1,8 +1,8 @@
-quay.io/acm-d/acm-custom-registry@sha256:bf250690f30a0c572974da70340add95cf5bff7c5ca2a6ade948506fa98881b0=__DESTINATION_ORG__/acm-custom-registry:2.6.0-DOWNSTREAM-2022-08-18-23-01-44
+quay.io/acm-d/acm-custom-registry@sha256:2be3a854bc5a55b08853ea59ac1555106c5690e1111bf6a211d30e0769e1f2b5=__DESTINATION_ORG__/acm-custom-registry:2.6.0-DOWNSTREAM-2022-08-18-23-01-44
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:59b45d22b66f3d3480a57b683687cfccff0558a2c2f557ac0faf2408098e0177=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.6.0-17
 quay.io/acm-d/acm-grafana-rhel8@sha256:d5ed0b8fac58cbfb12bafb18b13a1105d4336485c898058d1de7e3b3de3b9080=__DESTINATION_ORG__/acm-grafana-rhel8:v2.6.0-6
 quay.io/acm-d/acm-must-gather-rhel8@sha256:fd744e764d3e200ba0b74662ef2665c1e6250d2a45b16153ff481ae4a7e1c17e=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.6.0-8
-quay.io/acm-d/acm-operator-bundle@sha256:c82ed0f445ff73a4d34ed3152e0f8de39a2cbc56e4c4e56cd766ce71e366bc47=__DESTINATION_ORG__/acm-operator-bundle:v2.6.0-95
+quay.io/acm-d/acm-operator-bundle@sha256:2078ae3b047181c2c144bbaa5fa81f755408e6dcee5a8e772eb6ef444f9b8861=__DESTINATION_ORG__/acm-operator-bundle:v2.6.0-96
 quay.io/acm-d/acm-prometheus-config-reloader-rhel8@sha256:84c7c65dc712eba936ca7c7dfc0c5901ce28a08030cc8e84d7cdbf631bcd3b05=__DESTINATION_ORG__/acm-prometheus-config-reloader-rhel8:v2.6.0-6
 quay.io/acm-d/acm-prometheus-rhel8@sha256:ce7f9367cd69a24da02bb3ebfa594fdb2f54c33f7412fd4b6a510feaef3bfe17=__DESTINATION_ORG__/acm-prometheus-rhel8:v2.6.0-6
 quay.io/acm-d/acm-volsync-addon-controller-rhel8@sha256:a21d9055ceedcb6b4d4f55decdcfecd31c7facf8042843d648ee2c54f3e6e9a7=__DESTINATION_ORG__/acm-volsync-addon-controller-rhel8:v2.6.0-7
@@ -58,11 +58,11 @@ quay.io/acm-d/metrics-collector-rhel8@sha256:3a294207da1ccdb5a3b5f5c7d9a6875ca30
 quay.io/acm-d/multicloud-integrations-rhel8@sha256:fd4ff9b1316202eba09e96954f310e326b09b828a0777fe29f07038bc5da0a6a=__DESTINATION_ORG__/multicloud-integrations-rhel8:v2.6.0-11
 quay.io/acm-d/multicloud-manager-rhel8@sha256:a52ef31bb13ac8d3d017c9e54465d1270b47791be22eb40f15837f2622d50c62=__DESTINATION_ORG__/multicloud-manager-rhel8:v2.1.0-27
 quay.io/acm-d/multiclusterhub-repo-rhel8@sha256:749f5d21c9e90ec66a68fc4f0b3315d166ffbc56d1823440051ce2fcfd2782db=__DESTINATION_ORG__/multiclusterhub-repo-rhel8:v2.6.0-18
-quay.io/acm-d/multiclusterhub-rhel8@sha256:4e6d88c430248c38a3d901d93d99188e9b29eb62bf77ea0537e01510409aaf80=__DESTINATION_ORG__/multiclusterhub-rhel8:v2.6.0-23
+quay.io/acm-d/multiclusterhub-rhel8@sha256:8e0751dec575db6fd11af758aa057a600cabf7e4fde86738661eec3d14f8fe04=__DESTINATION_ORG__/multiclusterhub-rhel8:v2.6.0-24
 quay.io/acm-d/multicluster-observability-rhel8-operator@sha256:41878756d7aee3409d6633a30a2cfc1503083f64ef6e6ef9d746d4c25c038bb3=__DESTINATION_ORG__/multicluster-observability-rhel8-operator:v2.6.0-15
 quay.io/acm-d/multicluster-operators-application-rhel8@sha256:823c964ef87984c9f7008bd5fc69db49fada72bfab020f01494c69ee804d0d88=__DESTINATION_ORG__/multicluster-operators-application-rhel8:v2.6.0-18
 quay.io/acm-d/multicluster-operators-channel-rhel8@sha256:ecb9efc1a14c6a19562d89ba2215ff7c44b842174a040627b2cc2d8d0cf8e874=__DESTINATION_ORG__/multicluster-operators-channel-rhel8:v2.6.0-17
-quay.io/acm-d/multicluster-operators-subscription-rhel8@sha256:0d15dd7fa8d00753aa8c3ff0275cd429ea3b8735e28702a90bd25c10cb7c617c=__DESTINATION_ORG__/multicluster-operators-subscription-rhel8:v2.6.0-38
+quay.io/acm-d/multicluster-operators-subscription-rhel8@sha256:827fe46cca09f0ced73dab8de78fffef3c9bae489054bce309aee5b527c5f2f9=__DESTINATION_ORG__/multicluster-operators-subscription-rhel8:v2.6.0-39
 quay.io/acm-d/must-gather-rhel8@sha256:36d00853b7b4cb675a6d1c2dee96edf68ce695cc31cc996c8f9d250cfe57c1bf=__DESTINATION_ORG__/must-gather-rhel8:v2.1.0-6
 quay.io/acm-d/node-exporter-rhel8@sha256:bd69ea28ec134a2aff2539e9ef65cbf2f7d9dad9f77d8d13f08d06ccda34ac6b=__DESTINATION_ORG__/node-exporter-rhel8:v2.6.0-7
 quay.io/acm-d/observatorium-rhel8-operator@sha256:a92b57c267e7487aef6f7862b2c39849a21f05dffc344b02937e6d25ad0002d8=__DESTINATION_ORG__/observatorium-rhel8-operator:v2.6.0-7
