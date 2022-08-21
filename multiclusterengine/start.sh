@@ -52,9 +52,9 @@ fi
 
 IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
 VER="${SNAPSHOT_CHOICE:0:3}" yq eval -i '.spec.channel = "stable-"+ env(VER)' multiclusterengine/operator/subscription.yaml
-oc apply -f catalogsources/multicluster-engine.yaml
+oc apply -f ../catalogsources/multicluster-engine.yaml
 oc create ns multicluster-engine --dry-run=client -o yaml | oc apply -f -
-oc apply -k multiclusterengine/operator/
+oc apply -k operator/
 
 CSVName=""
 for run in {1..10}; do
@@ -88,7 +88,7 @@ for run in {1..10}; do
 done
 
 if [ $_apiReady -eq 1 ]; then
-  oc apply -f multiclusterengine/multicluster_v1alpha1_multiclusterengine.yaml
+  oc apply -f multicluster_v1alpha1_multiclusterengine.yaml
   echo "multiclusterengine installed successfully"
 else
   echo "multiclusterengine subscription could not install in the allotted time."
