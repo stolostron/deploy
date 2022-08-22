@@ -1,7 +1,7 @@
-quay.io/acm-d/acm-custom-registry@sha256:18afebfdd7ffac4a79ee6a33ae3d292446c17de832ac1d081ef60f989d957d62=__DESTINATION_ORG__/acm-custom-registry:2.3.12-DOWNSTREAM-2022-07-10-18-25-57
+quay.io/acm-d/acm-custom-registry@sha256:7dcd35acf8db70254be2ca3805c94a9e2b85a19daa5a0e92986a203142d5a457=__DESTINATION_ORG__/acm-custom-registry:2.3.12-DOWNSTREAM-2022-07-10-18-25-57
 quay.io/acm-d/acm-grafana-rhel8@sha256:0826c3874e1ead27daf407f8095906655613ce24648e252c0cf8a28e93322eb4=__DESTINATION_ORG__/acm-grafana-rhel8:v2.3.12-3
 quay.io/acm-d/acm-must-gather-rhel8@sha256:7337fd8957e836be24480f06dfe118dafcb25d8c2bd9577b6da331d5696435a5=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.3.12-2
-quay.io/acm-d/acm-operator-bundle@sha256:b0423126040c87a1f16fa01bf3d879b9868ec83286e1cfbf6bb2aa460c1401ce=__DESTINATION_ORG__/acm-operator-bundle:v2.3.12-4
+quay.io/acm-d/acm-operator-bundle@sha256:83d347da2de82355bea2ff714b75e24c1c943e9f07da2473e183ec0767266fb2=__DESTINATION_ORG__/acm-operator-bundle:v2.3.12-5
 quay.io/acm-d/agent-service-rhel8@sha256:584825708116c35bf7073da0b46da504bfcebf5eb156613845dd6a1dc8e07353=__DESTINATION_ORG__/agent-service-rhel8:v2.3.12-3
 quay.io/acm-d/application-ui-rhel8@sha256:dea5eaafce5505c46dba1850bfa33f96f15edccda101e5cb4731b5e110fdaab7=__DESTINATION_ORG__/application-ui-rhel8:v2.3.12-3
 quay.io/acm-d/assisted-installer-agent-rhel8@sha256:6f8bf16cc981c7684f32b0a6d6393eeae284f9321348262dd11ffc08c1eebe09=__DESTINATION_ORG__/assisted-installer-agent-rhel8:v2.3.12-3
@@ -45,7 +45,7 @@ quay.io/acm-d/multicluster-operators-subscription-release-rhel8@sha256:72658c857
 quay.io/acm-d/multicluster-operators-subscription-rhel8@sha256:866ec6271b1031c2f39ea730a449cecd88330518104ef0b12683adc24cf52a08=__DESTINATION_ORG__/multicluster-operators-subscription-rhel8:v2.3.12-2
 quay.io/acm-d/observatorium-rhel8-operator@sha256:d3c45412a06ac3b7349bf3303d74b79c41a3fb789a06d3b63ddb7c01772ef593=__DESTINATION_ORG__/observatorium-rhel8-operator:v2.3.12-3
 quay.io/acm-d/observatorium-rhel8@sha256:880a50741e3a9f935cba5bbea53ca680079addc408cb431a5717b7747636d7c3=__DESTINATION_ORG__/observatorium-rhel8:v2.3.12-3
-quay.io/acm-d/openshift-hive-rhel8@sha256:fe7e2affdcf38eb6bb846d219f57bc4c9e8a309d2f047e956030631b789e71cc=__DESTINATION_ORG__/openshift-hive-rhel8:v2.3.12-3
+quay.io/acm-d/openshift-hive-rhel8@sha256:c664d63e70bf75bd90e088d4a9d52f6be5ad941d95f3419c10b4d213a8d74492=__DESTINATION_ORG__/openshift-hive-rhel8:v2.3.12-4
 quay.io/acm-d/ose-configmap-reloader@sha256:ca6df8d39998275a1b42c761df0379911025386ca4130c1801d83f4141ee3576=__DESTINATION_ORG__/ose-configmap-reloader:v4.5.0-202106111650.p0.git.8b987c8
 quay.io/acm-d/ose-oauth-proxy@sha256:2fe11e0fabd878f53a2627ebbed273400e063cffd80d8817565163dcbdaabcf7=__DESTINATION_ORG__/ose-oauth-proxy:v4.5.0-202106111650.p0.git.afb73cd
 quay.io/acm-d/ose-prometheus-alertmanager@sha256:88e34930a9e7c766b5b280388e960a14f2803eab4604e8c9ec785ee14493d2c9=__DESTINATION_ORG__/ose-prometheus-alertmanager:v4.5.0-202106111650.p0.git.26fa6b4
