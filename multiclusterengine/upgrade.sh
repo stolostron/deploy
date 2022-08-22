@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+DOWNSTREAM=${DOWNSTREAM:-"false"}
+
 # Check availability of multicluster engine
 echo "Verify connection and Multicluster Engine is present."
 out=`oc get mce multiclusterengine-sample 2>&1`
@@ -22,14 +24,28 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+REGISTRY=stolostron
+IMAGE_NAME="cmb-custom-registry"
+if [ "${DOWNSTREAM}" == "true" ]; then
+  REGISTRY="acm-d"
+  IMAGE_NAME="mce-custom-registry"
+fi
+
 # Support running the script while connected to the cluster as "snapshot=backplane-2.0-XX-YY-ZZ && ./upgrade.sh"
 if [ "${snapshot}" == "" ]; then
-  echo "Choose a snapshot to use from: https://quay.io/repository/stolostron/cmb-custom-registry?tab=tags&tag=latest"
+  echo "Choose a snapshot to use from: https://quay.io/repository/${REGISTRY}/${IMAGE_NAME}?tab=tags&tag=latest"
   read snapshot
   if [ "${snapshot}" == "" ]; then
     echo "No snapshot provided"
     exit 1
   fi
+fi
+
+SNAPSHOT_PREFIX=${snapshot%%\-*}
+echo "* Downstream: ${DOWNSTREAM}   Release Version: $SNAPSHOT_PREFIX"
+if [[ (! $SNAPSHOT_PREFIX == *.*.*) && ("$DOWNSTREAM" != "true") ]]; then
+    echo "ERROR: invalid SNAPSHOT format... snapshot must begin with 'X.0.0-' not '$SNAPSHOT_PREFIX', if DOWNSTREAM isn't set"
+    exit 1
 fi
 
 echo "Verify multiclusterengine-catalog in openshift-marketplace."
@@ -47,7 +63,7 @@ metadata:
   namespace: openshift-marketplace
 spec:
   displayName: MultiCluster Engine
-  image: quay.io/stolostron/cmb-custom-registry:${snapshot}
+  image: quay.io/${REGISTRY}/${IMAGE_NAME}:${snapshot/v/}
   publisher: Red Hat
   sourceType: grpc
   updateStrategy:
