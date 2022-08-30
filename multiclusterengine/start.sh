@@ -16,6 +16,18 @@ _REPO="${_REGISTRY}/${_IMAGE_NAME}"
 _WEB_REPO="https://${_REPO}?tab=tags"
 
 
+# fix sed issue on mac
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+SED="sed"
+if [ "${OS}" == "darwin" ]; then
+    SED="gsed"
+    if [ ! -x "$(command -v ${SED})"  ]; then
+       echo "ERROR: $SED required, but not found."
+       echo "Perform \"brew install gnu-sed\" and try again."
+       exit 1
+    fi
+fi
+
 # This is needed for the deploy
 echo "* Testing connection"
 HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
@@ -50,15 +62,15 @@ else
     echo "SNAPSHOT_CHOICE is set to ${SNAPSHOT_CHOICE}"
 fi
 
-SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_CHOICE} | sed -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_CHOICE} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
 if [[ ! ( $SUBSCRIPTION_CHANNEL_VERSION =~ [0-9]+\.[0-9]+ ) ]]; then
     echo "Failed to detect SUBSCRIPTION_CHANNEL_VERSION, we detected ${SUBSCRIPTION_CHANNEL_VERSION} which doesn't seem correct.  Try exporting SUBSCRIPTION_CHANNEL_VERSION and rerunning."
     exit 1
 fi
 
 OPERATOR_DIRECTORY=multiclusterengine/operator/
-echo "* Applying SUBSCRIPTION_CHANNEL to multiclusterengine-operator subscription"
-sed -i "s|channel: .*$|channel: stable-${SUBSCRIPTION_CHANNEL_VERSION}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+echo "* Applying SUBSCRIPTION_CHANNEL $SUBSCRIPTION_CHANNEL_VERSION to multiclusterengine-operator subscription"
+${SED} -i "s|channel: .*$|channel: stable-${SUBSCRIPTION_CHANNEL_VERSION}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
 
 IMG="${_REPO}:${SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
 VER="${SNAPSHOT_CHOICE:0:3}" yq eval -i '.spec.channel = "stable-"+ env(VER)' multiclusterengine/operator/subscription.yaml

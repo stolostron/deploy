@@ -232,6 +232,118 @@ Use the following command to enable search
 oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
 ```
 
+### Deploy a managed cluster with downstream images
+
+Run on the **hub cluster**:
+
+```
+# Create a namespace managed cluster namespace on the hub cluster
+export CLUSTER_NAME=managed-cluster1
+oc new-project "${CLUSTER_NAME}"
+oc label namespace "${CLUSTER_NAME}" cluster.open-cluster-management.io/managedCluster="${CLUSTER_NAME}"
+
+# Create the managed cluster
+echo "
+    apiVersion: cluster.open-cluster-management.io/v1
+    kind: ManagedCluster
+    metadata:
+      name: ${CLUSTER_NAME}
+    spec:
+      hubAcceptsClient: true" | kubectl apply -f -
+
+# Create the KlusterletAddonConfig
+echo "
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: ${CLUSTER_NAME}
+  namespace: ${CLUSTER_NAME}
+spec:
+  clusterName: ${CLUSTER_NAME}
+  clusterNamespace: ${CLUSTER_NAME}
+  applicationManager:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  clusterLabels:
+    cloud: auto-detect
+    vendor: auto-detect
+  iamPolicyController:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  version: 2.2.0" | kubectl apply -f -
+
+oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.crds\\.yaml} | base64 --decode > klusterlet-crd.yaml
+oc get secret "${CLUSTER_NAME}"-import -n "${CLUSTER_NAME}" -o jsonpath={.data.import\\.yaml} | base64 --decode > import.yaml
+```
+
+Next apply the saved YAML manifests to your **managed cluster**:
+
+```
+# Change kubconfig to the managed cluster
+
+# Add quay credentials to the managed cluster too
+# Replace <USER> and <PASSWORD> with your credentials
+oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' >pull_secret.yaml
+oc registry login --registry="quay.io:443" --auth-basic="<USER>:<PASSWORD>" --to=pull_secret.yaml
+oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=pull_secret.yaml
+rm pull_secret.yaml
+
+# Apply klusterlet-crd
+kubectl apply -f klusterlet-crd.yaml
+
+# replace the registry in import.yaml "registry.redhat.io/rhacm2" to "quay.io:443/acm-d"
+sed 's/registry.redhat.io\/rhacm2/quay.io:443\/acm-d/g' import.yaml > import.yaml
+
+# Apply the import.yaml
+kubectl apply -f import.yaml
+
+# Validate the pod status on the managed cluster
+kubectl get pod -n open-cluster-management-agent
+```
+
+Validate the imported cluster's status in the **hub cluster**:
+
+```
+kubectl get managedcluster ${CLUSTER_NAME}
+kubectl get pod -n open-cluster-management-agent-addon
+```
+
+Test if it works by applying creating a `ManifestWork` in the **hub cluster**:
+
+```
+echo "apiVersion: work.open-cluster-management.io/v1
+kind: ManifestWork
+metadata:
+  name: mw-01
+  namespace: ${CLUSTER_NAME}
+spec:
+  workload:
+    manifests:
+      - apiVersion: v1
+        kind: Pod
+        metadata:
+          name: hello
+          namespace: default
+        spec:
+          containers:
+            - name: hello
+              image: busybox
+              command: ["sh", "-c", 'echo "Hello, Kubernetes!" && sleep 3600']
+          restartPolicy: OnFailure" | kubectl apply -f -
+```
+
+On the **managed cluster** validate that the hello pod is running:
+
+```
+$ kubectl get pods -n default
+NAME    READY   STATUS    RESTARTS   AGE
+hello   1/1     Running   0          3m23s
+```
+
 ## To Delete a MultiClusterHub Instance (the easy way)
 
 1. Run the `uninstall.sh` script in the root of this repo.
@@ -345,6 +457,7 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
     ```
 </p>
 </details>
+
 
 # Upgrade
 You can test the upgrade process with `downstream` builds only, using this repo. To test upgrade follow the instructions below:
