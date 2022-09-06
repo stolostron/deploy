@@ -7,7 +7,7 @@ DOWNSTREAM=${DOWNSTREAM:-"false"}
 _REGISTRY="quay.io/stolostron"
 _IMAGE_NAME="cmb-custom-registry"
 
-if [ $DOWNSTREAM == "true" ]; then
+if [ "$DOWNSTREAM" == "true" ]; then
     _REGISTRY="quay.io/acm-d"
     _IMAGE_NAME="mce-custom-registry"
 fi
@@ -92,7 +92,6 @@ for run in {1..10}; do
   sleep 10
 done
 
-
 _apiReady=0
 echo "* Using CSV: ${CSVName}"
 for run in {1..10}; do
@@ -111,6 +110,9 @@ done
 
 if [ $_apiReady -eq 1 ]; then
   oc apply -f multiclusterengine/multicluster_v1alpha1_multiclusterengine.yaml
+  if [ "$DOWNSTREAM" == "true" ]; then
+    oc annotate mce multiclusterengine-sample imageRepository=quay.io:443/acm-d
+  fi
   echo "multiclusterengine installed successfully"
 else
   echo "multiclusterengine subscription could not install in the allotted time."
