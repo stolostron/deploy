@@ -472,7 +472,7 @@ if [[ " $@ " =~ " --watch " ]]; then
         fi
         exit 1
     else
-        enable_search
+        #enable_search
 
         echo "#####"
         echo "* Red Hat ACM URL: https://$CONSOLE_URL"
