@@ -1,5 +1,5 @@
 quay.io/acm-d/acm-cluster-proxy-rhel8@sha256:fdd654516f966b3bbbe3b96adacacc1fd8e7f1c82236cbdcf8042858ae5ef035=__DESTINATION_ORG__/acm-cluster-proxy-rhel8:v2.5.3-1
-quay.io/acm-d/acm-custom-registry@sha256:0cc1c5ccadefe5c13b0a4d46d2fa9c03acf207de1df20f1d16b0c4ba1e680de9=__DESTINATION_ORG__/acm-custom-registry:2.5.3-DOWNSTREAM-2022-09-29-17-42-16
+quay.io/acm-d/acm-custom-registry@sha256:2238beb329d4e4f06c6bccb747087e504fb84bdfdc65c3ce8ebddfaa9a668ec3=__DESTINATION_ORG__/acm-custom-registry:2.5.3-DOWNSTREAM-2022-09-29-17-42-16
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:7bc2eb13acf2a2567181e4398e4384c15c3d24a621ce1da8f577edb215d499dd=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.5.3-1
 quay.io/acm-d/acm-grafana-rhel8@sha256:d3e056c5e53b7c3bb6cd13929491a16c3140d506696fc5a5670455f7f6dbacfc=__DESTINATION_ORG__/acm-grafana-rhel8:v2.5.3-2
 quay.io/acm-d/acm-must-gather-rhel8@sha256:33b6ce00908ae40c4dadd5984af0c7918092b84def58d9805feab6e1773964af=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.5.3-2
@@ -51,7 +51,7 @@ quay.io/acm-d/kube-state-metrics-rhel8@sha256:65afbabcd3519a75c226ae77f384b550ef
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:bfba54f289d5702843b57f793a689b87bc27572a2fc50c3477e7f163f7ab7036=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.0.3-2
 quay.io/acm-d/managed-serviceaccount-rhel8@sha256:dec88ed16bd1749d5ca9ebf14facaa9c6a8d281a2c0a35b1da98444050e17288=__DESTINATION_ORG__/managed-serviceaccount-rhel8:v2.0.3-2
 quay.io/acm-d/management-ingress-rhel8@sha256:d8b2eebb5bc769003dfe5d79567bac85a070a7c047e5c6689138b75d18e500a7=__DESTINATION_ORG__/management-ingress-rhel8:v2.5.3-2
-quay.io/acm-d/mce-custom-registry@sha256:1cb9733cd769676411e5c1bdd27b27107041a60bcffc9cf2075d062eb3750494=__DESTINATION_ORG__/mce-custom-registry:2.5.3-DOWNSTREAM-2022-09-29-17-42-16
+quay.io/acm-d/mce-custom-registry@sha256:e734b7041ea5a4194ffacd03ef38c6623d1952ff1cd7c553550c572cd893ea42=__DESTINATION_ORG__/mce-custom-registry:2.5.3-DOWNSTREAM-2022-09-29-17-42-16
 quay.io/acm-d/mce-operator-bundle@sha256:975cb3840916ab5ba2b8a895227cbd1c8bbafbfdd8251ee7b1773e74e397e04c=__DESTINATION_ORG__/mce-operator-bundle:v2.0.3-5
 quay.io/acm-d/memcached-exporter-rhel8@sha256:1581ac7e7bfcb545e76e9d206c9d91f6c22ae3ecd098dad62eea98b1d72d735f=__DESTINATION_ORG__/memcached-exporter-rhel8:v2.5.3-1
 quay.io/acm-d/memcached-rhel8@sha256:0efd340093d5896ca4110581943b67f67aa1d9f9f4f674014f32f5dad650ff29=__DESTINATION_ORG__/memcached-rhel8:v2.5.3-1
