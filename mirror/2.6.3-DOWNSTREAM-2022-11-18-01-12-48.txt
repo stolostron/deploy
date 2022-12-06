@@ -1,4 +1,4 @@
-quay.io/acm-d/acm-custom-registry@sha256:4b8ce53d124dfea6c1b1657581b05a456be5b277e8c053c2e35dd1f0722887b3=__DESTINATION_ORG__/acm-custom-registry:2.6.3-DOWNSTREAM-2022-11-18-01-12-48
+quay.io/acm-d/acm-custom-registry@sha256:f1cdee99d33a6cd5bad5cd346cb9aa3bed03519fcf91a17f91022c37625bcc0f=__DESTINATION_ORG__/acm-custom-registry:2.6.3-DOWNSTREAM-2022-11-18-01-12-48
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:24a600c7c3742f5c786e20bf4002520be055f9fff54e620c61eebec534c5bd9d=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.6.3-2
 quay.io/acm-d/acm-grafana-rhel8@sha256:09f0b9f36934925c96f373d50032ce2a24a908e07ca59079bc1709bcd46a57c7=__DESTINATION_ORG__/acm-grafana-rhel8:v2.6.3-3
 quay.io/acm-d/acm-must-gather-rhel8@sha256:89dce91919673ab50f264e7813ed77f09b14e93559195a7ec242ecb6816805a0=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.6.3-2
@@ -50,7 +50,7 @@ quay.io/acm-d/kube-state-metrics-rhel8@sha256:930c982d4e88f0847949b8b46b2e89f96b
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:db503d2a9dac210fa7f500959a25eeaf713dfd23f991c26fec02b7edad43bd06=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.1.3-2
 quay.io/acm-d/managed-serviceaccount-rhel8@sha256:c27cec71b7fa222cd458ffff13b25a86cf8e54e00ebd856aede9673ee1fb187f=__DESTINATION_ORG__/managed-serviceaccount-rhel8:v2.1.3-2
 quay.io/acm-d/management-ingress-rhel8@sha256:31d5febea171f4763f6a7c712c0c9c76589db04485a9c25238661781a5db9baf=__DESTINATION_ORG__/management-ingress-rhel8:v2.6.3-2
-quay.io/acm-d/mce-custom-registry@sha256:3c5ad570d7d8daec437620b8dd62b671f614ba8d00bd15350bdfeba53d897777=__DESTINATION_ORG__/mce-custom-registry:2.6.3-DOWNSTREAM-2022-11-18-01-12-48
+quay.io/acm-d/mce-custom-registry@sha256:ab300a5ceaa51d6240b472ef24fb31784b6126c17ca9e6bec7d999edb9811c46=__DESTINATION_ORG__/mce-custom-registry:2.6.3-DOWNSTREAM-2022-11-18-01-12-48
 quay.io/acm-d/mce-operator-bundle@sha256:3973a500246a1c4b01300464915f70bcc793158fec9790d90f11391653ac6fef=__DESTINATION_ORG__/mce-operator-bundle:v2.1.3-22
 quay.io/acm-d/memcached-exporter-rhel8@sha256:d1ee0d3cac507a356c80f88b4a687e497e6190810ce5bcb7b2515979900bc10c=__DESTINATION_ORG__/memcached-exporter-rhel8:v2.6.3-2
 quay.io/acm-d/memcached-rhel8@sha256:6ac5381af24e61465bd3694e5933dd7e422a9ac485566791baf54d2df47be126=__DESTINATION_ORG__/memcached-rhel8:v2.6.3-2
