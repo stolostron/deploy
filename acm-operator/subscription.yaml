@@ -3,9 +3,9 @@ kind: Subscription
 metadata:
   name: acm-operator-subscription
 spec:
-  channel: release-2.3
+  channel: ""
   installPlanApproval: Automatic
   name: advanced-cluster-management
   source: acm-custom-registry
   sourceNamespace: openshift-marketplace
-  startingCSV: advanced-cluster-management.v2.3.0
+  startingCSV: ""
