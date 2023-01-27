@@ -10,3 +10,5 @@ local.rc
 kubeconfig
 pull-secret
 *.bak
+
+applied-mch/
