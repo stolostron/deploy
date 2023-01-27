@@ -209,18 +209,20 @@ fi
 
 if [[ -z $SKIP_OPERATOR_INSTALL ]]; then
 
+OPERATOR_DIRECTORY="applied-operator"
+if [[ -d ${OPERATOR_DIRECTORY} ]]; then rm -rf ${OPERATOR_DIRECTORY}; fi;
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
-    OPERATOR_DIRECTORY="acm-operator"
+    cp -r acm-operator ${OPERATOR_DIRECTORY}
     CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
-    IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/acm-operator.yaml
-    oc apply -f catalogsources/acm-operator.yaml
+    IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/acm-operator.yaml > ${OPERATOR_DIRECTORY}/acm-operator.yaml
+    oc apply -f ${OPERATOR_DIRECTORY}/acm-operator.yaml
     waitForPod "acm-custom-registry" "" "openshift-marketplace"
 else
-    OPERATOR_DIRECTORY="multicluster-hub-operator"
+    cp -r multicluster-hub-operator ${OPERATOR_DIRECTORY}
     CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"
-    IMG="${CUSTOM_REGISTRY_REPO}/multicluster-hub-custom-registry:${DEFAULT_SNAPSHOT}" yq eval -i '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml
-    oc apply -f catalogsources/multiclusterhub-operator.yaml
+    IMG="${CUSTOM_REGISTRY_REPO}/multicluster-hub-custom-registry:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml > ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
+    oc apply -f ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
 fi
 
 
@@ -235,8 +237,8 @@ if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
         MCE_SNAPSHOT_CHOICE=${DEFAULT_SNAPSHOT}
     fi
 
-    IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval -i '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml
-    oc apply -f catalogsources/multicluster-engine.yaml
+    IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml > ${OPERATOR_DIRECTORY}/multicluster-engine.yaml
+    oc apply -f ${OPERATOR_DIRECTORY}/multicluster-engine.yaml
     waitForPod "multiclusterengine-catalog" "" "openshift-marketplace"
 fi
 

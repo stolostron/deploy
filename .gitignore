@@ -1,5 +1,6 @@
 quay-secret.yaml
 pull-secret.yaml
+snapshot.ver
 
 ssh-privatekey
 ssh-privatekey.pub
@@ -12,3 +13,4 @@ pull-secret
 *.bak
 
 applied-mch/
+applied-operator/
