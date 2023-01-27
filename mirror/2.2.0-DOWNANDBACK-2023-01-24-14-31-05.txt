@@ -1,4 +1,4 @@
-quay.io/acm-d/agent-service-rhel8@sha256:6b6c52e0512e89c3bf9b9c37ecf4151c73e44e15429305cac2d1ccfeb91e3adc=__DESTINATION_ORG__/agent-service-rhel8:v2.2.0-135
+quay.io/acm-d/agent-service-rhel8@sha256:f1c2f7d1d47e67c81206a96d3d661da7c3cdde144ba3e5ba8155007442707ae3=__DESTINATION_ORG__/agent-service-rhel8:v2.2.0-134
 quay.io/acm-d/apiserver-network-proxy-rhel8@sha256:bfe5a6586821f0a9ac543ea1d319e06f7d94fed65b4b695fb8bb1a1597df79ac=__DESTINATION_ORG__/apiserver-network-proxy-rhel8:v2.2.0-17
 quay.io/acm-d/assisted-image-service-rhel8@sha256:b3088b4c7c563515d6eff0d8bd775a0e33f66ccb2a4f803a937d3eb0135a37af=__DESTINATION_ORG__/assisted-image-service-rhel8:v2.2.0-25
 quay.io/acm-d/assisted-installer-agent-rhel8@sha256:6e5c4d1b30cc6fe1d39651f2f55decf4f7d57ad2376a0a33859660ee0bcbf5e1=__DESTINATION_ORG__/assisted-installer-agent-rhel8:v2.2.0-40
@@ -20,14 +20,14 @@ quay.io/acm-d/cluster-proxy-rhel8@sha256:13c94eef320772a38a223c140ca485e0a23aa1d
 quay.io/acm-d/console-mce-rhel8@sha256:3ac19b1ef4c1f51977ce9c85f5362e2e306ccd1e98ec221d1cddffe16a1ba4f4=__DESTINATION_ORG__/console-mce-rhel8:v2.2.0-124
 quay.io/acm-d/discovery-rhel8@sha256:a982600dfa097d401de7fcddf484ebf9c9b3d1c9b7cc0d7c5666bd3315e1a859=__DESTINATION_ORG__/discovery-rhel8:v2.2.0-17
 quay.io/acm-d/hive-rhel8@sha256:f3edcc43c9d95612f601ab73d642178e7966cb983a0bd1dd691b90d9de277f0e=__DESTINATION_ORG__/hive-rhel8:v2.2.0-19
-quay.io/acm-d/hypershift-addon-rhel8-operator@sha256:952070474b1ddbb6c01c1b8cb325912d660f7720bec1001f16970627198485ca=__DESTINATION_ORG__/hypershift-addon-rhel8-operator:v2.2.0-48
+quay.io/acm-d/hypershift-addon-rhel8-operator@sha256:161bbe8b29166e0299691b30811a4e7c0bd21f47a20964ca726cfbc4908778b9=__DESTINATION_ORG__/hypershift-addon-rhel8-operator:v2.2.0-47
 quay.io/acm-d/hypershift-cli-rhel8@sha256:c02997cae0fe3fd009dc8186ce38d16a490d8733d2603c4eee9f0250013b949a=__DESTINATION_ORG__/hypershift-cli-rhel8:v2.2.0-15
 quay.io/acm-d/hypershift-rhel8-operator@sha256:5a691ee4c419f91b8f412fb00d48505c2aac796f5ba8b6799aa7f882f6b6ef61=__DESTINATION_ORG__/hypershift-rhel8-operator:v2.2.0-28
-quay.io/acm-d/klusterlet-operator-bundle@sha256:a2406167c0d3bf544332dd263bcbf8f720330570bcc60e634f8d1c2f38169fcb=__DESTINATION_ORG__/klusterlet-operator-bundle:v2.2.0-246
+quay.io/acm-d/klusterlet-operator-bundle@sha256:6c8547c9bbdb6e8356a28451fa7f53a538eccec5f9000a650376487524a4d1e4=__DESTINATION_ORG__/klusterlet-operator-bundle:v2.2.0-245
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:a910692e1e90e27a0b26487f9eebdc198412751a7198bd0fa180f5915f8c17c3=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.2.0-26
 quay.io/acm-d/managed-serviceaccount-rhel8@sha256:622107dce9cbd7a51ea09f446a2100b88b57e4aa6f60639362aff40890d66fdc=__DESTINATION_ORG__/managed-serviceaccount-rhel8:v2.2.0-20
-quay.io/acm-d/mce-custom-registry@sha256:44abcb151b0fec207733f501af883b208e0b8a1c3964e17a763e27fe8be75c1a=__DESTINATION_ORG__/mce-custom-registry:2.2.0-DOWNANDBACK-2023-01-26-14-32-10
-quay.io/acm-d/mce-operator-bundle@sha256:281cedb4f868f8de06b075683bd85ba6b898458278666b57fb34f1c868dd678d=__DESTINATION_ORG__/mce-operator-bundle:v2.2.0-263
+quay.io/acm-d/mce-custom-registry@sha256:93792d331564d159402edb0f76234252f38fc4f1cdbd96c2cd2ed68d2fc7f636=__DESTINATION_ORG__/mce-custom-registry:2.2.0-DOWNANDBACK-2023-01-24-14-31-05
+quay.io/acm-d/mce-operator-bundle@sha256:1f1a45a2d36d9d03c4b389688af536cc6f5b01a5d565c5c46e5aafcbf701f6ae=__DESTINATION_ORG__/mce-operator-bundle:v2.2.0-262
 quay.io/acm-d/multicloud-manager-rhel8@sha256:a6d2c08311fa1f5a233ca7671eb0a365503f57c2021aa798f2128ab9ebd5e192=__DESTINATION_ORG__/multicloud-manager-rhel8:v2.2.0-30
 quay.io/acm-d/must-gather-rhel8@sha256:7d39203b307375bcef0032b8a71554905ed5245d3cbf18864311d68a47aa30b5=__DESTINATION_ORG__/must-gather-rhel8:v2.2.0-18
 quay.io/acm-d/placement-rhel8@sha256:002a1a62eab7cf047ebd332201f11a1fa7e649e2198921270a79b5c5cf57a5ff=__DESTINATION_ORG__/placement-rhel8:v2.2.0-21

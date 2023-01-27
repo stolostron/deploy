@@ -133,15 +133,12 @@ fi
 
 #This is needed for the deploy
 echo "* Testing connection"
-HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].routerCanonicalHostname}'`
+HOST_URL=`oc -n openshift-console get routes console -o jsonpath='{.status.ingress[0].host}'`
 if [ $? -ne 0 ]; then
     echo "ERROR: Make sure you are logged into an OpenShift Container Platform before running this script"
     exit 2
 fi
-#Shorten to the basedomain
-HOST_URL=${HOST_URL/#router-default./}
-HOST_URL=${HOST_URL/#apps./}
-echo "* Using baseDomain: ${HOST_URL}"
+RHACM_URL="${HOST_URL}/multicloud/home/welcome"
 VER=`oc version | grep "Client Version:"`
 echo "* oc CLI ${VER}"
 
@@ -376,10 +373,6 @@ if [[ " $@ " =~ " --watch " ]]; then
         acc=0
         while [[ "$mch_status" != "Running" && $acc -le $POLL_DURATION_21X ]]; do
             echo "Waited $acc/$POLL_DURATION_21X seconds for MCH to reach Ready Status.  Current Status: $mch_status"
-            CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
-            if [[ "$CONSOLE_URL" != "" ]]; then
-                echo "Detected ACM Console URL: https://${CONSOLE_URL}"
-            fi;
             if [[ "$DEBUG" == "true" ]]; then
                 echo "#####"
 
@@ -426,29 +419,21 @@ if [[ " $@ " =~ " --watch " ]]; then
         else
             COMPLETE=0
             echo "MCH reached Running status after $acc seconds."
-            CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
-            if [[ "$CONSOLE_URL" != "" ]]; then
-                echo "Detected ACM Console URL: https://${CONSOLE_URL}"
-            fi;
             echo ""
         fi
     else
         for i in {1..90}; do
             clear
             oc -n ${TARGET_NAMESPACE} get pods
-            CONSOLE_URL=`oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}' 2> /dev/null`
             whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
             RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
-            if [ "https://$CONSOLE_URL" == "https://multicloud-console.apps.${HOST_URL}" ] && [ ${whatsLeft} -eq 0 ]; then
-                if [ $RUNNING_PODS -ge ${TOTAL_POD_COUNT} ]; then
-                    COMPLETE=0
-                    break
-                fi
+            if [ $RUNNING_PODS -ge ${TOTAL_POD_COUNT} ]; then
+                COMPLETE=0
+                break
             fi
             echo
             echo "Number of expected Pods : $RUNNING_PODS/$TOTAL_POD_COUNT"
             echo "Pods still NOT running  : ${whatsLeft}"
-            echo "Detected ACM Console URL: https://${CONSOLE_URL}"
             sleep 10
         done
     fi
@@ -477,7 +462,10 @@ if [[ " $@ " =~ " --watch " ]]; then
         #enable_search
 
         echo "#####"
-        echo "* Red Hat ACM URL: https://$CONSOLE_URL"
+        echo "* Red Hat ACM URL: https://${RHACM_URL}"
+        echo ""
+        echo "* NOTE: For RHACM versions <2.6 or OCP versions <4.10, the console link can be found by running:"
+        echo "  oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}'"
         echo "#####"
     fi
     echo "Done!"
@@ -488,8 +476,12 @@ echo "Search will only be automaticaly enabled with '--watch' is set."
 echo "Run 'oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}' to enable search."
 echo ""
 echo "#####"
-echo "* Red Hat ACM URL: https://multicloud-console.apps.${HOST_URL}"
+echo "* Red Hat ACM URL: https://${RHACM_URL}"
+echo ""
+echo "* NOTE: For RHACM versions <2.6 or OCP versions <4.10, the console link can be found by running:"
+echo "  oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}'"
 echo "#####"
+
 if [ "${OS}" == "darwin" ]; then
     if [ ! -x "$(command -v watch)" ]; then
        echo "NOTE: watch executable not found.  Perform \"brew install watch\" to use the command above or use \"./start.sh --watch\" "
