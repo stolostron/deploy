@@ -22,6 +22,7 @@ QUAY_TOKEN=${QUAY_TOKEN:-"UNSET"}
 MODE=${MODE:-"Automatic"}
 STARTING_VERSION=${STARTING_VERSION:-"2.1.0"}
 MCE_SNAPSHOT_CHOICE=${MCE_SNAPSHOT_CHOICE:-"UNSET"}
+USE_STARTING_CSV=${USE_STARTING_CSV:-"false"}
 
 
 # build starting csv variable from $STARTING_VERSION
@@ -280,8 +281,12 @@ if [[ "$MODE" == "Automatic" ]]; then
     # Issue 7436 - If Downstream RC snapshot, remove leading 'v' from prefix name
     CLEAN_RC_PREFIX=$(echo ${SNAPSHOT_PREFIX} | ${SED} 's/v//')
     STARTING_CSV="advanced-cluster-management.v${CLEAN_RC_PREFIX}"
-    echo "* Applying STARTING_CSV to multiclusterhub-operator-subscription ($STARTING_CSV)"
-    ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+    if [[ "$USE_STARTING_CSV" == "true" ]]; then
+        echo "* Applying STARTING_CSV to multiclusterhub-operator-subscription ($STARTING_CSV)"
+        ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
+    else
+        ${SED} -i "s|startingCSV: .*$||g" ./$OPERATOR_DIRECTORY/subscription.yaml
+    fi
 elif [[ "$MODE" == "Manual" ]]; then
     echo "* Applying STARTING_CSV to multiclusterhub-operator subscription ($STARTING_CSV)"
     ${SED} -i "s|startingCSV: .*$|startingCSV: ${STARTING_CSV}|g" ./$OPERATOR_DIRECTORY/subscription.yaml
