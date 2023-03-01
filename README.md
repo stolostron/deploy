@@ -101,7 +101,7 @@ We've added a very simple `start.sh` script to make your life easier. To deploy 
 First, you need to `export KUBECONFIG=/path/to/some/cluster/kubeconfig` (or do an `oc login` that will set it for you).
 `deploy` installs ACM to the cluster configured in your `KUBECONFIG` env variable.
 
-_Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releases.
+_Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releases. `export USE_STARTING_CSV=true` to use an explicit `STARTING_CSV` variable.
 
 ### Running start.sh
 
