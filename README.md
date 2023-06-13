@@ -110,9 +110,9 @@ _Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releas
     -t modify the YAML but exit before apply the resources
     --silent, skip all prompting, uses the previous configuration
     --watch, will monitor the main Red Hat ACM pod deployments for up to 10min
-    --search, will activate search as part of the deployment.
+    --search, will activate search as part of the deployment. DEPRECATED: RHACM 2.7 and later, search is enabled by default.
     
-    $ ./start.sh --watch --search
+    $ ./start.sh --watch
     ```
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
@@ -227,7 +227,7 @@ export QUAY_TOKEN=<a quay token with quay.io:443 as the auth domain>
 
 ### Enable search later
 
-Use the following command to enable search
+For RHACM <=2.6, use the following command to enable search. Search is enabled by default in RHACM 2.7 and later.
 ```bash
 oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n INSTALL_NAMESPACE
 ```
