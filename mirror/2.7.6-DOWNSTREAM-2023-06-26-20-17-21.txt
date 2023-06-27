@@ -1,9 +1,9 @@
-quay.io/acm-d/acm-custom-registry@sha256:2b27e68996f4264c3fab5521005b240675e241bb5eaa9e37ff0f9608df7c8c91=__DESTINATION_ORG__/acm-custom-registry:2.7.6-DOWNSTREAM-2023-06-26-20-17-21
+quay.io/acm-d/acm-custom-registry@sha256:11a4065788d19fb0d490a4691c7d256018775b301a9ca3d879f5f98ab103908f=__DESTINATION_ORG__/acm-custom-registry:2.7.6-DOWNSTREAM-2023-06-26-20-17-21
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:73d61f682d1f7f6571fcda7fab902fb2456ea691de659b41a0c08e7b9eef377c=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.7.6-1
 quay.io/acm-d/acm-governance-policy-framework-addon-rhel8@sha256:74d984c7c3787863a875d1e6d78a3606f3c74e646dde2713fa0ed52d6b42aacf=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel8:v2.7.6-1
-quay.io/acm-d/acm-grafana-rhel8@sha256:017f6aedaab1a1523f9c269e824cbd4007d01a53cf1f8571320a29e48fed93dc=__DESTINATION_ORG__/acm-grafana-rhel8:v2.7.6-2
+quay.io/acm-d/acm-grafana-rhel8@sha256:b1bb86c246f340103cac55d8da1a50204fb7f6e546bf60602f01c29abb82b50d=__DESTINATION_ORG__/acm-grafana-rhel8:v2.7.6-3
 quay.io/acm-d/acm-must-gather-rhel8@sha256:2ba4b4d844c16cdf3a1f9ddbc714ead34128ace2330409ba057122916aabd115=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.7.6-1
-quay.io/acm-d/acm-operator-bundle@sha256:28cb97fbdcbd12b12f56610e25ac780a273d1d1dff2204976f9b1ed380990960=__DESTINATION_ORG__/acm-operator-bundle:v2.7.6-2
+quay.io/acm-d/acm-operator-bundle@sha256:4acdc835cf7d900290fed7e3dc64b1d10828117d3ca07fa13ed040d96c0cdb1e=__DESTINATION_ORG__/acm-operator-bundle:v2.7.6-3
 quay.io/acm-d/acm-prometheus-config-reloader-rhel8@sha256:1c5e8fda36926d0551e84164058a127e9f8e99e111dadf370cd5680b7724c4f6=__DESTINATION_ORG__/acm-prometheus-config-reloader-rhel8:v2.7.6-1
 quay.io/acm-d/acm-prometheus-rhel8@sha256:ccb725f6421e853f85d0ce4832466dc0a5f7ec2e7a2be115c81ff53d9c02b3dc=__DESTINATION_ORG__/acm-prometheus-rhel8:v2.7.6-1
 quay.io/acm-d/acm-search-indexer-rhel8@sha256:2ddd78a8f08d272f9807ceadedcdfb7f2e8c5aa2e3c5fc97d674699da23ca996=__DESTINATION_ORG__/acm-search-indexer-rhel8:v2.7.6-1
