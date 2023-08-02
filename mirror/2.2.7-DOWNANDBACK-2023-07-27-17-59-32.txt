@@ -1,11 +1,11 @@
-quay.io/acm-d/agent-service-rhel8@sha256:cb301927660aa7d1dd31c7c052821a8ac7b0fb3e573a6c4442ec035067e8e54c=__DESTINATION_ORG__/agent-service-rhel8:v2.2.7-5
+quay.io/acm-d/agent-service-rhel8@sha256:8850b34759cdf81bcaca76268ce240ba7fad7532ac3e600122b4a35c0bc71075=__DESTINATION_ORG__/agent-service-rhel8:v2.2.7-6
 quay.io/acm-d/apiserver-network-proxy-rhel8@sha256:c6889ffc6ade74bafddabdf6d2c1e1ee6543db17422aad1a9c02fe021e4d715b=__DESTINATION_ORG__/apiserver-network-proxy-rhel8:v2.2.7-2
 quay.io/acm-d/assisted-image-service-rhel8@sha256:c49ca766ced8e414f704012e0cf648c7ed1791c40d9892246f4a3a89355b525d=__DESTINATION_ORG__/assisted-image-service-rhel8:v2.2.7-4
-quay.io/acm-d/assisted-installer-agent-rhel8@sha256:fa1d7cd8775a5ffdc4670c0aaef03e0461a26e177fc789d614eb7420fba050a1=__DESTINATION_ORG__/assisted-installer-agent-rhel8:v2.2.7-3
+quay.io/acm-d/assisted-installer-agent-rhel8@sha256:d4249b0cd45b00a0af2618bfbffeb7948ce018b5afdead6156817ed60273d38a=__DESTINATION_ORG__/assisted-installer-agent-rhel8:v2.2.7-4
 quay.io/acm-d/assisted-installer-reporter-rhel8@sha256:3809590637d324b67ba840616b4db97ff7794cc6f66c66550837ad02b72af955=__DESTINATION_ORG__/assisted-installer-reporter-rhel8:v2.2.7-4
 quay.io/acm-d/assisted-installer-rhel8@sha256:c1d2c42bfc71dc9ef7a4020fdb57d3ed021d41a202a256627367fc582395fbee=__DESTINATION_ORG__/assisted-installer-rhel8:v2.2.7-4
 quay.io/acm-d/aws-encryption-provider-rhel8@sha256:5bbcba17fdb1bd3a26c0da069aa062e634c68e2697d39f656174385a59ef8aec=__DESTINATION_ORG__/aws-encryption-provider-rhel8:v2.2.7-2
-quay.io/acm-d/backplane-rhel8-operator@sha256:15ad7beb86939497ebee30b80344bdec455a895c6f4a86127b3932113ff15fa4=__DESTINATION_ORG__/backplane-rhel8-operator:v2.2.7-4
+quay.io/acm-d/backplane-rhel8-operator@sha256:3d8aa05be90afd41723f39dea1aa6c048e6613ed569d4cd0ac97613aec7fef67=__DESTINATION_ORG__/backplane-rhel8-operator:v2.2.7-5
 quay.io/acm-d/cluster-api-provider-agent-rhel8@sha256:df2315949e6c5e7ea583d63d29a8b4c43a547afd552d1c029d0c1f6e5eb36b09=__DESTINATION_ORG__/cluster-api-provider-agent-rhel8:v2.2.7-2
 quay.io/acm-d/cluster-api-provider-aws-rhel8@sha256:c78543e0b87045c6816a89291b8e0192dc734e8ef7728e430bba352214948668=__DESTINATION_ORG__/cluster-api-provider-aws-rhel8:v2.2.7-2
 quay.io/acm-d/cluster-api-provider-azure-rhel8@sha256:007d0f61997e108d0153cdee917c7914b62c772dd271d0f946c5ba6654038e69=__DESTINATION_ORG__/cluster-api-provider-azure-rhel8:v2.2.7-2
@@ -26,8 +26,8 @@ quay.io/acm-d/hypershift-rhel8-operator@sha256:fb9edcb7448ccf50841c277cd4b76df03
 quay.io/acm-d/klusterlet-operator-bundle@sha256:c8b2b08561059b5e280d353d06ecef7b8f04d952d356fe0531f909e8b558ded4=__DESTINATION_ORG__/klusterlet-operator-bundle:v2.2.7-10
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:04be4db55716a25c0aa6ed830f07469b8eeea933060bdb21edcf489495645aed=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.2.7-3
 quay.io/acm-d/managed-serviceaccount-rhel8@sha256:7dcc71a7ad34124d4924ebee6d3dd47fc9b25cb27867be9bc2703a5002dac5e1=__DESTINATION_ORG__/managed-serviceaccount-rhel8:v2.2.7-3
-quay.io/acm-d/mce-custom-registry@sha256:3941c88e94d0f89ca2732866c92fba7053a78e005f8ddfda809c8c191d7f5f19=__DESTINATION_ORG__/mce-custom-registry:2.2.7-DOWNANDBACK-2023-07-27-17-59-32
-quay.io/acm-d/mce-operator-bundle@sha256:cdccb73e1e41318d5a482f21cd5fb1fc962b8e0a7d2073314eadba61020a4cb2=__DESTINATION_ORG__/mce-operator-bundle:v2.2.7-10
+quay.io/acm-d/mce-custom-registry@sha256:48c3786d306373701b0c78cfa7765bbd7dfff097cb2a3e0cd86b72cf1fe52d21=__DESTINATION_ORG__/mce-custom-registry:2.2.7-DOWNANDBACK-2023-07-27-17-59-32
+quay.io/acm-d/mce-operator-bundle@sha256:553ec8a6cd4e47de8941ce861b5c613cbc62027da66e0d88cd8aaeb5503236cb=__DESTINATION_ORG__/mce-operator-bundle:v2.2.7-11
 quay.io/acm-d/multicloud-manager-rhel8@sha256:914f67d299866bb32b8c92314a191defc6e3553b54f59c891b15033e4d8b0565=__DESTINATION_ORG__/multicloud-manager-rhel8:v2.2.7-3
 quay.io/acm-d/must-gather-rhel8@sha256:835b284f326de46e16e880b3ffe02b156321718b32ed6b670bb0b3d435585e8b=__DESTINATION_ORG__/must-gather-rhel8:v2.2.7-2
 quay.io/acm-d/placement-rhel8@sha256:3bd683d9a431cbf0b17a63e4e4bb79dca0ec34a340e282c461b1b12550189321=__DESTINATION_ORG__/placement-rhel8:v2.2.7-3
