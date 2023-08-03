@@ -1,9 +1,9 @@
-quay.io/acm-d/acm-custom-registry@sha256:8413b9a43ecc12855da49eed07075fe51a680294b9935df159b2033ad277d70f=__DESTINATION_ORG__/acm-custom-registry:2.8.1-DOWNSTREAM-2023-07-31-20-24-40
+quay.io/acm-d/acm-custom-registry@sha256:17357d4bb2e55b5ea202ddffeadd5e8df15c4cab85aabe8f4321209750bf46ff=__DESTINATION_ORG__/acm-custom-registry:2.8.1-DOWNSTREAM-2023-07-31-20-24-40
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:051ce9aee0e180d99dc9c3906c367e05a98363b2b42c13f270a8e1259dd99231=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.8.1-5
 quay.io/acm-d/acm-governance-policy-framework-addon-rhel8@sha256:792395a203eef7ad0cfd2cd43d0458988c54dbe49da0e31c406c55049afb8481=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel8:v2.8.1-5
 quay.io/acm-d/acm-grafana-rhel8@sha256:261e59897776b6d7496a2dea8c2888cacc2130e26fe5b81d853b9dedf3216d90=__DESTINATION_ORG__/acm-grafana-rhel8:v2.8.1-5
-quay.io/acm-d/acm-must-gather-rhel8@sha256:c672ae136bfe056005ea0648b90ca29d5af5bdc783c360429ef602a13e88f50f=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.8.1-4
-quay.io/acm-d/acm-operator-bundle@sha256:24d7efc734ed678fc2c08d62fd2bb791efe77cc64db973037afd9e13bbc5eb60=__DESTINATION_ORG__/acm-operator-bundle:v2.8.1-10
+quay.io/acm-d/acm-must-gather-rhel8@sha256:648cc8725ac5ba9b1f1809ed19deb12953aeb05b8c6039be7aa3d194042652eb=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.8.1-5
+quay.io/acm-d/acm-operator-bundle@sha256:dd71469cd24033aa1213cf4108590f75478741c2cb4a61615b102a2ac717fec4=__DESTINATION_ORG__/acm-operator-bundle:v2.8.1-11
 quay.io/acm-d/acm-prometheus-config-reloader-rhel8@sha256:e2c951782db331a7d2bd6ee203d463b71e18404ee850fcbc3508a66366a1760b=__DESTINATION_ORG__/acm-prometheus-config-reloader-rhel8:v2.8.1-5
 quay.io/acm-d/acm-prometheus-rhel8@sha256:e41a70d8e5312492c6c0e12e8bbc56f4ed81f96861efca94bb07188d34caa856=__DESTINATION_ORG__/acm-prometheus-rhel8:v2.8.1-5
 quay.io/acm-d/acm-search-indexer-rhel8@sha256:b710e8aa333b293ef7049083db6d6a63a4e4b00956981b5a946f700ed89c7443=__DESTINATION_ORG__/acm-search-indexer-rhel8:v2.8.1-5
