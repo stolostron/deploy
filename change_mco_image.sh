@@ -38,8 +38,11 @@ csv_path="$temp_folder"/acm.csv.yaml
 
 oc get -n open-cluster-management csv "$csv_name" -o yaml >"$csv_path"
 
-sed -i'' -E "s|value: quay\\.io/stolostron/multicluster-observability-operator@([^\"]*)|value: $pr_image|g" "$csv_path"
-sed -i'' -E "s|image: quay\\.io/stolostron/multicluster-observability-operator@([^\"]*)|image: $pr_image|g" "$csv_path"
+sed -i'' -E "s|value: registry\\.redhat\\.io/rhacm2/multicluster-observability-rhel8-operator@(.*)\$|value: $pr_image|g" "$csv_path"
+sed -i'' -E "s|image: registry\\.redhat\\.io/rhacm2/multicluster-observability-rhel8-operator@(.*)\$|value: $pr_image|g" "$csv_path"
+
+sed -i'' -E "s|value: quay\\.io/stolostron/multicluster-observability-operator@([^\"]*)\$|value: $pr_image|g" "$csv_path"
+sed -i'' -E "s|image: quay\\.io/stolostron/multicluster-observability-operator@([^\"]*)\$|image: $pr_image|g" "$csv_path"
 
 oc apply -f "$csv_path" -n open-cluster-management
 rm -rf "$temp_folder"
