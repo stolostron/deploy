@@ -228,7 +228,8 @@ fi
 
 
 # If 2.5.0 or higher, install MCE
-if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
+majorVer=$(echo -n $DEFAULT_SNAPSHOT | awk -F '.' '{print $2}')
+if [[ $majorVer >= 5 ]]; then
     _MCE_IMAGE_NAME="mce-custom-registry"
     if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/stolostron" ]]; then
         _MCE_IMAGE_NAME="cmb-custom-registry"
@@ -391,7 +392,7 @@ if [[ " $@ " =~ " --watch " ]]; then
                     message="$(echo $component | jq -r '.message')";
                     printf "%-30s\t%-10s\t%-30s\t%-30s\n" "$status_item" "$component_status" "$type" "$reason"
                 done     
-                if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then 
+                if [[ $majorVer >= 5 ]]; then
                     mce_find=$(oc get mce --all-namespaces 2>&1)
                     if [[ $mce_find == *"No resources found"* ]]; then
                         echo "Still waiting on MCE to be created"
