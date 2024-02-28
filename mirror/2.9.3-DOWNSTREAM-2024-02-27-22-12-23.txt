@@ -1,10 +1,10 @@
 quay.io/acm-d/acm-cluster-permission-rhel8@sha256:e5228c42956d58a272187b9f5afefc9df0fdb41beddd382dcba31757acbbe279=__DESTINATION_ORG__/acm-cluster-permission-rhel8:v2.9.3-5
-quay.io/acm-d/acm-custom-registry@sha256:89ef69f86ceb3816b3f5c8223ce0f89d6cae3303122a60e9374a439c2eac2e2f=__DESTINATION_ORG__/acm-custom-registry:2.9.3-DOWNSTREAM-2024-02-27-22-12-23
+quay.io/acm-d/acm-custom-registry@sha256:7f83ac8ed780f9ed23eb45f16cfe3e7bf365fdddf45febb0d9ac0b0541e72b4e=__DESTINATION_ORG__/acm-custom-registry:2.9.3-DOWNSTREAM-2024-02-27-22-12-23
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:98e5a9b554703e6e216d35e6b109df9389f1f1b1774c7937420b9cca9609e344=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.9.3-8
 quay.io/acm-d/acm-governance-policy-framework-addon-rhel8@sha256:7e321fe75e34e33c5ddc96284d79dddf4e79ffa728933d5c76bc1c8c7c29183f=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel8:v2.9.3-6
 quay.io/acm-d/acm-grafana-rhel8@sha256:a1ee14112853ed77656b391c064fa5f1448ab2a61d8a8aec8daf2a302010520d=__DESTINATION_ORG__/acm-grafana-rhel8:v2.9.3-4
 quay.io/acm-d/acm-must-gather-rhel8@sha256:b64d381a5a6da0018e152b11a0cd62dc0c9f9b46317afdd288f7c602869ee84e=__DESTINATION_ORG__/acm-must-gather-rhel8:v2.9.3-5
-quay.io/acm-d/acm-operator-bundle@sha256:9a2e13cfca3e3ed435cad17a112dee732f7d4dedd32d11b212e41d81c223e5a0=__DESTINATION_ORG__/acm-operator-bundle:v2.9.3-17
+quay.io/acm-d/acm-operator-bundle@sha256:d00496e8d99b0f8c45b3f884609041f6d335ec8f50b0cf06a4dd983dc195a2a8=__DESTINATION_ORG__/acm-operator-bundle:v2.9.3-18
 quay.io/acm-d/acm-prometheus-config-reloader-rhel8@sha256:74a2babfad42d543936ba69c44b40b1688981f56dd855d8d36889ca3bc4fd536=__DESTINATION_ORG__/acm-prometheus-config-reloader-rhel8:v2.9.3-5
 quay.io/acm-d/acm-prometheus-rhel8@sha256:9f654eaef9fffbe6cb8ef28076a05f5985e4316d40d66c7190424f2b541fd048=__DESTINATION_ORG__/acm-prometheus-rhel8:v2.9.3-5
 quay.io/acm-d/acm-search-indexer-rhel8@sha256:2dd2f5dbdb1975f9962eddb684875186e78ae571c677ffb63b8c0f6bc8961673=__DESTINATION_ORG__/acm-search-indexer-rhel8:v2.9.3-5
