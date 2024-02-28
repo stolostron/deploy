@@ -78,7 +78,7 @@ Either way you choose to go, you are going to need a `pull-secret` in order to g
 
 2. Generate your pull-secret:
    - ensure you have access to the quay org ([stolostron](https://quay.io/repository/stolostron/acm-custom-registry?tab=tags))
-   - to request access to [stolostron](https://quay.io/repository/stolostron/acm-custom-registry?tab=tags) in quay.io please contact the ACM CICD team via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com) or, if you have access to Red Hat CoreOS Slack you can contact us on our Slack Channel [#forum-acm-devops](https://coreos.slack.com/archives/CSZLMKPS5)) and indicate if you want upstream (`stolostron`) or downstream (`acm-d`) repos (or both).  We'll need your quay ID.  Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
+   - to request access to [stolostron](https://quay.io/repository/stolostron/acm-custom-registry?tab=tags) in quay.io, for external (non Red Hat) users, you can please contact the ACM BU via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com). Or, if you have access to Red Hat Slack you can contact us on our Slack Channel [#forum-hypbld](https://redhat.enterprise.slack.com/archives/C04L50S5XM4)) and indicate if you want upstream (`stolostron`) or downstream (`acm-d`) repos (or both).  We'll need your quay ID.  Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
    - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
    - click on `Generate Encrypted Password`
    - enter your quay.io password
@@ -142,7 +142,7 @@ Note: This script can be run multiple times and will attempt to continue where i
 
 #### Required Access
 
-To deploy downstream builds, you need access to pull the related images from the downstream mirror respository, quay.io/acm-d.  Access is internal to Red Hat only for Dev/Test/QE use.  Contact ACM CICD in [#forum-acm-devops](https://coreos.slack.com/archives/CSZLMKPS5) on CoreOS Slack for access.
+To deploy downstream builds, you need access to pull the related images from the downstream mirror respository, quay.io/acm-d.  Access is internal to Red Hat only for Dev/Test/QE use.  Contact us in Slack Channel [#forum-hypbld](https://redhat.enterprise.slack.com/archives/C04L50S5XM4) on Red Hat Slack for access.
 
 #### Configuration
 
