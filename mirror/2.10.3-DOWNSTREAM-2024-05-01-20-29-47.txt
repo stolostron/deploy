@@ -1,5 +1,5 @@
 quay.io/acm-d/acm-cluster-permission-rhel9@sha256:91e46f9a170033e00f43c87d6594e1ff42a72a06c384d40f9c1bd2006ae8c63f=__DESTINATION_ORG__/acm-cluster-permission-rhel9:v2.10.3-5
-quay.io/acm-d/acm-custom-registry@sha256:30d0d5f01deec99372164a3267b49b3675d92b65b263ab77611cd45bf551c9a6=__DESTINATION_ORG__/acm-custom-registry:2.10.3-DOWNSTREAM-2024-05-01-20-29-47
+quay.io/acm-d/acm-custom-registry@sha256:e3cab414e969366571143e82f2ab0971a4d7170c927a102f120b6c226df2d1a4=__DESTINATION_ORG__/acm-custom-registry:2.10.3-DOWNSTREAM-2024-05-01-20-29-47
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel9@sha256:b72eec7e730098f2f5fe980d0d0ed91a4adb22679724bd67317c4729e15eee6a=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel9:v2.10.3-7
 quay.io/acm-d/acm-governance-policy-framework-addon-rhel9@sha256:604d98c553aa58b92524aa1f36b07510fc7d73131205c1bdff924931ad2fdb39=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel9:v2.10.3-6
 quay.io/acm-d/acm-grafana-rhel9@sha256:e3f47a12b485151ad24193cfd1791e5febdca7e18d13eb0295c6d9984d7b6c89=__DESTINATION_ORG__/acm-grafana-rhel9:v2.10.3-6
