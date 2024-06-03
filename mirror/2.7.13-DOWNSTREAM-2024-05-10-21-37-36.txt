@@ -1,4 +1,4 @@
-quay.io/acm-d/acm-custom-registry@sha256:b8bc5376f3bd220d9099e1273bc571e5a536d684398f9c9bee13141f32094aff=__DESTINATION_ORG__/acm-custom-registry:2.7.13-DOWNSTREAM-2024-05-10-21-37-36
+quay.io/acm-d/acm-custom-registry@sha256:deb4a64f4a6bde29d6e05705f7f94f11dfe6cd12852cfa059a3ae67d23aae5ab=__DESTINATION_ORG__/acm-custom-registry:2.7.13-DOWNSTREAM-2024-05-10-21-37-36
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel8@sha256:06529bf9c2581b23ba38015c566beec7adb3ee244af0226707fbed6935caa1e0=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel8:v2.7.13-7
 quay.io/acm-d/acm-governance-policy-framework-addon-rhel8@sha256:3e15320be7a88319baa34495641c9443b5b14abeda0fb53891f200e187b29ecc=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel8:v2.7.13-7
 quay.io/acm-d/acm-grafana-rhel8@sha256:03eda621612d6c99b904d3dab64db6a2efaa8f3868308b1cd68c6f8403a477d4=__DESTINATION_ORG__/acm-grafana-rhel8:v2.7.13-7
@@ -40,7 +40,7 @@ quay.io/acm-d/governance-policy-propagator-rhel8@sha256:47bb677075de027b9b14e973
 quay.io/acm-d/grafana-dashboard-loader-rhel8@sha256:cc2089e34dd7d5c6124a0f17b102b86f60e3b0771e75cdbf8b20614069645db6=__DESTINATION_ORG__/grafana-dashboard-loader-rhel8:v2.7.13-6
 quay.io/acm-d/hive-rhel8@sha256:216adaf32838f08813a6b8d10091dccf54fdd27a6bb0713b87f709c38deef927=__DESTINATION_ORG__/hive-rhel8:v2.2.13-6
 quay.io/acm-d/hypershift-addon-rhel8-operator@sha256:0067fb386695e1ee36df02575950ac874c079f8f5fe2b6443b19b4ce69f23728=__DESTINATION_ORG__/hypershift-addon-rhel8-operator:v2.2.13-6
-quay.io/acm-d/hypershift-cli-rhel8@sha256:b14df43a3b776623efee65461662937da6a636cbeb91f4aa9becb686e597f45c=__DESTINATION_ORG__/hypershift-cli-rhel8:v2.2.13-3
+quay.io/acm-d/hypershift-cli-rhel8@sha256:71a953cc30cf049f5dd820a3d534a01608bbb97d1aef86a2c3d5369ffa68a969=__DESTINATION_ORG__/hypershift-cli-rhel8:v2.2.13-4
 quay.io/acm-d/hypershift-rhel8-operator@sha256:3f2bced7cdb1698f07c2a22457a8e4006ff53ff024acb6735f32b0a4531edf74=__DESTINATION_ORG__/hypershift-rhel8-operator:v2.2.13-6
 quay.io/acm-d/iam-policy-controller-rhel8@sha256:e8040fe06fbb0f117e058c938b0cdb5ccfd84a4192925a6880cd53a5bdb56da4=__DESTINATION_ORG__/iam-policy-controller-rhel8:v2.7.13-6
 quay.io/acm-d/insights-client-rhel8@sha256:461f30ff325c5b2fd93cc946cb78267802b285e8eae94d3feaa4cf8e10a893f0=__DESTINATION_ORG__/insights-client-rhel8:v2.7.13-7
@@ -51,8 +51,8 @@ quay.io/acm-d/kube-rbac-proxy-rhel8@sha256:0ef1e20216c590001d388ecd44cddf51c19e1
 quay.io/acm-d/kube-state-metrics-rhel8@sha256:810ebfe3d89f2183a8dc315634c5d73dae8a64c9ccb2657795538b7256eb99d3=__DESTINATION_ORG__/kube-state-metrics-rhel8:v2.7.13-7
 quay.io/acm-d/managedcluster-import-controller-rhel8@sha256:1bd900e24c84499d4153a4e584b87ed8446a5237930a0be2c6119067064a4ff7=__DESTINATION_ORG__/managedcluster-import-controller-rhel8:v2.2.13-6
 quay.io/acm-d/managed-serviceaccount-rhel8@sha256:b58828b4986540448b133912f71b65e8c502194e86f66cab63ec2c7d67a9e352=__DESTINATION_ORG__/managed-serviceaccount-rhel8:v2.2.13-6
-quay.io/acm-d/mce-custom-registry@sha256:04423b20a6fdd17f188419a60110971a1b5dc80b28e9cc7a8cf057dc7c29bb8b=__DESTINATION_ORG__/mce-custom-registry:2.7.13-DOWNSTREAM-2024-05-10-21-37-36
-quay.io/acm-d/mce-operator-bundle@sha256:17b405fc68c0f719f93e9e92794eb3f0c98f28c6ba346d6e6e2b90895b765d98=__DESTINATION_ORG__/mce-operator-bundle:v2.2.13-11
+quay.io/acm-d/mce-custom-registry@sha256:eaf9657334836e87665fccea2445afe6a5d60d86d53d2491014917b1a35392b6=__DESTINATION_ORG__/mce-custom-registry:2.7.13-DOWNSTREAM-2024-05-10-21-37-36
+quay.io/acm-d/mce-operator-bundle@sha256:46a3562e7ca4fb9fd125830394d386dc3f5687179b195d64ae7398efcb777e6d=__DESTINATION_ORG__/mce-operator-bundle:v2.2.13-12
 quay.io/acm-d/memcached-exporter-rhel8@sha256:758da65accc5aabec3ce1487cdaa8e45bd6069419787d0bb19e542dfbc47ccc8=__DESTINATION_ORG__/memcached-exporter-rhel8:v2.7.13-7
 quay.io/acm-d/memcached-rhel8@sha256:08859655eda49390fb33d17ddd8bb685c236cabc231a30246feb581f719d7d1c=__DESTINATION_ORG__/memcached-rhel8:v2.7.13-7
 quay.io/acm-d/metrics-collector-rhel8@sha256:3905dc5bde8b1c19bd7b35a273ab0bca6bb634e3a1079ff2b63997b93e6f3100=__DESTINATION_ORG__/metrics-collector-rhel8:v2.7.13-6
