@@ -6,7 +6,6 @@
 # ./start.sh -t, this exits after modifying the files but not apply any of the yaml
 # ./start.sh --silent, this skips any questions, using the local files to apply the snapshot and secret
 # ./start.sh --watch, this monitors for status during the main deploy of Red Hat ACM
-# ./start.sh --search, this enables search, but turning on redis
 
 # CONSTANTS
 TOTAL_POD_COUNT_1X=35
@@ -72,18 +71,6 @@ function waitForPod() {
         sleep 3
         (( MINUTE = MINUTE + 3 ))
     done
-}
-
-function enable_search() {
-    if [[ ! " $@ " =~ " --skip-search " ]]; then
-        oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
-        echo "Search enabled"
-        echo ""
-    else
-        echo "Search was not enabled"
-        echo "Run 'oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}' to enable search."
-        echo ""
-    fi
 }
 
 # fix sed issue on mac
@@ -464,8 +451,6 @@ if [[ " $@ " =~ " --watch " ]]; then
         fi
         exit 1
     else
-        #enable_search
-
         echo "#####"
         echo "* Red Hat ACM URL: https://${RHACM_URL}"
         echo ""
@@ -477,11 +462,11 @@ if [[ " $@ " =~ " --watch " ]]; then
     exit $COMPLETE
 fi
 
-echo "Search will only be automaticaly enabled with '--watch' is set."
-echo "Run 'oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}' to enable search."
-echo ""
 echo "#####"
 echo "* Red Hat ACM URL: https://${RHACM_URL}"
+echo ""
+echo "* NOTE: For RHACM versions <=2.6, search is disabled by default."
+echo "  Run 'oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}' to enable search."
 echo ""
 echo "* NOTE: For RHACM versions <2.6 or OCP versions <4.10, the console link can be found by running:"
 echo "  oc -n ${TARGET_NAMESPACE} get routes multicloud-console -o jsonpath='{.status.ingress[0].host}'"
