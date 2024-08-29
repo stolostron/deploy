@@ -46,4 +46,5 @@ for crd in "${component_crds[@]}"; do
 	${KUBECTL} delete crd ${crd}
 done
 
+${KUBECTL} -n ${OPERATOR_NAMESPACE} exec $(${KUBECTL} -n ${OPERATOR_NAMESPACE} get pod -l name=endpoint-observability-operator -o=name) -- ./cmo-config-revert
 ${KUBECTL} delete namespace ${OPERATOR_NAMESPACE}
