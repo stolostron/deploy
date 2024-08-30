@@ -79,11 +79,8 @@ Either way you choose to go, you are going to need a `pull-secret` in order to g
 2. Generate your pull-secret:
    - ensure you have access to the quay org ([stolostron](https://quay.io/repository/stolostron/acm-custom-registry?tab=tags))
    - to request access to [stolostron](https://quay.io/repository/stolostron/acm-custom-registry?tab=tags) in quay.io, for external (non Red Hat) users, you can please contact the ACM BU via email at [acm-contact@redhat.com](mailto:acm-contact@redhat.com). Or, if you have access to Red Hat Slack you can contact us on our Slack Channel [#forum-hypbld](https://redhat.enterprise.slack.com/archives/C04L50S5XM4)) and indicate if you want upstream (`stolostron`) or downstream (`acm-d`) repos (or both).  We'll need your quay ID.  Once the team indicates they've granted you access, open your Notifications at quay.io and accept the invitation(s) waiting for you.
-   - go to [https://quay.io/user/tpouyer?tab=settings](https://quay.io/user/tpouyer?tab=settings) replacing `tpouyer` with your username
-   - click on `Generate Encrypted Password`
-   - enter your quay.io password
-   - select `Kubernetes Secret` from left-hand menu
-   - click on `Download tpouyer-secret.yaml` except `tpouyer` will be your username
+   - you will also need a bot and token generated for each of the repositories you wish to use.
+   - acm-d (stolostron images are public)
    - :exclamation: **save secret file in the `prereqs` directory as `pull-secret.yaml`**
    - :exclamation: **edit `pull-secret.yaml` file and change the name to `multiclusterhub-operator-pull-secret`**
       ```bash
@@ -459,7 +456,7 @@ After completing the steps above you can redeploy the `multiclusterhub-operator`
 </details>
 
 
-# Upgrade
+# Upgrade for Downstream
 You can test the upgrade process with `downstream` builds only, using this repo. To test upgrade follow the instructions below:
 
 1. Export environment variables needed for `downstream` deployment:  
@@ -492,6 +489,28 @@ Once the installation is complete you can then attempt to upgrade the ACM instan
    ```
    ./upgrade.sh
    ```
+
+# Upgrades for snapshots
+This approach mostly works, but we do not test or intend to have snapshot to snapshot upgrades.
+
+1. Connect to the Red Hat Advanced Cluster Management for Kubernetes OpenShift cluster
+2. Run the `upgrade-snapshot.sh` script
+   ```
+   ./upgrade-snapshot.sh [--watch] [--debug]
+   ```
+3. It will ask you to provide a snapshot to upgrade to. It does not validate the value, so if you put an older snapshot or an invalid one, the ugprade will get stuck. Press `ctrl-c` and try again.
+4. It takes about 5min to complete, and the final `--watch` output should look like this:
+    ```
+    Upgrade started
+    =---------{ Upgrade takes <10min }---------=
+        Elapsed                    : 300s
+    1. Multiclusterhub CSV        : Succeeded
+    2. Multiclusterengine CSV     : Succeeded
+    3. Multiclusterengine operator: Available
+    4. Multiclusterhub operator   : Running
+
+    DONE!   
+    ```
 
 # MultiCluster Engine
 
