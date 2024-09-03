@@ -182,6 +182,16 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+function get_multicluster-engine_pods() {
+  printf "=-----------------------------=\n Monitoring multiclusterengine\n=-----------------------------=\n"
+  oc -n multicluster-engine get pods --sort-by=.metadata.creationTimestamp
+}
+
+function get_open-cluster-management_pods() {
+  printf "=--------------------------=\n Monitoring multiclusterhub\n=--------------------------=\n"
+  oc -n open-cluster-management get pods --sort-by=.metadata.creationTimestamp
+}
+
 printf "Upgrade started\n"
 # First watch the ACM CSV
 csvName="advanced-cluster-management.v$SNAPSHOT_PREFIX"
@@ -208,11 +218,9 @@ if [[ "$@" == *"--watch"* ]]; then
     if [[ "$@" == *"--debug"* ]]; then
       clear
       if [ "${mcePhase}" != "Available" ] && [ "${mcePhase}" != "${PHASE_MSG}" ]; then
-        printf "=-----------------------------=\n Monitoring multiclusterengine\n=-----------------------------=\n"
-        oc -n multicluster-engine get pods --sort-by=.metadata.creationTimestamp
+        get_multicluster-engine_pods
       else
-        printf "=--------------------------=\n Monitoring multiclusterhub\n=--------------------------=\n"
-        oc -n open-cluster-management get pods --sort-by=.metadata.creationTimestamp
+        get_open-cluster-management_pods
       fi
     fi
     if [[ "$@" != *"--debug"* ]]; then
@@ -224,6 +232,8 @@ if [[ "$@" == *"--watch"* ]]; then
     sleep 5
     elapsed=$((elapsed+5))
   done
+  get_multicluster-engine_pods
+  get_open-cluster-management_pods
   echo "DONE!"
 fi
 
