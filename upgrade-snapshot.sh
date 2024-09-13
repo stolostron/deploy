@@ -224,7 +224,7 @@ if [[ "$@" == *"--watch"* ]]; then
       fi
     fi
     if [[ "$@" != *"--debug"* ]]; then
-      tput cuu 7 && tput el  # Moves the cursor up 4 lines so the message is overwritten
+      tput cuu 7 && tput el  # Moves the cursor up 7 lines so the message is overwritten
     fi
     printf "=---------{ Upgrade takes <10min }---------=\n    Elapsed                    : ${elapsed}s\n"
     printf " 1. Multiclusterhub CSV        : ${csvPhase}     \n 2. Multiclusterengine CSV     : ${csvMCEPhase}     \n"
