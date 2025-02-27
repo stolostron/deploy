@@ -24,7 +24,7 @@ quay.io/acm-d/image-based-install-rhel9@sha256:eba8c8590815c8b6db4b3a0d2b568568b
 quay.io/acm-d/kube-rbac-proxy-mce-rhel9@sha256:ed37ecf1f717a6d8e0aecd35a264003ed2b5469f20af904d34ae81a4d5cf634b=__DESTINATION_ORG__/kube-rbac-proxy-mce-rhel9:v2.8.0-17
 quay.io/acm-d/managedcluster-import-controller-rhel9@sha256:96271f43812d2ef5351c6419ae732bede209ccd62a6c6d264c42bf7d370f1bd1=__DESTINATION_ORG__/managedcluster-import-controller-rhel9:v2.8.0-35
 quay.io/acm-d/managed-serviceaccount-rhel9@sha256:e6a212a7de9949107ca5135b919ac6758a4ff90856742396fa87b8e4ba1cf96a=__DESTINATION_ORG__/managed-serviceaccount-rhel9:v2.8.0-28
-quay.io/acm-d/mce-custom-registry@sha256:10353d4aeeb3b70d568b4ac31a7b1d35aa4b1cf1e2bcb1f8cf866fc62ca1ad9a=__DESTINATION_ORG__/mce-custom-registry:2.8.0-DOWNANDBACK-2025-02-27-02-34-55
+quay.io/acm-d/mce-custom-registry@sha256:88060904dbbb3871bf32f99045da2e5a2dc318fce1020df167eb28aae215d78e=__DESTINATION_ORG__/mce-custom-registry:2.8.0-DOWNANDBACK-2025-02-27-02-34-55
 quay.io/acm-d/mce-operator-bundle@sha256:89aea385a8fcf69a6050aa06629d1c939e213a3d1d5ea6d4b512230eabcb2401=__DESTINATION_ORG__/mce-operator-bundle:v2.8.0-79
 quay.io/acm-d/multicloud-manager-rhel9@sha256:79491936e5b1c87951b2242066bf03c5f4c81b44a5443d6521220a28169b9513=__DESTINATION_ORG__/multicloud-manager-rhel9:v2.8.0-32
 quay.io/acm-d/must-gather-rhel9@sha256:8c72ab946b3cda3b5816e3a967d9439c6879bcd5e31e48d42db86fc74f94c20c=__DESTINATION_ORG__/must-gather-rhel9:v2.8.0-43
