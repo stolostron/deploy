@@ -1,6 +1,6 @@
 quay.io/acm-d/acm-cli-rhel9@sha256:a3f3b717db7f2427f36a9d409eb5cc247d3401625a25b522934b1f2132a86e6a=__DESTINATION_ORG__/acm-cli-rhel9:v2.13.0-44
 quay.io/acm-d/acm-cluster-permission-rhel9@sha256:1352dc936bd1b50ea1b1e9fdce711ceb46ad4978cdb5f743c3f72223cb1951d1=__DESTINATION_ORG__/acm-cluster-permission-rhel9:v2.13.0-22
-quay.io/acm-d/acm-custom-registry@sha256:6bb42fb7ee00610c85a9e4bf0a61384a76140dbceb5e647711f19aa572bc51b0=__DESTINATION_ORG__/acm-custom-registry:2.13.0-DOWNSTREAM-2025-03-07-03-19-34
+quay.io/acm-d/acm-custom-registry@sha256:6add67845ff182757e64df01d5b189e77ae6af5bcb2d41d356f6228e9ff01a6d=__DESTINATION_ORG__/acm-custom-registry:2.13.0-DOWNSTREAM-2025-03-07-03-19-34
 quay.io/acm-d/acm-flightctl-api-rhel9@sha256:a22116a6c50664cb9128884689d7895420ed3787b701e381fe19d053f01da2b6=__DESTINATION_ORG__/acm-flightctl-api-rhel9:v2.13.0-17
 quay.io/acm-d/acm-flightctl-ocp-ui-rhel9@sha256:4c4360effaf67e151480007e6778ca2b1687e17d711dff94c0b29282a20ec15c=__DESTINATION_ORG__/acm-flightctl-ocp-ui-rhel9:v2.13.0-16
 quay.io/acm-d/acm-flightctl-periodic-rhel9@sha256:afb35454c757d0fb79c908bb556e792e26069c7e78559aeeded4a5223d1a0c2e=__DESTINATION_ORG__/acm-flightctl-periodic-rhel9:v2.13.0-17
