@@ -4,7 +4,7 @@ quay.io/acm-d/assisted-installer-agent-rhel9@sha256:f694b6e9e76941b11cc8a15153d9
 quay.io/acm-d/assisted-installer-controller-rhel9@sha256:7c86c89ff57091d4112783d82d1add47f2d56dba584418d5664c198ba048e0c2=__DESTINATION_ORG__/assisted-installer-controller-rhel9:v2.8.3-18
 quay.io/acm-d/assisted-installer-rhel9@sha256:c6cd578123c1c86fcb3305ecca117543106f943cbcc4baf9065683988b2e10ff=__DESTINATION_ORG__/assisted-installer-rhel9:v2.8.3-18
 quay.io/acm-d/assisted-service-8-rhel8@sha256:f809a8774b0e3f891af46931dd4d2c11b95da4e7f5a8aee1814152d9a468d357=__DESTINATION_ORG__/assisted-service-8-rhel8:v2.8.3-14
-quay.io/acm-d/assisted-service-9-rhel9@sha256:d73a05bb8c0645d0b3e1a46bb5ddca742ef67b77b685cfed394673b2b10f6558=__DESTINATION_ORG__/assisted-service-9-rhel9:v2.8.3-15
+quay.io/acm-d/assisted-service-9-rhel9@sha256:83a82f9558c406899e573308947c15b1f36de454006bb0e2ac44709f0c2c28d7=__DESTINATION_ORG__/assisted-service-9-rhel9:v2.8.3-16
 quay.io/acm-d/backplane-rhel9-operator@sha256:ea2ba066abd170e1087558c7b701faeb1be2e1667943dc14440f19c2ee5b0c30=__DESTINATION_ORG__/backplane-rhel9-operator:v2.8.3-10
 quay.io/acm-d/cluster-api-provider-agent-rhel9@sha256:806b6c956f7bad824f0fe9acc3b534964e8f5f3399a1813f75511bc0f3904414=__DESTINATION_ORG__/cluster-api-provider-agent-rhel9:v2.8.3-7
 quay.io/acm-d/cluster-api-provider-kubevirt-rhel9@sha256:cf457b5a13cdd54c45a7b88f0f150a04e756bfac727c4365cb12f113d904937d=__DESTINATION_ORG__/cluster-api-provider-kubevirt-rhel9:v2.8.3-7
@@ -20,12 +20,12 @@ quay.io/acm-d/hive-rhel9@sha256:0d1dfcb06eaa26de74994891371a5657aded7a59972f006f
 quay.io/acm-d/hypershift-addon-rhel9-operator@sha256:7ca7e87615e12b9d7fa75befd05f4f45bdc4bf8ef1b576c69f36a23c66c90cd6=__DESTINATION_ORG__/hypershift-addon-rhel9-operator:v2.8.3-9
 quay.io/acm-d/hypershift-cli-rhel9@sha256:261b99b93d98825ade0a0d3b9c4e465a785f35d2a310dedd4bbd6e4aa1f33ef9=__DESTINATION_ORG__/hypershift-cli-rhel9:v2.8.3-13
 quay.io/acm-d/hypershift-rhel9-operator@sha256:5461643a61850d95409d989e81c304053372f1dc5dbba291f3f3386de9ecab1c=__DESTINATION_ORG__/hypershift-rhel9-operator:v2.8.3-11
-quay.io/acm-d/image-based-install-rhel9@sha256:ab6221a21fb9347642380599c19272d8bedd895cff2743ae8227a6ec3df1b87e=__DESTINATION_ORG__/image-based-install-rhel9:v2.8.3-30
+quay.io/acm-d/image-based-install-rhel9@sha256:e5e459e665afc14a1540e300015222b7c1ac896e2bee889283d67c3e19ca01ac=__DESTINATION_ORG__/image-based-install-rhel9:v2.8.3-31
 quay.io/acm-d/kube-rbac-proxy-mce-rhel9@sha256:d4d11d0aeb3e1c9ff2a80e769d92dce509a0202a2ef1c9d2430030acdbf85bce=__DESTINATION_ORG__/kube-rbac-proxy-mce-rhel9:v2.8.3-7
 quay.io/acm-d/managedcluster-import-controller-rhel9@sha256:aa2754d35c8460a2879d4d523ebf32351d36e8fd7886335b5c0d2ca4befb8e8e=__DESTINATION_ORG__/managedcluster-import-controller-rhel9:v2.8.3-10
 quay.io/acm-d/managed-serviceaccount-rhel9@sha256:a7f63077799a62fe6ece76a12346a87b5cbae966ab69df6ec6d951259dbf0e4a=__DESTINATION_ORG__/managed-serviceaccount-rhel9:v2.8.3-9
-quay.io/acm-d/mce-custom-registry@sha256:1dd6ee42daa14c44296835f3f75aaae62f0c54838fde2e817bd54d3f8f725d82=__DESTINATION_ORG__/mce-custom-registry:2.8.3-DOWNANDBACK-2025-08-27-16-09-54
-quay.io/acm-d/mce-operator-bundle@sha256:01524a572a62b6195c5e1eb64ec2c47644024e60fc6e11d6f31a785d8e98a589=__DESTINATION_ORG__/mce-operator-bundle:v2.8.3-23
+quay.io/acm-d/mce-custom-registry@sha256:006f5018f80fb8c0c41ba9f3b0ff584e532802a45953f2e64e4f9b176d6cce44=__DESTINATION_ORG__/mce-custom-registry:2.8.3-DOWNANDBACK-2025-08-27-16-09-54
+quay.io/acm-d/mce-operator-bundle@sha256:5e7fff44957afc678e6fcc92824bec375b3b84d928e23a4d3dd32e3029dd5f6e=__DESTINATION_ORG__/mce-operator-bundle:v2.8.3-24
 quay.io/acm-d/multicloud-manager-rhel9@sha256:5ea86c20383a6932c593e020fd3b7b1a2a8e666bc374bff8b4bca0ee2d4ecc33=__DESTINATION_ORG__/multicloud-manager-rhel9:v2.8.3-11
 quay.io/acm-d/must-gather-rhel9@sha256:bee8f0c047cf8dbfa3f28712ce91bea55e926b2edb26c394f18a2d780e142083=__DESTINATION_ORG__/must-gather-rhel9:v2.8.3-14
 quay.io/acm-d/ose-aws-cluster-api-controllers-rhel9@sha256:ada8b480a86d0a9e3ecc58f8b1cb53dbd7452b2b9183b3ba2b15a6a58c4436d1=__DESTINATION_ORG__/ose-aws-cluster-api-controllers-rhel9:v4.18.0-202507291333.p0.gd631c22.assembly.stream.el9
