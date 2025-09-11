@@ -114,7 +114,7 @@ _Optionally_ `export DEBUG=true` for additional debugging output for 2.1+ releas
 
 2. When prompted for the SNAPSHOT tag, either press `Enter` to use the previous tag, or provide a new SNAPSHOT tag.
     - UPSTREAM snapshot tags - https://quay.io/repository/stolostron/acm-custom-registry?tab=tags
-    - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-custom-registry?tab=tags
+    - DOWNSTREAM snapshot tag - https://quay.io/repository/acm-d/acm-dev-catalog?tab=tags
     
     For example, your SNAPSHOT tag might resemble the following information:
     ```bash

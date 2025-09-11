@@ -215,23 +215,35 @@ if [[ -d ${OPERATOR_DIRECTORY} ]]; then rm -rf ${OPERATOR_DIRECTORY}; fi;
 # If the user sets the COMPOSITE_BUNDLE flag to "true", then set to the `acm` variants of variables, otherwise the multicluster-hub version.
 if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
     cp -r acm-operator ${OPERATOR_DIRECTORY}
-    CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
-    IMG="${CUSTOM_REGISTRY_REPO}/acm-custom-registry:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/acm-operator.yaml > ${OPERATOR_DIRECTORY}/acm-operator.yaml
+    if [[ "$DOWNSTREAM" == "true" ]]; then
+        CUSTOM_REGISTRY_IMAGE="acm-dev-catalog"
+    else
+        CUSTOM_REGISTRY_IMAGE="acm-custom-registry"
+    fi
+    IMG="${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/acm-operator.yaml > ${OPERATOR_DIRECTORY}/acm-operator.yaml
     oc apply -f ${OPERATOR_DIRECTORY}/acm-operator.yaml
-    waitForPod "acm-custom-registry" "" "openshift-marketplace"
+    waitForPod "${CUSTOM_REGISTRY_IMAGE}" "" "openshift-marketplace"
 else
     cp -r multicluster-hub-operator ${OPERATOR_DIRECTORY}
-    CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"
-    IMG="${CUSTOM_REGISTRY_REPO}/multicluster-hub-custom-registry:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml > ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
+    if [[ "$DOWNSTREAM" == "true" ]]; then
+        CUSTOM_REGISTRY_IMAGE="multicluster-hub-dev-catalog"
+    else
+        CUSTOM_REGISTRY_IMAGE="multicluster-hub-custom-registry"
+    fi
+    IMG="${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml > ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
     oc apply -f ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
 fi
 
 
 # If 2.5.0 or higher, install MCE
 #if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[5-9]+\.[0-9]+.* ]]; then
-_MCE_IMAGE_NAME="mce-custom-registry"
-if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/stolostron" ]]; then
-    _MCE_IMAGE_NAME="cmb-custom-registry"
+if [[ "$DOWNSTREAM" == "true" ]]; then
+    _MCE_IMAGE_NAME="mce-dev-catalog"
+else
+    _MCE_IMAGE_NAME="mce-custom-registry"
+    if [[ ${CUSTOM_REGISTRY_REPO} == "quay.io/stolostron" ]]; then
+        _MCE_IMAGE_NAME="cmb-custom-registry"
+    fi
 fi
 
 if [[ "$MCE_SNAPSHOT_CHOICE" == "UNSET" ]]; then
