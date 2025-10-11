@@ -1,12 +1,12 @@
 quay.io/acm-d/acm-cli-rhel9@sha256:dbfd2a19553c7405d588fc727fe7616795212724fa8417d1b8525fe148d66ac3=__DESTINATION_ORG__/acm-cli-rhel9:v2.12.5-2
-quay.io/acm-d/acm-cluster-permission-rhel9@sha256:ec1518ba2ee3e96565d45655f7cc904f162bed9f271c46cfea6ef308be74109d=__DESTINATION_ORG__/acm-cluster-permission-rhel9:v2.12.5-2
-quay.io/acm-d/acm-custom-registry@sha256:d5f034855522658642fb698c0696f3d4e91d11f57b69ac968d65bf55ed151825=__DESTINATION_ORG__/acm-custom-registry:2.12.5-DOWNSTREAM-2025-10-10-18-56-20
+quay.io/acm-d/acm-cluster-permission-rhel9@sha256:4d7f336956edb992505fc61f305281b1afe76fa77aa3c38dfe4e34ef68fd6bc5=__DESTINATION_ORG__/acm-cluster-permission-rhel9:v2.12.5-3
+quay.io/acm-d/acm-custom-registry@sha256:a0585c42aad4f9794da307dd8ab2ec788b72101c8fb8d69df8dfa042384665c3=__DESTINATION_ORG__/acm-custom-registry:2.12.5-DOWNSTREAM-2025-10-10-18-56-20
 quay.io/acm-d/acm-governance-policy-addon-controller-rhel9@sha256:257a185223d2cccdcb33336232e597381f50b164d8ef782e7c7f377f9899be4e=__DESTINATION_ORG__/acm-governance-policy-addon-controller-rhel9:v2.12.5-2
-quay.io/acm-d/acm-governance-policy-framework-addon-rhel9@sha256:98182c771cdd09f3fa3eeabdee1bae59469ee95884d976051b98bf48d4bbefb2=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel9:v2.12.5-2
+quay.io/acm-d/acm-governance-policy-framework-addon-rhel9@sha256:52078036b5b5814c161fa6cc85ca321a0ffe57a11aee1b7c8a507f95fdf62863=__DESTINATION_ORG__/acm-governance-policy-framework-addon-rhel9:v2.12.5-3
 quay.io/acm-d/acm-grafana-rhel9@sha256:b5dcb6aedfadf9b06bdcc7aef11ea374dee95c4463724a55482142bc9b74f494=__DESTINATION_ORG__/acm-grafana-rhel9:v2.12.5-2
 quay.io/acm-d/acm-multicluster-observability-addon-rhel9@sha256:88ce83a9153f0b3958cda43b301f633aa6a794fd0586ee7c2bdc3aab24758014=__DESTINATION_ORG__/acm-multicluster-observability-addon-rhel9:v2.12.5-2
 quay.io/acm-d/acm-must-gather-rhel9@sha256:75b89cc72030edbbe0b963df531583141a2a35bb93305a9eaf3ee3f7811b5d99=__DESTINATION_ORG__/acm-must-gather-rhel9:v2.12.5-2
-quay.io/acm-d/acm-operator-bundle@sha256:f4c754da8d243923da0e8310777d067658cbdbdf3789e9301a4bb8c150ac7fe0=__DESTINATION_ORG__/acm-operator-bundle:v2.12.5-3
+quay.io/acm-d/acm-operator-bundle@sha256:2df0e678fefaf68135401dc65541ed8b3424e86b17bd121bd6cf0e1165623633=__DESTINATION_ORG__/acm-operator-bundle:v2.12.5-4
 quay.io/acm-d/acm-prometheus-config-reloader-rhel9@sha256:ef03cf9fcc812d27430c4d116a04cd51a6a5fddb986e7219e262372acd2dd78a=__DESTINATION_ORG__/acm-prometheus-config-reloader-rhel9:v2.12.5-2
 quay.io/acm-d/acm-prometheus-rhel9@sha256:175c2dfd8fe3491c15528c3635c8eb01a9c9a7aa58f9f6b5897b6d3862771149=__DESTINATION_ORG__/acm-prometheus-rhel9:v2.12.5-2
 quay.io/acm-d/acm-search-indexer-rhel9@sha256:90ebb7e820e672b3ef536b180dcc901b3550550b1e19cffa178b14b39bd74921=__DESTINATION_ORG__/acm-search-indexer-rhel9:v2.12.5-2
@@ -22,7 +22,7 @@ quay.io/acm-d/assisted-installer-rhel9@sha256:5238b8e555971d65c2aaa5a3e887a4ff20
 quay.io/acm-d/assisted-service-8-rhel8@sha256:2337bb4071639192299ada77900629d0e56c5f4dde511e4198356d50f6afa005=__DESTINATION_ORG__/assisted-service-8-rhel8:v2.7.6-2
 quay.io/acm-d/assisted-service-9-rhel9@sha256:d1621e61d5c448920d719b1806415eeeef9d8876e556aa35ef434b6ee7c6ef3e=__DESTINATION_ORG__/assisted-service-9-rhel9:v2.7.6-2
 quay.io/acm-d/backplane-rhel9-operator@sha256:3b6ea76c2b0ce6b2898da0b9b7bf2630fb3686898f97d3547f03c3b785e4042a=__DESTINATION_ORG__/backplane-rhel9-operator:v2.7.6-2
-quay.io/acm-d/cert-policy-controller-rhel9@sha256:5d688294700b85def3eebf4cc0b965d8352b8d03a7293c76e10ea4f56fab3054=__DESTINATION_ORG__/cert-policy-controller-rhel9:v2.12.5-2
+quay.io/acm-d/cert-policy-controller-rhel9@sha256:1400183ca58d06aaa8912f869e14235e3fc1a94c8f908c486b55daff821e4d96=__DESTINATION_ORG__/cert-policy-controller-rhel9:v2.12.5-3
 quay.io/acm-d/cluster-api-provider-agent-rhel9@sha256:441a9e69b1c9f14d365121d28f0d448ab48555ea3820c419f7a2c502d7c40f14=__DESTINATION_ORG__/cluster-api-provider-agent-rhel9:v2.7.6-2
 quay.io/acm-d/cluster-api-provider-kubevirt-rhel9@sha256:7e073b6442de7f6404c1b5cf3163fd12bc8a3f0fc00d419ad9f2a4bcca058b60=__DESTINATION_ORG__/cluster-api-provider-kubevirt-rhel9:v2.7.6-2
 quay.io/acm-d/cluster-api-rhel9@sha256:0562d8cc5096c51667309fc59864ddb65183fea0f7a9937ae23d1128b620292f=__DESTINATION_ORG__/cluster-api-rhel9:v2.7.6-2
