@@ -45,30 +45,29 @@ function waitForPod() {
     podName=$1
     ignore=$2
     namespace=$3
-    running="\([0-9]\+\)\/\1"
-    printf "\n#####\nWait for ${podName} to reach running state (4min).\n"
+    printf "\n#####\nWait for %s to reach running state (4min).\n" "${podName}"
     while [ ${FOUND} -eq 1 ]; do
         # Wait up to 4min, should only take about 20-30s
         if [ $MINUTE -gt 240 ]; then
             echo "Timeout waiting for the ${podName}. Try cleaning up using the uninstall scripts before running again."
             echo "List of current pods:"
-            oc -n ${namespace} get pods
+            oc -n "${namespace}" get pods
             echo
             echo "You should see ${podName}, multiclusterhub-repo, and multicloud-operators-subscription pods"
             exit 1
         fi
         if [ "$ignore" == "" ]; then
-            operatorPod=`oc -n ${namespace} get pods | grep ${podName}`
+            operatorPod=$(oc -n "${namespace}" get pods | grep "${podName}")
         else
-            operatorPod=`oc -n ${namespace} get pods | grep ${podName} | grep -v ${ignore}`
+            operatorPod=$(oc -n "${namespace}" get pods | grep "${podName}" | grep -v "${ignore}")
         fi
-        if [[ $(echo $operatorPod | grep "${running}") ]]; then
+        if (echo "${operatorPod}" | grep -q "\([0-9]\+\)/\1"); then
             echo "* ${podName} is running"
             break
-        elif [ "$operatorPod" == "" ]; then
+        elif [ "${operatorPod}" == "" ]; then
             operatorPod="Waiting"
         fi
-        echo "* STATUS: $operatorPod"
+        echo "* STATUS: ${operatorPod}"
         sleep 3
         (( MINUTE = MINUTE + 3 ))
     done
