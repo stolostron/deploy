@@ -206,6 +206,7 @@ You'll likely want to poll the status array of the mch resource or watch the UI!
 
 #### Step 9: [Optional] Enable Search
 
+When deploying RHACM 2.7 or later, search is enabled by default. For RHACM <=2.6, use the following command to enable search.
 ```
 oc set env deploy search-operator DEPLOY_REDISGRAPH="true" -n ${TARGET_NAMESPACE}
 ```
