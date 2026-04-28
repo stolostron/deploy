@@ -175,11 +175,33 @@ fi
 if [[ " $@ " =~ " --silent " ]]; then
     echo "* Silent mode"
 else
-    printf "Find snapshot tags @ https://quay.io/repository/stolostron/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    # Prompt for upstream/downstream
+    printf "Use DOWNSTREAM build? (true/false, Press ENTER for default: ${DOWNSTREAM})\n"
+    read -r DOWNSTREAM_CHOICE
+    if [ "${DOWNSTREAM_CHOICE}" != "" ]; then
+        DOWNSTREAM=${DOWNSTREAM_CHOICE}
+    fi
+
+    if [[ "$DOWNSTREAM" == "true" ]]; then
+        printf "Find snapshot tags @ https://quay.io/repository/acm-d/acm-dev-catalog?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    else
+        printf "Find snapshot tags @ https://quay.io/repository/stolostron/acm-custom-registry?tab=tags\nEnter SNAPSHOT TAG: (Press ENTER for default: ${DEFAULT_SNAPSHOT})\n"
+    fi
     read -r SNAPSHOT_CHOICE
     if [ "${SNAPSHOT_CHOICE}" != "" ]; then
         DEFAULT_SNAPSHOT=${SNAPSHOT_CHOICE}
         printf "${DEFAULT_SNAPSHOT}" > ./snapshot.ver
+    fi
+
+    # Prompt for MCE snapshot (if not already set via environment variable)
+    if [[ "${MCE_SNAPSHOT_CHOICE}" != "UNSET" ]]; then
+        printf "MCE SNAPSHOT TAG already set via environment: ${MCE_SNAPSHOT_CHOICE}\n"
+    else
+        printf "Enter MCE SNAPSHOT TAG: (Press ENTER to use same as ACM snapshot: ${DEFAULT_SNAPSHOT})\n"
+        read -r MCE_CHOICE
+        if [ "${MCE_CHOICE}" != "" ]; then
+            MCE_SNAPSHOT_CHOICE=${MCE_CHOICE}
+        fi
     fi
 fi
 if [ "${DEFAULT_SNAPSHOT}" == "MUST_PROVIDE_SNAPSHOT" ]; then
@@ -222,7 +244,7 @@ if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
     fi
     IMG="${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/acm-operator.yaml > ${OPERATOR_DIRECTORY}/acm-operator.yaml
     oc apply -f ${OPERATOR_DIRECTORY}/acm-operator.yaml
-    waitForPod "${CUSTOM_REGISTRY_IMAGE}" "" "openshift-marketplace"
+    waitForPod "acm-custom-registry" "" "openshift-marketplace"
 else
     cp -r multicluster-hub-operator ${OPERATOR_DIRECTORY}
     if [[ "$DOWNSTREAM" == "true" ]]; then
@@ -232,6 +254,7 @@ else
     fi
     IMG="${CUSTOM_REGISTRY_REPO}/${CUSTOM_REGISTRY_IMAGE}:${DEFAULT_SNAPSHOT}" yq eval '.spec.image = env(IMG)' catalogsources/multiclusterhub-operator.yaml > ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
     oc apply -f ${OPERATOR_DIRECTORY}/multiclusterhub-operator.yaml
+    waitForPod "multicluster-hub-custom-registry" "" "openshift-marketplace"
 fi
 
 
@@ -250,6 +273,14 @@ if [[ "$MCE_SNAPSHOT_CHOICE" == "UNSET" ]]; then
     MCE_SNAPSHOT_CHOICE=${DEFAULT_SNAPSHOT}
 fi
 
+# Set MCE subscription channel based on MCE snapshot version
+MCE_VERSION=$(echo ${MCE_SNAPSHOT_CHOICE} | ${SED} -nr "s/.*v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+if [[ -n "$MCE_VERSION" ]]; then
+    MCE_CHANNEL="stable-${MCE_VERSION}"
+    echo "* Setting MCE subscription channel to ${MCE_CHANNEL}"
+    MCE_CHANNEL=${MCE_CHANNEL} yq eval -i '.metadata.annotations."installer.open-cluster-management.io/mce-subscription-spec" = "{\"source\": \"multiclusterengine-catalog\", \"channel\": \"" + env(MCE_CHANNEL) + "\"}"' ./applied-mch/example-multiclusterhub-cr.yaml
+fi
+
 IMG="${CUSTOM_REGISTRY_REPO}/${_MCE_IMAGE_NAME}:${MCE_SNAPSHOT_CHOICE}" yq eval '.spec.image = env(IMG)' catalogsources/multicluster-engine.yaml > ${OPERATOR_DIRECTORY}/multicluster-engine.yaml
 oc apply -f ${OPERATOR_DIRECTORY}/multicluster-engine.yaml
 waitForPod "multiclusterengine-catalog" "" "openshift-marketplace"
@@ -257,9 +288,15 @@ waitForPod "multiclusterengine-catalog" "" "openshift-marketplace"
 
 # Set the subscription channel if the variable wasn't defined as input, defaulted to snapshot-<release-version>
 if [ -z "$SUBSCRIPTION_CHANNEL" ]; then
-    SUBSCRIPTION_CHANNEL_VERSION=$(echo ${SNAPSHOT_PREFIX} | ${SED} -nr "s/v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
+    SUBSCRIPTION_CHANNEL_VERSION=$(echo ${DEFAULT_SNAPSHOT} | ${SED} -nr "s/.*v{0,1}([0-9]+\.[0-9]+)\.{0,1}[0-9]*.*/\1/p")
     if [[ "$COMPOSITE_BUNDLE" == "true" ]]; then
-        SUBSCRIPTION_CHANNEL_PREFIX="release";
+        # Extract major version to determine channel prefix
+        MAJOR_VERSION=$(echo ${SUBSCRIPTION_CHANNEL_VERSION} | cut -d. -f1)
+        if [[ "$MAJOR_VERSION" -ge 5 ]]; then
+            SUBSCRIPTION_CHANNEL_PREFIX="stable";
+        else
+            SUBSCRIPTION_CHANNEL_PREFIX="release";
+        fi
     else
         SUBSCRIPTION_CHANNEL_PREFIX="snapshot";
     fi;
@@ -383,13 +420,14 @@ waitForPod "multicluster-operators-application" "" "${TARGET_NAMESPACE}"
 
 COMPLETE=1
 if [[ " $@ " =~ " --watch " ]]; then
-    if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
+    if [[ $DEFAULT_SNAPSHOT =~ v{0,1}[2-9]\.[0-9]+\.[0-9]+.* ]] || [[ $DEFAULT_SNAPSHOT =~ latest-[2-9](\.[0-9]+)? ]]; then
         echo ""
         echo "#####"
+        mce_status=$(oc get mce --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
         mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
         acc=0
-        while [[ "$mch_status" != "Running" && $acc -le $POLL_DURATION_21X ]]; do
-            echo "Waited $acc/$POLL_DURATION_21X seconds for MCH to reach Ready Status.  Current Status: $mch_status"
+        while [[ ("$mce_status" != "Available" || "$mch_status" != "Running") && $acc -le $POLL_DURATION_21X ]]; do
+            echo "Waited $acc/$POLL_DURATION_21X seconds - MCE Status: ${mce_status:-NotFound}, MCH Status: ${mch_status:-NotFound}"
             if [[ "$DEBUG" == "true" ]]; then
                 echo "#####"
 
@@ -429,30 +467,47 @@ if [[ " $@ " =~ " --watch " ]]; then
             echo ""
             acc=$((acc+30))
             sleep 30
+            mce_status=$(oc get mce --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
             mch_status=$(oc get multiclusterhub --all-namespaces -o json | jq -r '.items[].status.phase') 2> /dev/null
         done;
-        if [[ "$mch_status" != "Running" ]]; then
+        if [[ "$mce_status" != "Available" || "$mch_status" != "Running" ]]; then
             COMPLETE=1
         else
             COMPLETE=0
-            echo "MCH reached Running status after $acc seconds."
+            echo "MCE and MCH reached ready status after $acc seconds."
             echo ""
         fi
     else
-        for i in {1..90}; do
-            clear
-            oc -n ${TARGET_NAMESPACE} get pods
-            whatsLeft=`oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" -e "1/1     Running" -e "2/2     Running" -e "3/3     Running" -e "4/4     Running" -e "READY   STATUS" | wc -l`
-            RUNNING_PODS=$(oc -n ${TARGET_NAMESPACE} get pods | grep -v -e "Completed" | tail -n +2 | wc -l | tr -d '[:space:]')
-            if [ $RUNNING_PODS -ge ${TOTAL_POD_COUNT} ]; then
+        # Check MCE and MCH CR status instead of pod counting
+        echo ""
+        echo "#####"
+        echo "Waiting for MCE and MCH to become ready..."
+        mce_status=""
+        mch_status=""
+        acc=0
+        max_wait=1500
+
+        while [[ "$mce_status" != "Available" || "$mch_status" != "Running" ]] && [[ $acc -le $max_wait ]]; do
+            mce_status=$(oc get mce --all-namespaces -o json 2>/dev/null | jq -r '.items[].status.phase' 2>/dev/null)
+            mch_status=$(oc get multiclusterhub --all-namespaces -o json 2>/dev/null | jq -r '.items[].status.phase' 2>/dev/null)
+
+            echo "Waited $acc/$max_wait seconds - MCE Status: ${mce_status:-NotFound}, MCH Status: ${mch_status:-NotFound}"
+
+            if [[ "$mce_status" == "Available" && "$mch_status" == "Running" ]]; then
                 COMPLETE=0
+                echo "MCE and MCH are ready after $acc seconds."
                 break
             fi
-            echo
-            echo "Number of expected Pods : $RUNNING_PODS/$TOTAL_POD_COUNT"
-            echo "Pods still NOT running  : ${whatsLeft}"
-            sleep 10
+
+            echo ""
+            acc=$((acc+30))
+            sleep 30
         done
+
+        if [[ "$mce_status" != "Available" || "$mch_status" != "Running" ]]; then
+            COMPLETE=1
+            echo "Timeout: MCE Status: ${mce_status:-NotFound}, MCH Status: ${mch_status:-NotFound}"
+        fi
     fi
     if [ $COMPLETE -eq 1 ]; then
         if [[ $DEFAULT_SNAPSHOT =~ v{0,1}2\.[1-9][0-9]*\.[0-9]+.* ]]; then
